@@ -1,5 +1,6 @@
 import random
 
+
 def player_marker():
 
     while True:
@@ -16,12 +17,14 @@ def player_marker():
         else:
             print("Please choose 'X' or 'O' only!")
 
+
 def display_board(board):
     print(f" {board[7]} | {board[8]} | {board[9]} ")
     print("---------------")
     print(f" {board[4]} | {board[5]} | {board[6]} ")
     print("---------------")
     print(f" {board[1]} | {board[2]} | {board[3]} ")
+
 
 def choose_position():
     while True:
@@ -31,6 +34,7 @@ def choose_position():
         else:
             print("Please enter Valid position")
     return position
+
 
 def place_marker_player(player_marker,board):
     while True:
@@ -42,6 +46,7 @@ def place_marker_player(player_marker,board):
             print("Enter Position which is not taken")
             continue
 
+
 def place_marker_computer(marker,board):
     while True:
         pos = comp_position()
@@ -49,9 +54,11 @@ def place_marker_computer(marker,board):
             board[pos] = marker
             break
 
+
 def comp_position():
     comp_position = random.randint(1,9)
     return comp_position
+
 
 def check_win(marker,board):
     #Check rows
@@ -73,6 +80,7 @@ def full_board_check(board):
 
 global playing
 playing = True
+
 
 while playing:
     print("Welcome to Tic Tac Toe!! \n")

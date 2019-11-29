@@ -8,5 +8,5 @@ def primeFactors(n):
         while n%divisor == 0:
             factors_list.append(divisor)
             n = n/divisor
-        divisor += 1,
+        divisor += 1
     return factors_list

@@ -44,8 +44,36 @@ class utility():
         return round(payment,2)
 
     @staticmethod
-    def dayOfWeek(date,month,year):
-        pass
+    def dayOfWeek(d,m,y):
+        '''Input Format (dd/mm/yyyy'''
+        y0 = y - ((14-m)/12)
+        x = y0 + (y0/4) - (y0/100) + (y0/400)
+        m0 = m  + 12*((14-m)/12) - 2
+        d0 = (d+x+(31*m0)/12) % 7
+        return math.floor(d0)
 
+    @staticmethod
+    def toBinary(n):
+        s = ''
+        while n>1:
+            remainder = str(n%2)
+            s = s+ remainder
+            n = n//2
+        if n == 1:
+            s = s + str(1)
+        if len(s)%2 == 1:
+            s = s + str(0)
+        return s[::-1]
 
+    @staticmethod
+    def swapNibble(num):
+        binary = utility.toBinary(num)
+        swap_nibble = binary[4:] + binary[:4]
+        swap_nibble = list(swap_nibble)
+        formula = [2**7,2**6,2**5,2**4,2**3,2**2,2**1,1]
+        decimal = 0
+        for i in range(0,len(swap_nibble)):
+            if swap_nibble[i] == '1':
+                decimal = decimal + formula[i]
+        return decimal
 

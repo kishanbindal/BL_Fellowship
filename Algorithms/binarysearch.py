@@ -13,8 +13,22 @@ def binarySearch(lst):
         return True
     return False
 
+list_of_words = sorted(list_of_words)
+print(list_of_words)
+
 def binarySearchAlgo(lst,start,stop,word):
-    pass
 
+    if stop >= start:
+        mid = (start + (stop - start) + 1) // 2
+        if lst[mid] == word:
+            return mid
 
-print(binarySearch(list_of_words))
+        elif lst[mid] > word:
+            return binarySearchAlgo(lst,start,mid-1,word)
+
+        else:
+            return binarySearchAlgo(lst,mid+1,stop,word)
+    else:
+        return -1
+
+print(binarySearchAlgo(list_of_words,0,len(list_of_words)-1,'binaryseachlist.txt'))

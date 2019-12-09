@@ -18,8 +18,3 @@ class OrderedList:
             if cur_node.data < item:
                 break
             
-
-
-li = OrderedList()
-li.add(5)
-

@@ -26,3 +26,10 @@ def check_prime_range():
         if upper >= 1001:
             break
     return li1
+
+
+def check_prime_anagram(lst):
+    
+
+
+print(check_prime_anagram(check_prime_range()))

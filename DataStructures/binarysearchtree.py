@@ -15,26 +15,26 @@ class BinarySearchTree:
         self.root = None
 
     def insert(self, val):
-        if self.root is None:
+        if self.root is None:  # To Insert Node at root
             self.root = Node(val)
         else:
-            self._insert(val, self.root)
+            self._insert(val, self.root)  # To insert Nodes based on their Value, recursively
 
     def _insert(self, val, cur_node):
-        if val < cur_node.value:
+        if val < cur_node.value:  # If value is lesser than current node, value moves towards left child
             if cur_node.left_child is None:
-                cur_node.left_child = Node(val)
+                cur_node.left_child = Node(val)  # Place value in left child
             else:
                 self._insert(val, cur_node)
         else:
             if cur_node.right_child is None:
-                cur_node.right_child = Node(val)
+                cur_node.right_child = Node(val)  # If value is greater than cur_node, value moves towards right child
             else:
                 self._insert(val, cur_node)
 
     def in_order(self):
         if self.root is not None:
-            self._in_order(self.root)
+            self._in_order(self.root)  # Private call
 
     def _in_order(self, current_node):
         if current_node is not None:

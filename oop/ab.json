@@ -1,0 +1,22 @@
+{
+  "addressbook": [
+    {
+      "fname": "Kishan",
+      "lname": "Bindal",
+      "address": "xyz",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "zip": 560000,
+      "phone": 9852715935
+    },
+    {
+      "fname": "x",
+      "lname": "y",
+      "address": "abc",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "zip": 460012,
+      "phone": 7835128965
+    }
+  ]
+}

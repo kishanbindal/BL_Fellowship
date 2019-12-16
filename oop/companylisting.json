@@ -1,0 +1,19 @@
+{
+  "company": [
+    {
+      "name": "Apple",
+      "numberofshares": 1000,
+      "shareprice": 275.15
+    },
+    {
+      "name": "Amazon",
+      "numberofshares": 2000,
+      "shareprice": 1760.94
+    },
+    {
+      "name": "Google",
+      "numberofshares": 1500,
+      "shareprice": 1346.87
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "doctors" : [
+    {
+      "name" : "Doctor1",
+      "id" : 2019120001,
+      "specialization" : "specialization1",
+      "availability" : [[7, 11], [14.5, 16.5]]
+    },
+    {
+      "name" : "Doctor2",
+      "id" : 2019120002,
+      "specialization" : "specialization2",
+      "availability" : [[11,14.5]]
+    },
+    {
+      "name" : "Doctor3",
+      "id" : 2019120003,
+      "specialization" : "specialization3",
+      "availability" : [[16.5, 20.5]]
+    }
+  ],
+  "patient": [
+    {
+      "name" : "name1",
+      "id" : 2019010001,
+      "number" : 7896358715,
+      "age" : 39
+    },
+    {
+      "name" : "name2",
+      "id" : 2019010002,
+      "number" : 9963587225,
+      "age" : 23
+    },
+    {
+      "name" : "name3",
+      "id" : 2019010003,
+      "number" : 8150869345,
+      "age" : 68
+    },
+    {
+      "name" : "name4",
+      "id" : 2019010004,
+      "number" : 9963587226,
+      "age" : 55
+    },
+    {
+      "name" : "name5",
+      "id" : 2019010005,
+      "number" : 9963587227,
+      "age" : 31
+    },
+    {
+      "name" : "name6",
+      "id" : 2019010006,
+      "number" : 9963587228,
+      "age" : 27
+    },
+    {
+      "name" : "name7",
+      "id" : 2019010007,
+      "number" : 9963587229,
+      "age" : 18
+    },
+    {
+      "name" : "name8",
+      "id" : 2019010008,
+      "number" : 9963587230,
+      "age" : 5
+    }
+  ]
+}

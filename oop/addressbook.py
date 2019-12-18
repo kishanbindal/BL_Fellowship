@@ -21,13 +21,13 @@ class AddressBook:
     def add_person(self):  # Add Person to Address Book
         while True:
             try:
-                user_fname = input("Please enter First Name :\n")
-                user_lname = input("Please Enter Last Name :\n")
-                user_address = input("Please Enter Address :\n")
-                user_city = input("Please Enter City :\n")
-                user_state = input("Please Enter State :\n")
-                user_zip = int(input("Please Enter Zip Code :\n"))
-                user_phone = int(input("Please Enter Phone Number :\n"))
+                _user_fname = input("Please enter First Name :\n")
+                _user_lname = input("Please Enter Last Name :\n")
+                _user_address = input("Please Enter Address :\n")
+                _user_city = input("Please Enter City :\n")
+                _user_state = input("Please Enter State :\n")
+                _user_zip = int(input("Please Enter Zip Code :\n"))
+                _user_phone = int(input("Please Enter Phone Number :\n"))
             except ValueError:
                 print("Enter Name, Address, City and State as Strings."
                       "\nEnter Zip and Phone Numbers as Integer Values only.")
@@ -35,13 +35,13 @@ class AddressBook:
                 break
 
         user_data = dict()  # Creating a dictionary to keep details of new entry
-        user_data['fname'] = user_fname
-        user_data['lname'] = user_lname
-        user_data['address'] = user_address
-        user_data['city'] = user_city
-        user_data['state'] = user_state
-        user_data['zip'] = user_zip
-        user_data['phone'] = user_phone
+        user_data['fname'] = _user_fname
+        user_data['lname'] = _user_lname
+        user_data['address'] = _user_address
+        user_data['city'] = _user_city
+        user_data['state'] = _user_state
+        user_data['zip'] = _user_zip
+        user_data['phone'] = _user_phone
         self.data['addressbook'].append(user_data)  # Adding dictionary to data
 
     def edit_person(self):  # Editing a person's details (Other than <FIRSTNAME> and <LASTNAME>
@@ -78,7 +78,7 @@ class AddressBook:
         user_fname = input("Enter First Name of Entry you would like to Delete :")
         user_lname = input("Enter Last Name of Entry you would like to Delete :")
         count = 0
-        if self.search_entries(user_fname, user_lname) is True:  # Felete possible only when Person exists in AddBook
+        if self.search_entries(user_fname, user_lname) is True:  # Delete possible only when Person exists in AddBook
             for item in self.data['addressbook']:
                 # First name and Last need to point to same person
                 if (user_lname == item['lname']) and (user_fname == item['fname']):

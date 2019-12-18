@@ -5,3 +5,4 @@ class Patient:
         self.patient_id = patient_id
         self.number = number
         self.age = age
+        self.appointment_time = None

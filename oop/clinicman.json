@@ -17,6 +17,12 @@
       "id" : 2019120003,
       "specialization" : "specialization3",
       "availability" : [[16.5, 20.5]]
+    },
+    {
+      "name" : "Doctor4",
+      "id" : 2019120004,
+      "specialization" : "specialization1",
+      "availability" : [[15, 20]]
     }
   ],
   "patient": [

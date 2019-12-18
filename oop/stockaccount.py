@@ -11,7 +11,11 @@ import json
 
 class StockAccount(companyshares.CompanyShares):
 
-    def __init__(self, file):
+    def __init__(self, file, *args, **kwargs):
+        """
+
+        :param file:
+        """
         companyshares.CompanyShares.__init__(self)
         self.file = file
         self.account = self.stock_account()  # get account data from json file
@@ -59,11 +63,13 @@ class StockAccount(companyshares.CompanyShares):
             pps = float(input("\nEnter Price Per Share :"))
             self.company_listings.append(companyshares.CompanyShares(n, ns, pps))  # Add company obj to company listings
             temp = self.company_listings[-1]
+
             user_share = int(input("Number of Shares You would like to purchase? :\t"))
             if user_share > temp.number_of_shares:
                 print(f"Transaction not possible since Company does not have enough shares to sell")
             else:
                 data = dict()
+
                 data['stockname'] = n
                 data['numberofshares'] = user_share
                 data['shareprice'] = pps
@@ -79,16 +85,20 @@ class StockAccount(companyshares.CompanyShares):
 
     def sell(self):  # Sell stocks to company, if company not present in list, add company to list
         print("Customer Portfolio :\n\nStock Name \t\tNumber\t\tPrice/Share\n")  # Displaying customers Portfolio
+
         for item in self.account['stock']:
             print(f"{item['stockname']}\t\t\t{item['numberofshares']}\t\t\t{item['shareprice']}")
         user_sell = input("\nPlease Enter which Company Stock you would like to sell? \n")
         in_file = False  # Switch case True/False
+
         for comp_obj in self.company_listings:
             for user_stock in self.account['stock']:
                 # checking for company name in both json files
+
                 if (user_sell == comp_obj.symbol) and (user_sell == user_stock['stockname']):
                     sell_num = int(input("Number of Shares You would like to Sell? :\t"))  # Number of stocks to sell
                     # If no. of shares>available shares then transaction not possible
+
                     if sell_num > user_stock['numberofshares']:
                         print("Transaction Not Possible since You do not have enough shares to sell")
                     else:
@@ -102,10 +112,15 @@ class StockAccount(companyshares.CompanyShares):
                         print(f"{user_stock['stockname']}\t\t\t{user_stock['numberofshares']}")
                         in_file = True
                         break
+
         if in_file is False:  # If company doesnt exist, create company object for user
             n = input("\nEnter Name of Company :")
             ns = int(input("\nEnter Number of shares you have to sell :"))
             pps = float(input("\nEnter Price Per Share :"))
+            # data = {
+            #     'stockname': n,
+            #
+            # }
             data = dict()
             data['stockname'] = n
             data['numberofshares'] = ns
@@ -113,6 +128,7 @@ class StockAccount(companyshares.CompanyShares):
             self.account['stock'].append(data)  # add company to customer's portfolio
             temp = self.account["stock"][-1]
             sell_share = int(input("\nEnter Number of shares you want to sell : "))  # no of shares to sell
+
             if sell_share > self.account["stock"][-1]['numberofshares']:
                 print('Transaction Incomplete : You do not have enough shares to sell')
             else:
@@ -130,13 +146,16 @@ class StockAccount(companyshares.CompanyShares):
         with open(self.file, 'r+') as f:
             print("\nSaving User's Stock Account Details\n")
             json.dump(self.account, f, indent=2)  # add changes to customer's portfolio json file
+
         test = []
+
         for company in self.company_listings:  # Adding company listing into test[]
             temp = dict()
             temp['name'] = company.symbol
             temp['numberofshares'] = company.number_of_shares
             temp['shareprice'] = company.price
             test.append(temp)
+
         temp = dict()
         temp['company'] = test  # Making dictionary in order to save to json file
         companyshares.CompanyShares.save(temp)  # Saving changed to Company's json file
@@ -144,6 +163,7 @@ class StockAccount(companyshares.CompanyShares):
     def print_report(self):  # Printing Report of Customer's Portfolio
         print("\nCustomer Stock Account :\n")
         print("Company Name\t\tNumber of Shares\t\tPrice/Share\t\tValue of Share in company")
+
         for stock in self.account['stock']:
             print(f"{stock['stockname']}\t\t\t\t\t\t{stock['numberofshares']}\t\t\t\t{stock['shareprice']}\t\t\t"
                   f"{stock['numberofshares'] * stock['shareprice']}")

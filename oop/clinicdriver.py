@@ -8,8 +8,11 @@ class ClDriver(clinic.Clinic):
 
     def _search_doctors(self):
         print("-----------DOCTOR SUBMENU--------------")
-        print("1. Search Doctor with Name\n2. Search Doctor with ID\n3. Search Doctor with Specialization\n"
-              "4. Search Doctor by Availability\n5. Exit Submenu")
+        print("""\t\t1. Search Doctor with Name
+        2. Search Doctor with ID
+        3. Search Doctor with Specialization
+        4. Search Doctor by Availability
+        5. Exit Submenu""")
         while True:
             while True:
                 try:
@@ -27,12 +30,15 @@ class ClDriver(clinic.Clinic):
             elif user_choice == 4:
                 print(self.search_doctor_availability())
             else:
-                print("EXIT BACK TO OPTIONS")
+                print("EXIT BACK TO OPTIONS\n")
                 break
 
     def search_patients(self):
         print("---------PATIENT SUBMENU------------")
-        print("\n1. Search Patient by name\n2. Search Patient by mobile number\n3. Search Patient by ID\n4. Exit")
+        print("""\t\t1. Search Patient by name
+        2. Search Patient by mobile number
+        3. Search Patient by ID
+        4. Exit""")
         while True:
             while True:
                 try:
@@ -48,14 +54,17 @@ class ClDriver(clinic.Clinic):
             elif user_choice == 3:
                 print(self.search_patient_id())
             else:
-                print("----------EXIT BACK TO OPTIONS-----------")
+                print("----------EXIT BACK TO OPTIONS-----------\n")
                 break
 
     def main(self):
         print("--------------WELCOME TO THE CLINIC APP-----------------\n")
-        print("\t\t\t\t\t OPTIONS")
-        print("1. Search For Doctor\n2. Search For Patient\n3. Book Patient Appointment\n4. Show Doctor Patient Report")
-        print("5. Exit")
+        print("\t\t\t\t OPTIONS")
+        print("""\t\t1. Search For Doctor
+        2. Search For Patient 
+        3. Book Patient Appointment
+        4. ShowDoctor Patient Report
+        5. Exit""")
         while True:
             while True:
                 try:
@@ -65,17 +74,17 @@ class ClDriver(clinic.Clinic):
                 else:
                     break
             if user_menu_choice == 1:
-                ClDriver()._search_doctors()
+                self._search_doctors()
             elif user_menu_choice == 2:
-                ClDriver().search_patients()
+                self.search_patients()
             elif user_menu_choice == 3:
-                ClDriver().book_appointment()
+                self.book_appointment()
             elif user_menu_choice == 4:
-                ClDriver().display_doctor_patient_report()
+                self.display_doctor_patient_report()
             else:
                 break
 
 
 if __name__ == '__main__':
-    cl = ClDriver
-    cl.main(ClDriver())
+    cl = ClDriver()
+    cl.main()

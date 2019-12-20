@@ -1,0 +1,8 @@
+#Ignore db
+/home/admin1/Desktop/Kishan/ChatApp/project_1/db.sqlite3
+
+#Ignore __pychache__
+/home/admin1/Desktop/Kishan/ChatApp/project_1/chat_app/__pycache__
+/home/admin1/Desktop/Kishan/ChatApp/project_1/project_1/__pycahce__
+/home/admin1/Desktop/Kishan/ChatApp/project_1/chat_app/migrations/__pycache__
+

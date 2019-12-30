@@ -1,0 +1,40 @@
+
+<body ng-contoller="registerControl">
+            
+    <div class="rtitle">
+                   
+        <h1 class="titleheader">ChatApp</h1>
+        <nav>     
+            <ul class="options">                   
+                <li class="list"><a href="register.html" style="color:blanchedalmond">Register</a></li>
+                <li class="list"><a href="login.html" style="color:blanchedalmond">Login</a></li>
+                <li class="list"><a href=""style="color:blanchedalmond">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div>
+        <form>
+            <div class="register">
+                <h2 class="headline">Register here</h2>
+                <div class ="rcontent">
+                           
+                    Enter first name:<br>
+                    <input type="text" ng-model="firstName" name = "firstName"><br><br>
+                    Enter last name : <br>
+                    <input type="text" ng-model="lastName" name = "lastName"><br><br>                                                
+                    Enter email Id:<br>
+                    <input type="text" ng-model="emailId" name = "emailId"><br><br>
+                    Enter password :<br>
+                    <input type="text" ng-model="password" name = "password"><br><br>
+                            
+                    <button type="submit"  class="buttonstyle" ng-click="register()">Register</button>
+                    <!-- <button type="submit"  class="buttonstyle" ng-href="login.html">Login</button> -->
+                    <!-- <a ng-href="login.html" class="buttonstyle">Login</a>  -->
+
+                </div>  
+            </div>  
+        </form>
+    </div>
+</body>
+    

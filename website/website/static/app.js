@@ -6,13 +6,13 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
     /** register state */
     .state('register',{
         url:'/register',
-        templateUrl:'template/register.html',
+        templateUrl:'static/template/register.html',
         controller:'registerControl'
     })
 
     /** login state */
     .state('login',{
-        url:'',
+        url:'/login',
         templateUrl:'static/template/login.html',
         controller:'loginControl'
     })
@@ -24,11 +24,10 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
         controller:'forgotPasswordControl'
     })
 
-     /** forgotPassword state */
-     .state('resetPassword',{
-        url:'/resetPassword',
-        templateUrl:'template/resetPassword.html',
-        controller:'resetPasswordControl'
+     /** Home state */
+     .state('home',{
+        url:'/home',
+        templateUrl:'static/template/resetPassword.html',
     })
 
     $urlRouterProvider.otherwise('login');

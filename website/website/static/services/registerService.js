@@ -3,7 +3,7 @@ chatAppModule.service('registerService',function($http,$location){
     {
         $http({
             method:'POST',
-            url:'http://localhost:8000/register',
+            url:'http://localhost:8000/#/register',
             data:data
         }).then(
             function(response){

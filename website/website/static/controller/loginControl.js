@@ -1,4 +1,4 @@
-chatAppModule.controller('loginControl',function($scope,loginService){
+chatAppModule.controller('loginControl',function($scope, $state, loginService){
     console.log('login called');
 
     $scope.login=function(){

@@ -1,17 +1,26 @@
-chatAppModule.service('loginService',function($http, $httpprovider, $location){
+chatAppModule.service('loginService',function($http, $location, $cookies){
+
+    // $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    // $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    // $httpProvider.defaults.withCredentials = true;
+
+    console.log('token====> ',$cookies.csrftoken)
 
     this.loginServiceUser=function(data,$scope){
         console.log("login service ",data)
-        $httpprovider.defaults.post
         $http({
             method:'POST',
-            url:'http://localhost:8000/#/login',
+            url:'http://localhost:8000/api/login',
             data:data,
-            headers:
+            headers: {
+                "x-csrftoken" : $cookies.csrftoken,
+                // 'xsrfCookieName': 'csrfmiddlewaretoken',
+                // 'xsrfHeaderName': 'X-CSRFToken',
+            }
         }).then((response) =>
             {
                 console.log("response in login server---",response);
-                // console.log("token--", response.data.result.token);
+                console.log("token--", response.data);
                 
                 if(response.data === false)
                 {
@@ -22,10 +31,11 @@ chatAppModule.service('loginService',function($http, $httpprovider, $location){
                         alert('login failed');
                     }
                 }else{
+                    console.log('response ---> ', response.data)
 
-                    // localStorage.setItem('token', response.data);
-                    // console.log('login Successfully');
-                    // console.log(response);
+                    localStorage.setItem('token', response.data);
+                    console.log('login Successfully');
+                    console.log(response);
 
                     $location.path('/#/home');
                     $scope.login=function()

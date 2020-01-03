@@ -1,10 +1,16 @@
-chatAppModule.service('registerService',function($http,$location){
+chatAppModule.service('registerService',function($http,$location, $cookies){
+
+    console.log('token====> ',$cookies.csrftoken)
+
     this.registerServicesUser=function(data,$scope)
     {
         $http({
             method:'POST',
-            url:'http://localhost:8000/#/register',
-            data:data
+            url:'http://localhost:8000/api/register',
+            data:data,
+            headers:{
+                "x-csrftoken" : $cookies.csrftoken,
+            }
         }).then(
             function(response){
                 console.log("response in register server---",response);
@@ -19,7 +25,6 @@ chatAppModule.service('registerService',function($http,$location){
                     }
                 }else{
                     console.log('Registration done Successfully');
-                    //console.log('response date :'+JSON.stringify(response));
 
                     $scope.register=function(){
                         alert('registartion done successfully');

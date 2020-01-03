@@ -1,6 +1,9 @@
-let chatAppModule = angular.module('chatAppModule',['ui.router']);
+let chatAppModule = angular.module('chatAppModule',['ui.router', 'ngCookies']);
 
 chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$urlRouterProvider)=>{
+    
+    
+
     $stateProvider
 
     /** register state */
@@ -12,7 +15,7 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
 
     /** login state */
     .state('login',{
-        url:'/login',
+        url:'',
         templateUrl:'static/template/login.html',
         controller:'loginControl'
     })
@@ -27,8 +30,9 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
      /** Home state */
      .state('home',{
         url:'/home',
-        templateUrl:'static/template/resetPassword.html',
+        templateUrl:'static/template/home.html',
     })
 
     $urlRouterProvider.otherwise('login');
-}])
+
+}]);

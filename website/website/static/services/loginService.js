@@ -1,4 +1,4 @@
-chatAppModule.service('loginService',function($http, $location, $cookies){
+chatAppModule.service('loginService',function($http, $location, $cookies, $state){
 
     // $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     // $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -31,17 +31,8 @@ chatAppModule.service('loginService',function($http, $location, $cookies){
                         alert('login failed');
                     }
                 }else{
-                    console.log('response ---> ', response.data)
-
-                    localStorage.setItem('token', response.data);
-                    console.log('login Successfully');
-                    console.log(response);
-
-                    $location.path('/#/home');
-                    $scope.login=function()
-                    {
-                        alert('login successfully');
-                    }
+                    console.log('login completed')
+                    $state.go('home');
                 }
                
             }).catch((error) => {
@@ -50,5 +41,19 @@ chatAppModule.service('loginService',function($http, $location, $cookies){
                 }
                 console.log('Login failed ...',error);
             });
+    }
+
+    this.logUserOut = function(data, $scope){
+        $http({
+            method:'POST',
+            url:'http://localhost:8000/api/logout',
+            // data:data,
+        }).then((response)=>{
+            if (response.data===false){
+                console.log('Logout failed')
+            }else{
+                $state.go('login')
+            }
+        })
     }
 });

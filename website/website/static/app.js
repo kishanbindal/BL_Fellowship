@@ -31,8 +31,8 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
      .state('home',{
         url:'/home',
         templateUrl:'static/template/home.html',
+        controller: 'loginControl'
     })
 
     $urlRouterProvider.otherwise('login');
-
 }]);

@@ -1,4 +1,4 @@
-chatAppModule.service('registerService',function($http,$location, $cookies){
+chatAppModule.service('registerService',function($http,$location, $cookies, $state){
 
     console.log('token====> ',$cookies.csrftoken)
 
@@ -24,14 +24,8 @@ chatAppModule.service('registerService',function($http,$location, $cookies){
                         alert('Registration Failed');
                     }
                 }else{
-                    console.log('Registration done Successfully');
-
-                    $scope.register=function(){
-                        alert('registartion done successfully');
-                    }
-                    $location.path('/#/login');
+                    $state.go('login');
                 }
-                
             }).catch(function(error){
                 $scope.register=function(){
                     alert('registration failed');

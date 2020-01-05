@@ -21,25 +21,23 @@ chatAppModule.service('loginService',function($http, $location, $cookies, $state
             {
                 console.log("response in login server---",response);
                 console.log("token--", response.data);
-                
+
                 if(response.data === false)
                 {
                     console.log('login failed');
                     console.log(response);
-
-                    $scope.login=function(){
-                        alert('login failed');
-                    }
+                    $state.go("login")
                 }else{
+                  
+                  localStorage.setItem('tokenforget', response.data.result.token);
                     console.log('login completed')
                     $state.go('home');
+
                 }
-               
+
             }).catch((error) => {
-                $scope.login=function(){
-                    alert('login failed...');
-                }
-                console.log('Login failed ...',error);
+                alert('login failed...');
+                $state.go('login')
             });
     }
 

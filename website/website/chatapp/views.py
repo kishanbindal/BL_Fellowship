@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from rest_framework.views import APIView
@@ -70,14 +71,28 @@ class UserRegistration(APIView):
 
 def activate(self, token):
 
+	decoded_token = jwt.decode(token, 'secretkey', algorithms='HS256')
 
-    decoded_token = jwt.decode(token, 'secretkey', algorithms='HS256')
-
+    email = decoded_token.get('email')
     username = decoded_token.get('username')
+    user = User.objects.get(username=username)
 
     if username is not None:
-        # username.save()
+        user.is_active = True
+        redirect('home')
         return HttpResponse('success')
+
+    else:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+    # decoded_token = jwt.decode(token, 'secretkey', algorithms='HS256')
+
+    # username = decoded_token.get('username')
+
+    # if username is not None:
+    #     # username.save()
+    #     return HttpResponse('success')
 
 
 class UserLogin(APIView):
@@ -117,3 +132,53 @@ class UserLogout(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+class UserForgotPassword(APIView):
+
+    def post(self, request, *args, **kwargs):
+        try:
+
+            email = request.get('user_email')
+            username = User.objects.get(email=email).username
+            user = User.objects.get(email=email)
+
+            if user is not None:
+
+                payload = {
+                    'username': username,
+                    'email': email
+                }
+                secret = 'secretkey'
+                token = jwt.encode(payload, secret, algorithms='HS256').decode('utf-8')
+                from_mail = settings.EMAIL_HOST_USER
+                to_email = [email]
+                subject = 'Password reset for Forgot Password'
+                current_site = get_current_site(request)
+                message = render_to_string('forgotPassword.html', {
+                    'user': username,
+                    'domain': current_site.domain,
+                    'token': token
+                })
+                # send_mail = (subject, message, from_mail, to_email_list[], fail_silently=True)
+
+                send_mail(subject, message, from_mail, to_email, fail_silently=True)
+                return Response('success')
+            else:
+                Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response(status=status.HTTP_302_FOUND)
+
+
+def verify(token):
+
+    decoded_data = jwt.decode(token, 'secretkey', algorithms='HS256')
+    username = decoded_data.get('username')
+    user = User.objects.get(username=username)
+
+    if user is not None:
+        redirect('home')
+        return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ForgotPasswordForm():
+    pass

@@ -7,7 +7,7 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
     $stateProvider
 
     /** register state */
-    .state('register',{
+                                                                                                                                                                            .state('register',{
         url:'/register',
         templateUrl:'static/template/register.html',
         controller:'registerControl'
@@ -23,7 +23,7 @@ chatAppModule.config(['$stateProvider','$urlRouterProvider',($stateProvider,$url
     /** forgotPassword state */
     .state('forgotPassword',{
         url:'/forgotPassword',
-        templateUrl:'template/forgotPassword.html',
+        templateUrl:'static/template/forgotPassword.html',
         controller:'forgotPasswordControl'
     })
 

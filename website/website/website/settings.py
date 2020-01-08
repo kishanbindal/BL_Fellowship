@@ -24,16 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'k7rh_!gt&f+zsdffurv9t(gk+b^$-65zxv_w)g1@zb)o-q6gkn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -70,7 +66,7 @@ CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:8000',
 ]
 
-CSRF_COOKIE_DOMAIN = "http://localhost:8000"
+CSRF_COOKIE_DOMAIN = "http://127.0.0.1:8000"
 
 ROOT_URLCONF = 'website.urls'
 
@@ -85,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },

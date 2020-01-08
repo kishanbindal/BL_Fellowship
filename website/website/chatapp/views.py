@@ -32,15 +32,18 @@ class UserRegistration(APIView):
             # import pdb
             # pdb.set_trace()
 
-            user_name = request.data['username']
+            user_name = request.POST.get('username', None)
             user_email = request.data['email']
             user_password = request.data['password']
+
+            if user_name is None:
+                raise Exception("Username is required")
 
             User = get_user_model()
             if User.objects.filter(username=user_name, email=user_email).exists():
                 return Response(status=status.HTTP_208_ALREADY_REPORTED)
             else:
-                user = User.objects.create(username=user_name, email=user_email, password=user_password)
+                user = User.objects.create_user(username=user_name, email=user_email, password=user_password)
                 user.is_active = False
                 user.save()
                 payload = {
@@ -71,7 +74,10 @@ class UserRegistration(APIView):
 
 def activate(self, token):
 
-	decoded_token = jwt.decode(token, 'secretkey', algorithms='HS256')
+    import pdb
+    pdb.set_trace()
+
+    decoded_token = jwt.decode(token, 'secretkey', algorithm='HS256')
 
     email = decoded_token.get('email')
     username = decoded_token.get('username')
@@ -101,26 +107,32 @@ class UserLogin(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            # import pdb
-            # pdb.set_trace()
+            import pdb
+            pdb.set_trace()
 
-            data = request.data
-            entry_email = data['user_email']
-            entry_password = data['user_password']
-            username = User.objects.get(email=entry_email).username
-            user = auth.authenticate(username=username, password=entry_password)
+            # data = request.data
+            entry_email = request.data['user_email']
+            entry_password = request.data['user_password']
+            # username = User.objects.get(email=entry_email).username
+            user = auth.authenticate(email=entry_email, password=entry_password)
+            print(user)
             # user = User.get.model()
             if user is not None and user != ' ':
                 auth.login(request, user)
-                serializer = UserLoginSerializer(user)
-                return Response(serializer.data)
+                user.save()
+                # serializer = UserLoginSerializer(user)
+                return Response({
+                    'user': user,
+                    'message': 'successfully logged in',
+                    'status': 'UnAuthorized'
+                }, status=status.HTTP_200_OK)
             return Response({
                 'user': user,
                 'message': 'Account is disabled',
                 'status': 'UnAuthorized'
             }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception:
-            return HttpResponse(Exception)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class UserLogout(APIView):
@@ -137,9 +149,15 @@ class UserForgotPassword(APIView):
     def post(self, request, *args, **kwargs):
         try:
 
-            email = request.get('user_email')
-            username = User.objects.get(email=email).username
-            user = User.objects.get(email=email)
+            # import pdb
+            # pdb.set_trace()
+
+            username = request.data['username']
+            print(username)
+            User = get_user_model()
+            user = User.objects.get(username=username)
+            email = user.email
+            print(user)
 
             if user is not None:
 
@@ -148,13 +166,13 @@ class UserForgotPassword(APIView):
                     'email': email
                 }
                 secret = 'secretkey'
-                token = jwt.encode(payload, secret, algorithms='HS256').decode('utf-8')
+                token = jwt.encode(payload, secret, algorithm='HS256').decode('utf-8')
                 from_mail = settings.EMAIL_HOST_USER
                 to_email = [email]
                 subject = 'Password reset for Forgot Password'
                 current_site = get_current_site(request)
-                message = render_to_string('forgotPassword.html', {
-                    'user': username,
+                message = render_to_string('forgotpassword.html', {
+                    'user': payload,
                     'domain': current_site.domain,
                     'token': token
                 })
@@ -168,17 +186,19 @@ class UserForgotPassword(APIView):
             return Response(status=status.HTTP_302_FOUND)
 
 
-def verify(token):
+def verify(self, token):
+    import pdb
+    pdb.set_trace()
 
-    decoded_data = jwt.decode(token, 'secretkey', algorithms='HS256')
-    username = decoded_data.get('username')
+    decoded_token = jwt.decode(token, 'secretkey', algorithm='HS256')
+
+    username = decoded_token.get('username')
     user = User.objects.get(username=username)
 
     if user is not None:
-        redirect('home')
-        return Response(status=status.HTTP_200_OK)
+        return redirect('get-credentials')
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ForgotPasswordForm():
+class GetForgotCredentials(APIView):
     pass

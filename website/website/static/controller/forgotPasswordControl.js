@@ -9,7 +9,7 @@ chatAppModule.controller('forgotPasswordControl',function($scope,forgotPasswordS
 
         let forgotPasswordData={
 
-            'emailId':$scope.emailId
+            'username':$scope.username
         }
         console.log('forgotPassword Data :',forgotPasswordData);
         forgotPasswordService.forgotPasswordServiceUser(forgotPasswordData,$scope);

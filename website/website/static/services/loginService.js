@@ -20,7 +20,7 @@ chatAppModule.service('loginService',function($http, $location, $cookies, $state
         }).then((response) =>
             {
                 console.log("response in login server---",response);
-                console.log("token--", response.data);
+                console.log("response data --", response.data);
 
                 if(response.data === false)
                 {
@@ -28,8 +28,6 @@ chatAppModule.service('loginService',function($http, $location, $cookies, $state
                     console.log(response);
                     $state.go("login")
                 }else{
-                  
-                  localStorage.setItem('tokenforget', response.data.result.token);
                     console.log('login completed')
                     $state.go('home');
 

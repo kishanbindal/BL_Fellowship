@@ -8,6 +8,7 @@ urlpatterns = [
     path('api/register', views.UserRegistration.as_view(), name='register'),
     path('api/logout', views.UserLogout.as_view(), name='logout'),
     path('activate/<token>', views.activate, name='activate'),
-    path('api/api/forgotpassword', views.UserForgotPassword.as_view(), name='forgot-password'),,
-    path('verify/<token>', views.activate, name='activate'),
+    path('api/forgotpassword', views.UserForgotPassword.as_view(), name='forgot-password'),
+    path('verify/<token>', views.verify, name='verify'),
+    path('api/getcredentials', views.GetForgotCredentials.as_view(), name='get-credentials')
 ]

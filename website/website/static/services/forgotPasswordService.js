@@ -1,4 +1,4 @@
-chatAppModule.service('forgotPasswordService',function($http,$location){
+chatAppModule.service('forgotPasswordService',function($http, $state, $location){
 
     this.forgotPasswordServiceUser=function(data,$scope){
         console.log("forgotPassword service ",data)
@@ -8,8 +8,6 @@ chatAppModule.service('forgotPasswordService',function($http,$location){
             data:data
         }).then((response) =>
             {
-                console.log("response in forgotPassword server---",response);
-
                 if(response.data.content==false)
                 {
                     console.log('failed');

@@ -6,6 +6,5 @@ class User(AbstractUser):
 
     confirm_password = models.CharField(max_length=16, )
 
-
     def __str__(self):
-        return self.email
+        return self.username

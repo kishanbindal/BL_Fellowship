@@ -25,10 +25,10 @@ class UserForgotPasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email']
 
-
-class UserGetPasswordSerializer(serializers.ModelSerializer):
-
-    class Meta:
-
-        model = User
-        fields = ['password', 'confirm_password']
+#
+# class UserGetPasswordSerializer(serializers.ModelSerializer):
+#
+#     class Meta:
+#
+#         model = User
+#         fields = ['password', 'confirm_password']

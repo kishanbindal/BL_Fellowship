@@ -17,7 +17,7 @@ from rest_framework.views import APIView
 from .models import User
 from.serializers import UserRegistrationSerializer, UserLoginSerializer, UserForgotPasswordSerializer
 
-
+# ??? Need to learn how to mask this path ???
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = os.path.join(base, '.env')
 load_dotenv(dotenv_path=env)
@@ -133,6 +133,9 @@ class UserLoginView(GenericAPIView):
 
         try:
 
+            # import pdb
+            # pdb.set_trace()
+
             email = request.data.get('email')
             password = request.data.get('password')
 
@@ -149,7 +152,7 @@ class UserLoginView(GenericAPIView):
                     }
                     return JsonResponse(smd, status=status.HTTP_200_OK)
                 else:
-                    raise ValueError("User Value is None! Please check credentials")
+                    raise ValueError("Please check credentials!!")
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -187,9 +190,6 @@ class UserForgotPasswordView(GenericAPIView):
 
         try:
 
-            # import pdb
-            # pdb.set_trace()
-
             email = request.data.get('email')
             serializer = UserForgotPasswordSerializer(data=request.data)
 
@@ -202,6 +202,7 @@ class UserForgotPasswordView(GenericAPIView):
                 }
                 token = jwt.encode(payload, os.getenv('secret'), algorithm=os.getenv('algorithm')).decode('utf-8')
                 s_url = get_surl(str(token))
+                print(s_url)
                 s_url = s_url.split('/')
 
                 current_site = get_current_site(request)
@@ -214,6 +215,7 @@ class UserForgotPasswordView(GenericAPIView):
                     'token': s_url[2],
                 })
                 send_mail(subject, message, from_email, to_email, fail_silently=True)
+
                 smd = {
                     'message': f'mail successfully sent to {to_email}'
                 }
@@ -225,6 +227,11 @@ class UserForgotPasswordView(GenericAPIView):
 
 
 def reset(request, token):
+    '''
+    :param request: Contains New Password
+    :param token: token from reset.html
+    :return: Http200 for successful change, Http406 in case user is None, Http404 in case of uncaught Exceptions
+    '''
     smd = {
         'message': 'ping to reset successful',
         'status': 'Password change unsuccessful'
@@ -233,14 +240,14 @@ def reset(request, token):
     try:
 
         print(request.body)
-        request_data = json.loads(request.body)
+        request_data = json.loads(request.body)  # Convert incoming data into python dict() object
         new_password = request_data.get('new_password')
 
         if new_password is None or new_password == '':
             raise ValueError('Password Value cannot be None or empty')
 
         token_object = ShortURL.objects.get(surl=token)
-        token1 = token_object.lurls
+        token1 = token_object.lurl
         decoded_token = jwt.decode(token1, os.getenv('secret'), algorithm=os.getenv('algorithm'))
         username = decoded_token.get('username')
 
@@ -261,4 +268,4 @@ def reset(request, token):
         return JsonResponse(smd, status=status.HTTP_406_NOT_ACCEPTABLE)
 
     except Exception:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse(smd, status=status.HTTP_404_NOT_FOUND)

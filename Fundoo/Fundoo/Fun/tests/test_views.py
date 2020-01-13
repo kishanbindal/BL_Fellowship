@@ -63,8 +63,6 @@ class TestRegistrationView:
         response = views.UserRegistrationView.post(self, request)
         assert response.status_code == 400
 
-    # test not working
-
 
 @pytest.mark.django_db
 class TestLoginView:

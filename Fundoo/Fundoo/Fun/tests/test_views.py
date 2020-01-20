@@ -1,5 +1,6 @@
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import RequestFactory, Client
+from django.test import RequestFactory
+
 from django.urls import reverse
 from rest_framework.test import force_authenticate
 from Fun import views
@@ -24,7 +25,6 @@ class TestRegistrationView:
             'username': username,
             'email': email,
             'password': password,
-            'confirm_password': confirm_password
         }
         response = views.UserRegistrationView.post(self, request)
         assert response.status_code == 201
@@ -33,15 +33,13 @@ class TestRegistrationView:
         username = 'kishan'
         email = 'kishan.bindal@gmail.com'
         password = '123'
-        confirm_password = '0'
 
         path = reverse('register')
         request = RequestFactory().post(path)
         request.data = {
             'username': username,
             'email': email,
-            'password': password,
-            'confirm_password': confirm_password
+            'password': '',
         }
         response = views.UserRegistrationView.post(self, request)
         assert response.status_code == 400
@@ -50,7 +48,6 @@ class TestRegistrationView:
         username = ''
         email = 'kishan.bindal@gmail.com'
         password = '123'
-        confirm_password = '0'
 
         path = reverse('register')
         request = RequestFactory().post(path)
@@ -58,7 +55,6 @@ class TestRegistrationView:
             'username': username,
             'email': email,
             'password': password,
-            'confirm_password': confirm_password
         }
         response = views.UserRegistrationView.post(self, request)
         assert response.status_code == 400
@@ -86,7 +82,7 @@ class TestLoginView:
         password = '123'
 
         user = User.objects.create_user(username='kishanbindal', email=email, password=password,
-                                        confirm_password=password, is_active=True)
+                                        is_active=True)
         user.save()
 
         path = reverse('login')
@@ -110,7 +106,7 @@ class TestLoginView:
         password = '123'
 
         user = User.objects.create_user(username='kishanbindal', email=email, password=password,
-                                        confirm_password=password, is_active=True)
+                                        is_active=True)
         user.save()
 
         path = reverse('login')
@@ -134,7 +130,7 @@ class TestLoginView:
         password = '123'
 
         user = User.objects.create_user(username='kishanbindal', email=email, password=password,
-                                        confirm_password=password, is_active=True)
+                                        is_active=True)
         user.save()
 
         path = reverse('login')
@@ -163,7 +159,7 @@ class TestForgotPasswordView:
         email = 'asd@gmail.com'
         password = '123'
 
-        user = User.objects.create_user(username=username, email=email, password=password, confirm_password=password)
+        user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
 
         path = reverse('forgot-password')
@@ -179,7 +175,7 @@ class TestForgotPasswordView:
         email = 'asd@gmail.com'
         password = '123'
 
-        user = User.objects.create_user(username=username, email=email, password=password, confirm_password=password)
+        user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
 
         path = reverse('forgot-password')
@@ -195,8 +191,7 @@ class TestForgotPasswordView:
         email = 'asd@gmail.com'
         password = '123'
 
-        user = User.objects.create_user(username=username, email=email, password=password,
-                                        confirm_password=password)
+        user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
 
         path = reverse('forgot-password')

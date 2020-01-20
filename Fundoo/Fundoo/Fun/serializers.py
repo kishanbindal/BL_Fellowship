@@ -7,7 +7,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
+        fields = ['username', 'email', 'password']
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -25,7 +25,14 @@ class UserForgotPasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email']
 
-#
+
+class UploadImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = User
+        fields = ['profile_image']
+
 # class UserGetPasswordSerializer(serializers.ModelSerializer):
 #
 #     class Meta:

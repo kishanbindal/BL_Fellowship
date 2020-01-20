@@ -44,8 +44,6 @@ class UserRegistrationView(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         '''
-
-
         :param request: Takes in Http request
         :return: if user is not in database, creates a User, sends activation email and returns HTTP 201
                 if user already exists in database, returns HTTP Response 208
@@ -54,33 +52,17 @@ class UserRegistrationView(GenericAPIView):
 
         try:
 
-            # # Get user attributes from the request
-            # username = request.data.get('username')
-            # email = request.data.get('email')
-            # password = request.data.get('password')
-
-            # if username is None or username == '' or password == '' or email == '':
-            #     raise ValueError("Field cannot be type(None) or empty!")  # Username field cannot be empty string
             '''Validation Done here'''
 
             username, email, password = UserCredentialValidation.is_empty_register(request.data)
 
-            #business logic TODO
-            # response=UserRegistrationService.fj()
             if User.objects.filter(email=email).exists() or User.objects.filter(username=username).exists():
                 return Response(status=status.HTTP_208_ALREADY_REPORTED)  # user should not be registered in DB
 
             else:
                 if (email and password) is not None:
-                    # payload = {
-                    #     'username': username,
-                    #     'email': email,
-                    # }
-                    # secret = os.getenv('secret')
 
-                    # Encoding of the token
-                    # token = jwt.encode(payload, secret, os.getenv('algorithm')).decode('utf-8')  # TODO token wrapper
-                    token = TokenService().generate_token(username, email)
+                    token = TokenService().generate_reg_token(username, email)
                     print(token)
 
                     s_url = get_surl(str(token))  # Creation of short URL
@@ -88,17 +70,7 @@ class UserRegistrationView(GenericAPIView):
 
                     user = User.objects.create_user(username, email, password)
 
-                    # send_mail = (subject, message, from_email, to_email[], fail_silently=True)
                     current_site = get_current_site(request)  # Mail related variables
-                    # mail_subject = "Account Activation Link"
-                    # message = render_to_string('activate.html', {
-                    #     'user': username,
-                    #     'domain': current_site.domain,
-                    #     'token': s_url[2],
-                    # })
-                    # # Remember to change code here!!!<<<<<------[Change receiver email during production]------>>>>>
-                    # send_mail(mail_subject, message, os.getenv('EMAIL_HOST_USER'), ['kishan.bindal@gmail.com'],
-                    #           fail_silently=True)  # TODO email wrapper
 
                     MailServices.send_registration_email(username, current_site, s_url)
                     # is_active set to false so that user cannot login without activating account from mail
@@ -169,13 +141,9 @@ class UserLoginView(GenericAPIView):
                 user = auth.authenticate(username=username, password=password)
                 print(user.id)
                 if user is not None:
-                    payload = {
-                        'id': user.id,
-                    }
-                    secret = os.getenv('secret')
-                    algorithm = os.getenv('algorithm')
-                    token = jwt.encode(payload, secret, algorithm=algorithm).decode('utf-8')
 
+                    token = TokenService().generate_login_token(user.id)
+                    print(token)
                     smd = {
                         'message': 'Logged in Successfully',
                         'token': token
@@ -200,6 +168,9 @@ class UserLogoutView(APIView):
         :param request: takes in a post request with no attributes
         :return: Returns a HTTP 200 after logging user out.
         '''
+
+        import pdb
+        pdb.set_trace()
 
         token = request.headers.get('token')
         payload = jwt.decode(token, os.getenv('secret'), algorithm=os.getenv('algorithm'))
@@ -228,6 +199,8 @@ class UserForgotPasswordView(GenericAPIView):
         '''
 
         try:
+            import pdb
+            pdb.set_trace()
 
             email = request.data.get('email')
             serializer = UserForgotPasswordSerializer(data=request.data)
@@ -235,25 +208,15 @@ class UserForgotPasswordView(GenericAPIView):
             if serializer.is_valid():
 
                 user = User.objects.get(email=email)
-                payload = {
-                    'username': user.username,
-                    'email': email,
-                }
-                token = jwt.encode(payload, os.getenv('secret'), algorithm=os.getenv('algorithm')).decode('utf-8')
+
+                token = TokenService().generate_reg_token(user.username, email)
                 s_url = get_surl(str(token))
-                print(s_url)
                 s_url = s_url.split('/')
 
                 current_site = get_current_site(request)
-                subject = f"Receiving this message because you clicked forgot password on {current_site.domain}"
-                from_email = os.getenv('EMAIL_HOST_USER')
+
                 to_email = ['kishan.bindal@gmail.com']  # Change to user email at time of production
-                message = render_to_string('reset.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'token': s_url[2],
-                })
-                send_mail(subject, message, from_email, to_email, fail_silently=True)
+                MailServices.send_forgot_password_email(user, current_site, s_url)
 
                 smd = {
                     'message': f'mail successfully sent to {to_email}'
@@ -325,7 +288,7 @@ class UploadImage(GenericAPIView):
         # request_data = json.loads(request.body)
         img_file = request.FILES['image']
         token = request.headers.get('token')
-        decoded_token = jwt.decode(token, os.getenv('secret'), os.getenv('algorithm'))
+        decoded_token = TokenService().decode_token(token)
         user_id = str(decoded_token.get('id'))
 
         if user_id:

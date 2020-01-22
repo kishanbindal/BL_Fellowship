@@ -38,3 +38,5 @@ class Redis:
 
     def exists(self, key):
         return self.connection.exists(key)
+
+    # TODO

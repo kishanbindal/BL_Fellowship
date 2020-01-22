@@ -24,6 +24,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'Fun',
+    'FundooNotes',
     'rest_framework',
     'rest_framework_swagger',
     'django_short_url',

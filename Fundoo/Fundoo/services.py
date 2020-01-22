@@ -14,14 +14,12 @@ class UserCredentialValidation:
 
     @staticmethod
     def is_empty_register(credentials):
-        import pdb
-        pdb.set_trace()
 
         username = credentials.get('username')
         email = credentials.get('email')
         password = credentials.get('password')
 
-        if (password or email or username) == '' or (password or email or username) == ' ':
+        if (password or email or username) == '' or (password or email or username) == ' ' or password == '':
             raise ValueError("Input Values cannot be Empty")
         elif (password or email or username) is None:
             raise ValueError("Input values cannot be None")
@@ -53,8 +51,8 @@ class TokenService:
             'username': username,
             'email': email,
         }
-        token = jwt.encode(payload, self.secret, algorithm=os.getenv('algorithm')).decode('utf-8')
-        return token
+        # token = jwt.encode(payload, self.secret, algorithm=os.getenv('algorithm')).decode('utf-8')
+        return self.__encode(payload)
 
     def generate_login_token(self, user_id):
         payload = {
@@ -68,11 +66,14 @@ class TokenService:
         payload = jwt.decode(token, self.secret, algorithm=os.getenv('algorithm'))
         return payload
 
+    def __encode(self, payload):
+        return jwt.encode(payload, self.secret, algorithm=os.getenv('algorithm')).decode('utf-8')
+
 
 class MailServices:
 
     @staticmethod
-    def send_registration_email(username, current_site_url, short_url): # Add to email at time of production
+    def send_registration_email(username, current_site_url, short_url):  # Add to email at time of production
 
         # send_mail = (subject, message, from_email, to_email[], fail_silently=True)
         mail_subject = "Account Activation Link"

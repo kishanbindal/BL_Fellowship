@@ -1,0 +1,18 @@
+[run]
+
+source = .
+
+
+[omit]
+*/Fundoo*
+*/migrations/*
+*/admin.py
+*/aws_services.py
+*/models.py
+*/services.py
+*/tests.py
+*/__init__.py
+
+
+[xml]
+output = coverage.xml

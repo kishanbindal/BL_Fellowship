@@ -30,9 +30,9 @@ class TestRegistrationView:
         assert response.status_code == 201
 
     def test_registration_view2(self):
+
         username = 'kishan'
         email = 'kishan.bindal@gmail.com'
-        password = '123'
 
         path = reverse('register')
         request = RequestFactory().post(path)
@@ -201,3 +201,15 @@ class TestForgotPasswordView:
         }
         response = views.UserForgotPasswordView.post(self, request)
         assert response.status_code == 404
+
+
+@pytest.mark.django_db
+class TestLoginWithGoogleAuthorization:
+
+    def test_google_auth_view(self):
+
+        path = reverse('google-auth')
+        request = RequestFactory().get(path)
+
+        response = views.LoginGoogleAuthorization.get(self, request)
+        assert response.status_code == 200

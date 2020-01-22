@@ -169,9 +169,6 @@ class UserLogoutView(APIView):
         :return: Returns a HTTP 200 after logging user out.
         '''
 
-        import pdb
-        pdb.set_trace()
-
         token = request.headers.get('token')
         payload = jwt.decode(token, os.getenv('secret'), algorithm=os.getenv('algorithm'))
         user_id = payload.get('id')
@@ -199,8 +196,6 @@ class UserForgotPasswordView(GenericAPIView):
         '''
 
         try:
-            import pdb
-            pdb.set_trace()
 
             email = request.data.get('email')
             serializer = UserForgotPasswordSerializer(data=request.data)
@@ -277,7 +272,6 @@ class UploadImage(GenericAPIView):
 
     serializer_class = UploadImageSerializer
 
-    # @login_required(login_url='api/login')
     def post(self, request, *args, **kwargs):
         smd = {
             'message': 'Successfully Added Image',
@@ -439,8 +433,6 @@ class LoginGitHub(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        # import pdb
-        # pdb.set_trace()
         try:
             access_url = os.getenv('SOCIAL_AUTH_GITHUB_GET_TOKEN')
             auth_code = get_auth_code(request)

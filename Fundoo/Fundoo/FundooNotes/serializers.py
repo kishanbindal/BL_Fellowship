@@ -7,4 +7,29 @@ class CreateNoteSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Note
-        fields = ['title', 'note_text']
+        # fields = ['title', 'note_text', 'note_image', 'labels', 'collaborators', 'is_archived']
+        fields = '__all__'
+
+
+class NoteOperationsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Note
+        fields = ['title', 'note_text', 'note_image', 'labels', 'collaborators', 'is_archived', 'is_trashed', 'color',
+                  'is_pinned', 'link', 'reminder']
+
+
+class CreateLabelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Label
+        fields = '__all__'
+
+
+class LabelOperationsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Label
+        fields = ['label_name']

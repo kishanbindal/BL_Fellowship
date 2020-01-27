@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'django_short_url',
     'storages',
+    'django_nose',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,9 +127,12 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-SWAGGER_SETTINGS = {
-    'SHOW_REQUEST_HEADERS': True,
-}
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# SWAGGER_SETTINGS = {
+#     # 'SHOW_REQUEST_HEADERS': True,
+# }
 
 LANGUAGE_CODE = 'en-us'
 
@@ -151,3 +155,28 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# # NOSE_ARGS = ['--with-spec', '--spec-color']
+# NOSE_ARGS = [ '--with-spec', '--spec-color',
+#                 # '--with-coverage', '--cover-html',
+#                 # '--with-coverage',
+#               # '--cover-xml',
+#                 # '--cover-package=.',
+#                 # '--cover-html-dir=reports/cover'
+#                 "--cover-xml-file=FILE",
+#
+# ]
+
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# NOSE_ARGS = ['--with-spec', '--spec-color']
+NOSE_ARGS = [ '--with-spec', '--spec-color',
+# '--with-coverage', '--cover-html',
+'--with-coverage', '--cover-xml',
+'--cover-package=.',
+# '--cover-html-dir=reports/cover'
+
+]

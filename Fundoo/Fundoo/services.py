@@ -3,6 +3,9 @@ import dotenv
 import jwt
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from rest_framework.response import Response
+from rest_framework import status
+from Fundoo.redis_class import Redis
 
 
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -99,3 +102,35 @@ class MailServices:
             'token': short_url[2],
         })
         send_mail(subject, message, from_email, to_email, fail_silently=True)
+
+
+class GoogleLoginServices:
+
+    def __init__(self):
+
+        self.rdb = Redis()
+        self.smd = {
+            'success': 'Success',
+            'message': 'Successfully signed up and logged in through Google',
+            'data': []
+        }
+
+    def generate_token_at_login(self, user_model, username):
+
+        if user_model.objects.get(username=username) is not None:
+            user = user_model.objects.get(username=username)
+            key = user.id
+            token = TokenService().generate_login_token(key)
+            self.smd['message'], self.smd['data'] = 'Successfully Logged in', [token]
+            self.rdb.set(key=key, value=token)
+            return Response(data=self.smd, status=status.HTTP_200_OK)
+
+        else:
+            user = user_model.objects.create_user(username=username)
+            user.save()
+            user = user_model.objects.get(username=username)
+            key = user.id
+            token = TokenService().generate_login_token(key)
+            self.smd['data'] = [token]
+            self.rdb.set(key=key, value=token)
+            return Response(self.smd, status=status.HTTP_201_CREATED)

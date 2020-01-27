@@ -8,7 +8,8 @@ class CreateNoteSerializer(serializers.ModelSerializer):
 
         model = Note
         # fields = ['title', 'note_text', 'note_image', 'labels', 'collaborators', 'is_archived']
-        fields = '__all__'
+        exclude = ['user', ]
+        # fields = '__all__'
 
 
 class NoteOperationsSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class CreateLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Label
-        fields = '__all__'
+        exclude = ['user', ]
 
 
 class LabelOperationsSerializer(serializers.ModelSerializer):

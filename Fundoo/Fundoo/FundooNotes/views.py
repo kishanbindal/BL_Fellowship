@@ -10,10 +10,12 @@ from .serializers import CreateNoteSerializer, NoteOperationsSerializer, CreateL
     LabelOperationsSerializer
 from Fundoo.redis_class import Redis
 from services import TokenService
+from .note_services import GenerateId
 
 rdb = Redis()
 
 
+@method_decorator(logged_in, name='dispatch')
 class NoteView(GenericAPIView):
 
     queryset = Note.objects.all()
@@ -22,12 +24,11 @@ class NoteView(GenericAPIView):
     def get(self, request, *args, **kwargs):
 
         try:
-
-            notes = self.queryset.filter(is_archived=False, is_trashed=False)
-            return Response(notes.values(), status=status.HTTP_200_OK)
+            user_id = GenerateId().generate_id(request)
+            notes = self.queryset.filter(is_archived=False, is_trashed=False, user_id=user_id)
+            return Response(data=notes.values(), status=status.HTTP_200_OK)
 
         except Exception:
-
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
     def post(self, request, *args, **kwargs):
@@ -39,11 +40,12 @@ class NoteView(GenericAPIView):
         }
 
         try:
+
             serializer = CreateNoteSerializer(data=request.data)
 
             if serializer.is_valid():
-                # user = request.user
-                serializer.save(user_id=41)
+                user_id = GenerateId().generate_id(request)
+                serializer.save(user_id=user_id)
                 smd['success'], smd['message'] = 'Success', 'Note Successfully created'
                 return JsonResponse(data=smd, status=status.HTTP_201_CREATED)
             else:
@@ -57,15 +59,18 @@ class NoteOperationsView(GenericAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteOperationsSerializer
 
+    @method_decorator(logged_in)
     def get(self, request, id, *args, **kwargs):
 
         try:
+
             smd = {
                 'success': 'FAIL',
                 'message': f'Unsuccessful in retrieving note with id : {id}',
                 'data': []
             }
-            note = self.queryset.filter(pk=id)
+            user_id = GenerateId().generate_id(request)
+            note = self.queryset.filter(pk=id, user_id=user_id)
             if note.values() is not None:
                 smd = {
                     'success': 'Successful',
@@ -79,6 +84,7 @@ class NoteOperationsView(GenericAPIView):
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
+    @method_decorator(logged_in)
     def put(self, request, id, *args, **kwargs):
 
         try:
@@ -91,16 +97,26 @@ class NoteOperationsView(GenericAPIView):
 
             if serializer.is_valid():
 
-                note = Note.objects.get(pk=id)
-                serializer.update(note, serializer.data)
-                smd['Success'], smd['message'] = 'success', f'Successfully update Note with id: {id}'
-                return Response(smd, status=status.HTTP_200_OK)
+                user_id = GenerateId().generate_id(request)
+                # image = request.FILES['note_image']
+                note = self.queryset.get(pk=id, user_id=user_id)
+                if note is not None:
+                    serializer.update(note, serializer.data)
+                    # if image is not None:
+                    #     note.__setattr__('note_image', image)
+                    #     note.save()
+                    #     print(note.note_image)
+                    smd['Success'], smd['message'] = 'success', f'Successfully update Note with id: {id}'
+                    return Response(smd, status=status.HTTP_200_OK)
+                else:
+                    return Response(smd, status=status.HTTP_404_NOT_FOUND)
             else:
                 smd['data'] = [serializer.errors]
                 return Response(smd, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
+    @method_decorator(logged_in)
     def delete(self, request, id, *args, **kwargs):
 
         smd = {
@@ -122,14 +138,18 @@ class LabelView(GenericAPIView):
     queryset = Label.objects.all()
     serializer_class = CreateLabelSerializer
 
+    @method_decorator(logged_in)
     def get(self, request, *args, **kwargs):
 
         try:
-            labels = self.queryset
+
+            user_id = GenerateId().generate_id(request)
+            labels = self.queryset.filter(user_id=user_id)
             return Response(labels.values(), status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
+    @method_decorator(logged_in)
     def post(self, request, *args, **kwargs):
 
         try:
@@ -141,7 +161,8 @@ class LabelView(GenericAPIView):
             serializer = CreateLabelSerializer(data=request.data)
 
             if serializer.is_valid():
-                serializer.save(user_id=41)
+                user_id = GenerateId().generate_id(request)
+                serializer.save(user_id=user_id)
                 smd['Success'], smd['message'] = 'Success', 'Successfully created Label'
                 return Response(smd, status=status.HTTP_201_CREATED)
             else:
@@ -155,6 +176,7 @@ class LabelOperationsView(GenericAPIView):
     queryset = Label.objects.all()
     serializer_class = LabelOperationsSerializer
 
+    @method_decorator(logged_in)
     def get(self, request, id, *args, **kwargs):
 
         try:
@@ -174,6 +196,7 @@ class LabelOperationsView(GenericAPIView):
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
+    @method_decorator(logged_in)
     def put(self, request, id, *args, **kwargs):
 
         try:
@@ -197,6 +220,7 @@ class LabelOperationsView(GenericAPIView):
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
+    @method_decorator(logged_in)
     def delete(self, request, id, *args, **kwargs):
 
         try:
@@ -220,10 +244,12 @@ class LabelOperationsView(GenericAPIView):
 
 class ViewArchivedNotes(GenericAPIView):
 
+    @method_decorator(logged_in)
     def get(self, request, *args, **kwargs):
 
         try:
-            archived_notes = Note.objects.all().filter(is_archived=True)
+            user_id = GenerateId().generate_id(request)
+            archived_notes = Note.objects.all().filter(is_archived=True, user_id=user_id)
             return Response(archived_notes.values(), status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
@@ -231,10 +257,12 @@ class ViewArchivedNotes(GenericAPIView):
 
 class ViewTrashedNotes(GenericAPIView):
 
+    @method_decorator(logged_in)
     def get(self, request, *args, **kwargs):
 
         try:
-            trashed_notes = Note.objects.all().filter(is_trashed=True)
+            user_id = GenerateId().generate_id(request)
+            trashed_notes = Note.objects.all().filter(is_trashed=True, user_id=user_id)
             return Response(trashed_notes.values(), status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)

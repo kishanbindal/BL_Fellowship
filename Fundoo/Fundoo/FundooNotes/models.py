@@ -15,7 +15,7 @@ class Note(models.Model):
     user = models.ForeignKey(User, related_name='NoteUser', on_delete=models.CASCADE)
     title = models.CharField(max_length=64, blank=True)
     note_text = models.TextField(blank=True)
-    note_image = models.URLField(blank=True, null=True)
+    note_image = models.ImageField(upload_to='images/', blank=True, null=True)
     labels = models.ManyToManyField(Label, blank=True)
     collaborators = models.ManyToManyField(User, blank=True)
     is_archived = models.BooleanField(default=False)

@@ -4,12 +4,15 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.response import Response
+from Fundoo import redis_class
+
+rdb = redis_class.Redis()
 
 
-def logged_in(function=None, redis_db=None):
+def logged_in(function=None):
 
     @wraps(function)
-    def wrapper(request, *args, **kwargs):
+    def wrapper(request, id=None, *args, **kwargs):
 
         smd = {
             'success': 'Fail',
@@ -19,6 +22,7 @@ def logged_in(function=None, redis_db=None):
 
         try:
 
+            # token = request.META.get('HTTP_TOKEN')
             token = request.headers.get('token')
 
             if token is None or token == '':
@@ -26,11 +30,11 @@ def logged_in(function=None, redis_db=None):
 
             payload = TokenService().decode_token(token)
             user_id = payload.get('id')
-            if redis_db.exists(user_id):
-                return function(request, *args, **kwargs)
-            return JsonResponse(data=smd, status=status.HTTP_401_UNAUTHORIZED)
+            if rdb.exists(user_id):
+                return function(request, id=None, *args, **kwargs)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         except ValueError:
-            return Response(ValueError, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(smd, status=status.HTTP_401_UNAUTHORIZED)
 
     return wrapper

@@ -1,18 +1,24 @@
 [run]
-
 source = .
 
+omit=
+    */migrations/*
+    */admin.py
+    */aws_services.py
+    */models.py
+    */services.py
+    */tests.py
+    */tests/*
+    util/*
+    */apps.py
+    manage.py
+    */wsgi.py
+    */asgi.py
+    */env_settings/*
+    */note_services.py
+    */serializers.py
+    */settings.py
+    */redis_class.py
+    */__init__.py
 
-[omit]
-*/Fundoo*
-*/migrations/*
-*/admin.py
-*/aws_services.py
-*/models.py
-*/services.py
-*/tests.py
-*/__init__.py
 
-
-[xml]
-output = coverage.xml

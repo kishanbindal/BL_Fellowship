@@ -19,6 +19,18 @@ class Redis:
             print('Connection established : ', connection)
         return connection
 
+    def delete(self, *names):
+        self.connection.delete(*names)
+
+    def exists(self, key):
+        return self.connection.exists(key)
+
+    def get(self, key):
+        return self.connection.get(key)
+
+    def mget(self, *key):
+        return self.connection.mget(*key)
+
     def set(self, key, value, exp_s=None, exp_ms=None):
         '''
         :param key: Name for Cache 'key'
@@ -29,14 +41,4 @@ class Redis:
         '''
         self.connection.set(key, value, exp_s, exp_ms)
         return 'key:value is set in-memory cache'
-
-    def get(self, key):
-        return self.connection.get(key)
-
-    def delete(self, *names):
-        self.connection.delete(*names)
-
-    def exists(self, key):
-        return self.connection.exists(key)
-
     # TODO

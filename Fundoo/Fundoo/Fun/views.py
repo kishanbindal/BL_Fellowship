@@ -1,7 +1,7 @@
 """
 
 """
-from services import UserCredentialValidation, TokenService, MailServices
+from services import UserCredentialValidation, TokenService, MailServices, GoogleLoginServices
 from Fundoo import redis_class
 import logging
 from PIL import Image
@@ -151,7 +151,7 @@ class UserLoginView(GenericAPIView):
                     print(token)
                     # REDIS CONTENT GOES HERE
                     rdb.set(user.id, token)
-                    return JsonResponse(smd, status=status.HTTP_200_OK)
+                    return Response(smd, status=status.HTTP_200_OK)
                 else:
                     raise ValueError("Please check credentials!!")
             else:
@@ -394,15 +394,15 @@ class LoginGoogle(GenericAPIView):
 
             smd = {
                 'success': 'Success',
-                'message': 'Successfully signed up and logged in through Google'
+                'message': 'Successfully signed up and logged in through Google',
+                'data': []
             }
 
             if api_response.status_code == 200:
                 data = json.loads(api_response.content)
                 username = data.get('name')
-                user = User.objects.create_user(username=username)
-                user.save()
-                return Response(data=smd, status=api_response.status_code)
+                response = GoogleLoginServices().generate_token_at_login(User, username)
+                return response
             else:
                 smd['success'] = 'Fail'
                 smd['message'] = 'Failed to Sign up with Google'

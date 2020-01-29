@@ -66,7 +66,7 @@ class TokenService:
 
     def decode_token(self, token, *args, **kwargs):
 
-        payload = jwt.decode(token, self.secret, algorithm=os.getenv('algorithm'))
+        payload = jwt.decode(token, self.secret, algorithms=os.getenv('algorithm'))
         return payload
 
     def __encode(self, payload):

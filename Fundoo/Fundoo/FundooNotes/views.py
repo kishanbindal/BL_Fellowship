@@ -22,7 +22,11 @@ class NoteView(GenericAPIView):
     serializer_class = CreateNoteSerializer
 
     def get(self, request, *args, **kwargs):
-
+        '''
+        :param request:
+        :return: Returns all Notes of specific user with Http 200. Exceptions return Http403. If token does not exist,
+                returns Http 403
+        '''
         try:
             user_id = GenerateId().generate_id(request)
             notes = self.queryset.filter(is_archived=False, is_trashed=False, user_id=user_id)
@@ -32,7 +36,10 @@ class NoteView(GenericAPIView):
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
     def post(self, request, *args, **kwargs):
-
+        '''
+        :param request: HTTP Request containing Data being sent by the user
+        :return: Http201 if Input is valid, else Http 400. If token not present/exceptions returns Http403
+        '''
         smd = {
             'success': 'FAIL',
             'message': 'Failed To add Note to Server Database',
@@ -61,7 +68,12 @@ class NoteOperationsView(GenericAPIView):
 
     @method_decorator(logged_in)
     def get(self, request, id, *args, **kwargs):
-
+        '''
+        :param request:
+        :param id: Specified note ID
+        :return: returns Note Value and Http 200 if found, else returns Http 400 if Note does not exist. Exceptions
+                raise Http404
+        '''
         try:
 
             smd = {
@@ -85,27 +97,33 @@ class NoteOperationsView(GenericAPIView):
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
     @method_decorator(logged_in)
-    def put(self, request, id, *args, **kwargs):
-
+    def put(self, request, id):
+        '''
+        :param request:
+        :param id: Specified Note ID
+        :return: returns Http200, if note is found and updated, else Http404. If input data is worng then, Http 400 is
+                returned. Exceptions return Http 404.
+        '''
         try:
             smd = {
                 'Success': 'Fail',
                 'message': 'Unsuccessful in updating Note',
                 'data': [],
             }
-            serializer = NoteOperationsSerializer(data=request.data)
+            import json
+
+            print(request.body)
+            print('id::', id)
+            # clientname = kwargs.get("clientname", "noparameter")
+            # print("The searched name is: " + str(clientname))
+            serializer = NoteOperationsSerializer(data=request.data) #json.loads(request.body)
 
             if serializer.is_valid():
-
                 user_id = GenerateId().generate_id(request)
-                # image = request.FILES['note_image']
-                note = self.queryset.get(pk=id, user_id=user_id)
+                note = Note.objects.get(pk=id)
+                print(note, '---->')
                 if note is not None:
                     serializer.update(note, serializer.data)
-                    # if image is not None:
-                    #     note.__setattr__('note_image', image)
-                    #     note.save()
-                    #     print(note.note_image)
                     smd['Success'], smd['message'] = 'success', f'Successfully update Note with id: {id}'
                     return Response(smd, status=status.HTTP_200_OK)
                 else:
@@ -113,24 +131,37 @@ class NoteOperationsView(GenericAPIView):
             else:
                 smd['data'] = [serializer.errors]
                 return Response(smd, status=status.HTTP_400_BAD_REQUEST)
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
     @method_decorator(logged_in)
-    def delete(self, request, id, *args, **kwargs):
-
+    def delete(self, request, id):
+        '''
+        :param request:
+        :param id: Specified Note ID
+        :return: Deletes the specific Note with ID if note is found, else Http400. If no token, Http401 is returned
+                from decorator
+        '''
         smd = {
             'Success': 'Fail',
             'message': 'Deletion of Note Unsuccessful',
             'data': []
         }
-        note = self.queryset.get(pk=id)
-        if note is not None:
-            print(note.delete())
-            smd['Success'], smd['message'] = 'Success', 'Deletion of Note unsuccessful'
-            return Response(data=smd, status=status.HTTP_200_OK)
-        else:
-            return Response(smd, status=status.HTTP_400_BAD_REQUEST)
+
+        print(id)
+        try:
+            note = self.queryset.get(pk=id)
+            if note is not None:
+                print(note.delete())
+                smd['Success'], smd['message'] = 'Success', 'Deletion of Note Successful'
+                return Response(data=smd, status=status.HTTP_200_OK)
+            else:
+                return Response(smd, status=status.HTTP_400_BAD_REQUEST)
+        except Note.DoesNotExist:
+            return Response(smd, status=status.HTTP_404_NOT_FOUND)
+        except Exception:
+            return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
 
 class LabelView(GenericAPIView):
@@ -140,7 +171,10 @@ class LabelView(GenericAPIView):
 
     @method_decorator(logged_in)
     def get(self, request, *args, **kwargs):
-
+        '''
+        :param request:
+        :return: Returns all labels of the specific user. if no token, Http403 is returned
+        '''
         try:
 
             user_id = GenerateId().generate_id(request)
@@ -151,7 +185,10 @@ class LabelView(GenericAPIView):
 
     @method_decorator(logged_in)
     def post(self, request, *args, **kwargs):
-
+        '''
+        :param request: Takes in Label Details from request, with token
+        :return: adds a label if successful else returns Http400. If token not present returns Http403
+        '''
         try:
             smd = {
                 'Success': 'Fail',
@@ -178,7 +215,12 @@ class LabelOperationsView(GenericAPIView):
 
     @method_decorator(logged_in)
     def get(self, request, id, *args, **kwargs):
+        '''
 
+        :param request:
+        :param id: Label ID
+        :return: returns the label with specified ID, if not found returns Http400. Exception Gives Http404
+        '''
         try:
             smd = {
                 'Success': 'Fail',
@@ -192,13 +234,17 @@ class LabelOperationsView(GenericAPIView):
                 return Response(smd, status=status.HTTP_200_OK)
             else:
                 return Response(smd, status=status.HTTP_400_BAD_REQUEST)
-
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
     @method_decorator(logged_in)
     def put(self, request, id, *args, **kwargs):
-
+        '''
+        :param request:
+        :param id: Label ID
+        :return: Updates the specified Label, returns Http200, if Input data mismatch then returns Http400, Http404 for
+                    Exceptions
+        '''
         try:
             smd = {
                 'Success': 'Fail',
@@ -217,12 +263,19 @@ class LabelOperationsView(GenericAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        except Label.DoesNotExist:
+            return Response(smd, status=status.HTTP_404_NOT_FOUND)
+
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
     @method_decorator(logged_in)
     def delete(self, request, id, *args, **kwargs):
-
+        '''
+        :param request:
+        :param id: Note ID
+        :return: Deletes Note with provided ID if label exists, else returns Http400, returns 404 for any Exception
+        '''
         try:
             smd = {
                 'Success': 'Fail',
@@ -238,6 +291,8 @@ class LabelOperationsView(GenericAPIView):
                 return Response(smd, status=status.HTTP_200_OK)
             else:
                 return Response(smd, status=status.HTTP_400_BAD_REQUEST)
+        except Label.DoesNotExist:
+            return Response(smd, status=status.HTTP_404_NOT_FOUND)
         except Exception:
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
@@ -246,7 +301,10 @@ class ViewArchivedNotes(GenericAPIView):
 
     @method_decorator(logged_in)
     def get(self, request, *args, **kwargs):
-
+        '''
+        :param request:
+        :return: returns all archived notes by the user
+        '''
         try:
             user_id = GenerateId().generate_id(request)
             archived_notes = Note.objects.all().filter(is_archived=True, user_id=user_id)
@@ -259,7 +317,10 @@ class ViewTrashedNotes(GenericAPIView):
 
     @method_decorator(logged_in)
     def get(self, request, *args, **kwargs):
-
+        '''
+        :param request:
+        :return: Returns all Trashed Notes by the User
+        '''
         try:
             user_id = GenerateId().generate_id(request)
             trashed_notes = Note.objects.all().filter(is_trashed=True, user_id=user_id)

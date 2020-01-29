@@ -1,5 +1,5 @@
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import RequestFactory
+from django.test import RequestFactory, Client
 
 from django.urls import reverse
 from rest_framework.test import force_authenticate
@@ -188,14 +188,17 @@ class TestForgotPasswordView:
         response = views.UserForgotPasswordView.post(self, request)
         assert response.status_code == 404
 
-
+#
 # @pytest.mark.django_db
 # class TestLoginWithGoogleAuthorization:
 #
 #     def test_google_auth_view(self):
 #
 #         path = reverse('google-auth')
-#         request = RequestFactory().get(path, follow=True)
-#         response = views.LoginGoogleAuthorization.get(self, request)
+#         client = Client()
+#         response = client.get(path, follow=True)
+#         assert response.status_code == 200
+#         # request = RequestFactory().get(path, follow=True)
+#         # response = views.LoginGoogleAuthorization.get(self, request)
 #         # assert response.status_code == 200
-#         assert Redirects(response, "/expected_redirect/url", 302, 200)
+#         # assert response.status_code == 200

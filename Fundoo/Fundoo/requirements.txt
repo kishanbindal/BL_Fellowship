@@ -5,6 +5,7 @@ botocore==1.14.2
 certifi==2019.11.28
 chardet==3.0.4
 CodeConvert==3.0.2
+colorama==0.4.3
 coreapi==2.3.3
 coreschema==0.0.4
 coverage==5.0.2
@@ -13,6 +14,7 @@ django-admin==2.0.0
 django-cors-headers==3.2.0
 django-excel-response2==2.0.8
 django-models-ext==1.1.9
+django-nose==1.4.6
 django-redis==4.11.0
 django-rest-swagger==2.2.0
 django-short-url==1.1.4
@@ -34,10 +36,12 @@ MarkupSafe==1.1.1
 mixer==6.1.3
 mock==3.0.5
 more-itertools==8.0.2
+nose==1.3.7
 openapi-codec==1.3.2
 orderedmultidict==1.0.1
 packaging==20.0
 Pillow==7.0.0
+pinocchio==0.4.2
 pluggy==0.13.1
 psycopg2==2.8.4
 py==1.8.1
@@ -45,6 +49,8 @@ PyJWT==1.7.1
 pyparsing==2.4.6
 pytest==5.3.2
 pytest-cov==2.8.1
+pytest-cover==3.0.0
+pytest-coverage==0.0
 pytest-django==3.7.0
 python-dateutil==2.8.1
 python-dotenv==0.10.3

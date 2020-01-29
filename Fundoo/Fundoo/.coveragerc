@@ -15,8 +15,8 @@ omit=
     */wsgi.py
     */asgi.py
     */env_settings/*
-    */note_services.py
-    */serializers.py
+    *note_services.py
+    *serializers.py
     */settings.py
     */redis_class.py
     */__init__.py

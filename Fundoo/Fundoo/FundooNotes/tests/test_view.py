@@ -8,7 +8,10 @@ from util.decorators import logged_in
 from Fun.models import User
 from Fun import views
 import FundooNotes
+from FundooNotes.models import Note, Label
 import mock
+
+BASE_URL='http://127.0.0.1:8000/'
 
 
 @pytest.mark.django_db
@@ -55,6 +58,17 @@ class TestNoteView:
         response = requests.get(url='http://127.0.0.1:8000/notes/api/notes/', headers=headers)
         assert response.status_code == 401
 
+    def test_note_view_wrong_token(self):
+
+        headers = {
+            'token': 'byJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYyJ9.zIVQLO-ZB6lVQXph3faTxfovtIAByaH8v1c2ZRMpVbI'
+        }
+        path = reverse('notes')
+        request = RequestFactory().get(path)
+        request.headers = headers
+        response = FundooNotes.views.NoteView.get(self, request)
+        assert response.status_code == 403
+
     def test_note_view(self, set_up):
 
         headers = {
@@ -96,6 +110,22 @@ class TestNoteView:
         response = FundooNotes.views.NoteView.post(self, request)
         assert response.status_code == 403
 
+    def test_note_post_invalid_serializer(self, set_up):
+
+        path = reverse('notes')
+        data = {"title": "Title of My note", "note_text": None, "note_image": None, "labels": [],
+                "collaborators": [], "is_archived": "False", "is_trashed": "False", "color": "", "is_pinned": "False",
+                "link": "", "reminder": None
+                }
+        headers = {
+            'token': set_up
+        }
+        request = RequestFactory().post(path)
+        request.data = data
+        request.headers = headers
+        response = FundooNotes.views.NoteView.post(self, request)
+        assert response.status_code == 400
+
 
 @pytest.mark.django_db
 class TestNoteOperationsView:
@@ -117,14 +147,17 @@ class TestNoteOperationsView:
             'password': password
         }
         response = views.UserLoginView.post(self, request)
-
-        return response.data.get('token')
+        note = Note(user_id=user.id, title="Title of My note", note_text='Note Sent', note_image=None, is_archived=True,
+                    is_trashed=False, color="", is_pinned=False, link="", reminder=None,)
+        note.save()
+        print(note.pk, '===========NOTE ID============')
+        return response.data.get('token'), note.pk
 
     def test_get_note_by_id(self, set_up):
 
         path = reverse('notes-op', kwargs={"id": 8})
         request = RequestFactory().get(path)
-        headers = {'token': set_up}
+        headers = {'token': set_up[0]}
         request.headers = headers
         response = FundooNotes.views.NoteOperationsView.get(self, request)
         assert response.status_code == 200
@@ -136,32 +169,83 @@ class TestNoteOperationsView:
         response = FundooNotes.views.NoteOperationsView.get(self, request)
         assert response.status_code == 401
 
-    # def test_update_note(self, set_up):
-    #
-    #     path = reverse('notes-op', kwargs={"id": 3})
-    #     request = RequestFactory().put(path)
-    #     headers = {'token': set_up}
-    #     request.headers = headers
-    #     data = {"title": "Title of My note", "note_text": 'Note Sent', "note_image": None, "labels": [],
-    #             "collaborators": [],
-    #             "is_archived": "True", "is_trashed": "False", "color": "", "is_pinned": "False", "link": "",
-    #             "reminder": None,
-    #             }
-    #     request.data = data
-    #     response = FundooNotes.views.NoteOperationsView.put(self, request)
-    #     assert response.status_code == 200
+    def test_get_note_by_id_wrong_token(self):
 
-    # def test_delete_note(self, set_up):
-    #
-    #     path = reverse('notes-op', kwargs={"id": 8})
-    #     headers = set_up
-    #     request = RequestFactory().delete(path)
-    #     request.headers = {
-    #         'token': headers
-    #     }
-    #     response = FundooNotes.views.NoteOperationsView.delete(self, request)
-    #     assert response.status_code == 200
-# TODO Delete, Put
+        path = reverse('notes-op', kwargs={"id": 8})
+        headers = {
+            'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjR9.bQzPrAnhZwvT1e5X3ILJU1WgvOs0dEsAVuna6mtwKHg'
+        }
+        request = RequestFactory().get(path)
+        request.headers = headers
+        response = FundooNotes.views.NoteOperationsView.get(self, request)
+        assert response.status_code == 400
+
+    def test_update_note(self, set_up):
+
+        token, note_id = set_up
+        path = reverse('notes-op', args=[note_id])
+        print(f'Path =======> {path}')
+        headers = {'HTTP_TOKEN': token}
+        data = {
+            "title": "Changed title of my Note", "note_text": "Not Updated!!!", "note_image": None,
+            "is_archived": False, "is_trashed": False, "color": "", "labels": [], "is_pinned": False, "link": "",
+            'collaborators': [], "reminder": None
+            }
+        client = Client()
+        response = client.put(path, data=data, content_type='application/json', **headers)
+        assert response.status_code == 200
+
+    def test_update_note_no_token(self, set_up):
+
+        token, note_id = set_up
+        path = reverse('notes-op', args=[note_id])
+        print(f'Path =======> {path}')
+        headers = {'HTTP_TOKEN': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiY2QxMDAifQ.NkSXJBoHozYOHfJwxw9FWS4Cz-nRjHP1FtXd2UlmMx0'}
+        data = {
+            "title": "Changed title of my Note", "note_text": "Not Updated!!!", "note_image": None,
+            "is_archived": False, "is_trashed": False, "color": "", "labels": [], "is_pinned": False, "link": "",
+            'collaborators': [], "reminder": None
+        }
+        client = Client()
+        response = client.put(path, data=data, content_type='application/json', **headers)
+        assert response.status_code == 400
+
+    def test_delete_note(self, set_up):
+
+        token, note_id = set_up
+        path = reverse('notes-op', args=[note_id])
+        print(path)
+        client = Client()
+        headers = {'HTTP_TOKEN': token}
+        response = client.delete(path=path, content_type='application/json', **headers)
+        assert response.status_code == 200
+
+    def test_delete_note_wrong_token(self, set_up):
+
+        token, note_id = set_up
+        path = reverse('notes-op', args=[note_id])
+        client = Client()
+        headers = {'HTTP_TOKEN': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiY2QxMDAifQ.NkSXJBoHozYOHfJwxw9FWS4Cz-nRjHP1FtXd2UlmMx0'}
+        response = client.delete(path, content_type='application/json', **headers)
+        assert response.status_code == 400
+
+    def test_delete_note_no_token(self, set_up):
+
+        note_id = set_up[1]
+        path = reverse('notes-op', args=[note_id])
+        client = Client()
+        response = client.delete(path, content_type='application/json')
+        assert response.status_code == 401
+
+    def test_delete_note_wrong_note_id(self, set_up):
+
+        token = set_up[0]
+        path = reverse('notes-op', args=[100])
+        headers = {'HTTP_TOKEN': token}
+        client = Client()
+        response = client.delete(path, content_type='application/json', **headers)
+        assert response.status_code == 404
+
 
 @pytest.mark.django_db
 class TestLabelView:
@@ -274,26 +358,114 @@ class TestLabelOperationsView:
             'password': password
         }
         response = views.UserLoginView.post(self, request)
-        return response.data.get('token')
+        label = Label(label_name='NEW TEST LABEL', user_id=user.id)
+        label.save()
+        return response.data.get('token'), label.id
 
     def test_get_label_by_id(self, set_up):
 
+        token, label_id = set_up
         headers = {
-            'token': set_up
+            'token': token
         }
-        path = reverse('labels-op', kwargs={"id": 8})
+        path = reverse('labels-op', args=[label_id])
         request = RequestFactory().get(path)
         request.headers = headers
         response = FundooNotes.views.LabelOperationsView.get(self, request)
         assert response.status_code == 200
 
-    def test_get_label_by_id_no_token(self):
+    def test_get_label_by_id_no_token(self, set_up):
 
-        path = reverse('labels-op', kwargs={"id": 8})
+        label_id = set_up[1]
+        path = reverse('labels-op', args=[label_id])
         request = RequestFactory().get(path)
         response = FundooNotes.views.LabelOperationsView.get(self, request)
         assert response.status_code == 401
-# TODO Delete, PUT
+
+    def test_get_label_wrong_token(self, set_up):
+
+        label_id = set_up[1]
+        path = reverse('labels-op', args=[label_id])
+        headers = {'HTTP_TOKEN': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxNTQ2NDI1In0.UTMDxj2pEoHVGaGtfO0eLovJHW5IeXnXMytGxmsOwy4'}
+        client = Client()
+        response = client.get(path, content_type='application/json', **headers)
+        assert response.status_code == 400
+
+    def test_update_label_by_id(self, set_up):
+
+        token, label_id = set_up
+        path = reverse('labels-op', args=[label_id])
+        headers = {'HTTP_TOKEN': token}
+        data = {
+            'label_name': 'LABEL NAME HAS BEEN UPDATED'
+        }
+        client = Client()
+        response = client.get(path, data=data, content_type='application/json', **headers)
+        assert response.status_code == 200
+
+    def test_update_label_no_token(self, set_up):
+
+        label_id = set_up[1]
+        path = reverse('labels-op', args=[label_id])
+        data = {'label_name': "LABEL NAME IS BEING UPDATED"}
+        client = Client()
+        response = client.put(path, data=data, content_type='application/json')
+        assert response.status_code == 401
+
+    def test_update_label_wrong_token(self, set_up):
+
+        label_id = set_up[1]
+        path = reverse('labels-op', args=[label_id])
+        data = {'label_name': 'Attempting to change label name'}
+        headers = {'HTTP_TOKEN': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxNTQ2NDI1In0.UTMDxj2pEoHVGaGtfO0eLovJHW5IeXnXMytGxmsOwy4'}
+        client = Client()
+        response = client.put(path, data=data, content_type='application/json', **headers)
+        assert response.status_code == 400
+
+    # def test_update_label_does_not_exist(self, set_up):
+    #
+    #     token = set_up[0]
+    #     path = reverse('labels-op', args=[15])
+    #     headers = {'HTTP_TOKEN': token}
+    #     data = {'label_name': 'Changing Label Name'}
+    #     client = Client()
+    #     response = client.put(path, data=data, content_type='application/json', **headers)
+    #     assert response.status_code == 404
+
+    def test_delete_label(self, set_up):
+
+        token, label_id = set_up
+        headers = {'HTTP_TOKEN': token}
+        path = reverse('labels-op', args=[label_id])
+        client = Client()
+        response = client.delete(path, content_type='application/json', **headers)
+        assert response.status_code == 200
+
+    def test_delete_label_no_token(self, set_up):
+
+        label_id = set_up[1]
+        path = reverse('labels-op', args=[label_id])
+        client = Client()
+        response = client.delete(path, content_type='application/json')
+        assert response.status_code == 401
+
+    def test_delete_label_invalid_label(self, set_up):
+
+        token = set_up[0]
+        headers = {'HTTP_TOKEN': token}
+        path = reverse('labels-op', args=[100])
+        client = Client()
+        response = client.delete(path, content_type='application/type', **headers)
+        assert response.status_code == 404
+
+    def test_delete_label_invalid_token(self, set_up):
+
+        label_id = set_up[1]
+        headers = {'HTTP_TOKEN': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiY2QxMDAifQ.NkSXJBoHozYOHfJwxw9FWS4Cz-nRjHP1FtXd2UlmMx0'}
+        path = reverse('labels-op', args=[label_id])
+        client = Client()
+        response = client.delete(path, content_type='application/json', **headers)
+        assert response.status_code == 400
 
 
 @pytest.mark.django_db
@@ -301,30 +473,24 @@ class TestArchivedNotes:
 
     @pytest.fixture
     def set_up(self):
-        
-        user = User.objects.create_user(username='kb', email='kb@gmail.com', password=123, is_active=True)
+
+        email = 'kishan.bindal@gmail.com'
+        password = '123'
+
+        user = User.objects.create_user(username='kishanbindal', email=email, password=password, is_active=True)
         user.save()
         path = reverse('login')
         request = RequestFactory().post(path)
         request.data = {
-            'email': user.email,
-            'password': user.password
+            'email': email,
+            'password': password
         }
         response = views.UserLoginView.post(self, request)
-        token = response.data.get('token')
-
-        note1 = FundooNotes.models.Note(user_id=user.id, title="Shopping List", note_text="Vegetables", note_image='',
-                     is_archived=False, is_trashed=False, color='', is_pinned=False, link='', reminder=None)
-        note1.save()
-
-        note2 = FundooNotes.models.Note(user_id=user.id, title="Destination List", note_text="List of destinations", note_image=None,
-                     is_archived=True, is_trashed=False, color='', is_pinned=False, link='', reminder=None)
-        note2.save()
-
-        return note1, note2, token
+        return response.data.get('token')
 
     def test_view_archived_notes(self, set_up):
-        note1, note2, token = set_up
+
+        token = set_up
         path = reverse('archived-notes')
         headers = {
             'token': token
@@ -334,9 +500,70 @@ class TestArchivedNotes:
         response = FundooNotes.views.ViewArchivedNotes.get(self, request)
         assert response.status_code == 200
 
-    def test_view_archived_notes_no_token(self, set_up):
-        note1, note2, token = set_up
+    def test_view_archived_notes_no_token(self):
+
         path = reverse('archived-notes')
         request = RequestFactory().get(path)
         response = FundooNotes.views.ViewArchivedNotes.get(self, request)
         assert response.status_code == 401
+
+    def test_view_archived_notes_invalid_token(self):
+
+        path = reverse('archived-notes')
+        headers = {
+            'token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYyJ9.zIVQLO-ZB6lVQXph3faTxfovtIAByaH8v1c2ZRMpVbI"
+        }
+        request = RequestFactory().get(path)
+        request.headers = headers
+        response = FundooNotes.views.ViewArchivedNotes.get(self, request)
+        assert response.status_code == 400
+
+
+@pytest.mark.django_db
+class TestViewTrashedNotes:
+
+    @pytest.fixture
+    def set_up(self):
+
+        email = 'kishan.bindal@gmail.com'
+        password = '123'
+
+        user = User.objects.create_user(username='kishanbindal', email=email, password=password, is_active=True)
+        user.save()
+        path = reverse('login')
+        request = RequestFactory().post(path)
+        request.data = {
+            'email': email,
+            'password': password
+        }
+        response = views.UserLoginView.post(self, request)
+        return response.data.get('token')
+
+    def test_view_trashed_notes(self, set_up):
+
+        headers = {
+            'token': set_up
+        }
+        path = reverse('trashed-notes')
+        request = RequestFactory().get(path)
+        request.headers = headers
+        response = FundooNotes.views.ViewTrashedNotes.get(self, request)
+        assert response.status_code == 200
+
+    def test_view_trashed_notes_without_token(self):
+
+        path = reverse('trashed-notes')
+        request = RequestFactory().get(path)
+        response = FundooNotes.views.ViewTrashedNotes.get(self, request)
+        assert response.status_code == 401
+
+    def test_view_trashed_notes_wrong_token(self):
+
+        path = reverse('trashed-notes')
+        headers = {
+            'token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYyJ9.zIVQLO-ZB6lVQXph3faTxfovtIAByaH8v1c2ZRMpVbI"
+        }
+        request = RequestFactory().get(path)
+        request.headers = headers
+        response = FundooNotes.views.ViewTrashedNotes.get(self, request)
+        assert response.status_code == 400

@@ -143,12 +143,11 @@ class UserLoginView(GenericAPIView):
                 if user is not None:
 
                     token = TokenService().generate_login_token(user.id)
-                    print(token)
                     smd = {
                         'message': 'Logged in Successfully',
                         'token': token
                     }
-                    print(token)
+
                     # REDIS CONTENT GOES HERE
                     rdb.set(user.id, token)
                     return Response(smd, status=status.HTTP_200_OK)

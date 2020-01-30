@@ -34,3 +34,11 @@ class LabelOperationsSerializer(serializers.ModelSerializer):
 
         model = Label
         fields = ['label_name']
+
+
+class SearchNoteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Note
+        fields = ['title']

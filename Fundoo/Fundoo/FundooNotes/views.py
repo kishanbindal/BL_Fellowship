@@ -1,3 +1,4 @@
+import logging
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from rest_framework.generics import GenericAPIView
@@ -5,14 +6,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from Fun.models import User
 from util.decorators import logged_in
+from.documents import NoteDocument
 from .models import Note, Label
 from .serializers import CreateNoteSerializer, NoteOperationsSerializer, CreateLabelSerializer, \
-    LabelOperationsSerializer
+    LabelOperationsSerializer, SearchNoteSerializer
 from Fundoo.redis_class import Redis
 from services import TokenService
 from .note_services import GenerateId
 
 rdb = Redis()
+logging.basicConfig(level=logging.DEBUG)
 
 
 @method_decorator(logged_in, name='dispatch')
@@ -327,3 +330,32 @@ class ViewTrashedNotes(GenericAPIView):
             return Response(trashed_notes.values(), status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
+
+
+@method_decorator(logged_in)
+class SearchNote(GenericAPIView):
+
+    serializer_class = SearchNoteSerializer
+    queryset = Note.objects.all()
+
+    def post(self, request):
+
+        search_parameters = request.data.get('title')
+        serializer = SearchNoteSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            result = NoteDocument().search().query({
+                'bool': {
+                    'must': [
+                        {'multimatch': {
+                            'query': search_parameters,
+                            'fields': ['title', 'note_text', 'reminder', 'color', 'labels']
+                        }}
+                    ]
+                }
+            })
+
+            
+
+    pass

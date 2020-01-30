@@ -1,7 +1,0 @@
-{% autoescape off %}
-
-Hi {{user.username}}
-Thank you for Registering, please click the button to activate your account
-
-http://{{ domain }}{% url 'activate' token=token %}
-{% endautoescape %}

@@ -1,3 +1,5 @@
+from elasticsearch import Elasticsearch
+import json
 import logging
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -16,6 +18,7 @@ from .note_services import GenerateId
 
 rdb = Redis()
 logging.basicConfig(level=logging.DEBUG)
+es = Elasticsearch
 
 
 @method_decorator(logged_in, name='dispatch')
@@ -43,6 +46,7 @@ class NoteView(GenericAPIView):
         :param request: HTTP Request containing Data being sent by the user
         :return: Http201 if Input is valid, else Http 400. If token not present/exceptions returns Http403
         '''
+
         smd = {
             'success': 'FAIL',
             'message': 'Failed To add Note to Server Database',
@@ -56,6 +60,7 @@ class NoteView(GenericAPIView):
             if serializer.is_valid():
                 user_id = GenerateId().generate_id(request)
                 serializer.save(user_id=user_id)
+                data = serializer.data
                 smd['success'], smd['message'] = 'Success', 'Note Successfully created'
                 return JsonResponse(data=smd, status=status.HTTP_201_CREATED)
             else:
@@ -332,30 +337,42 @@ class ViewTrashedNotes(GenericAPIView):
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
 
-@method_decorator(logged_in)
+@method_decorator(logged_in, name='post')
 class SearchNote(GenericAPIView):
 
     serializer_class = SearchNoteSerializer
     queryset = Note.objects.all()
 
-    def post(self, request):
+    def post(self, request, id=None):
+
+        import pdb
+        pdb.set_trace()
 
         search_parameters = request.data.get('title')
         serializer = SearchNoteSerializer(data=request.data)
 
         if serializer.is_valid():
 
-            result = NoteDocument().search().query({
+            user_id = GenerateId().generate_id(request)
+            search_result = NoteDocument().search().query({
                 'bool': {
                     'must': [
-                        {'multimatch': {
-                            'query': search_parameters,
-                            'fields': ['title', 'note_text', 'reminder', 'color', 'labels']
+                        {'match': {
+                            "title": search_parameters
+                            # 'query': search_parameters,
+                            # 'field': ['title']  # , 'note_text', 'reminder', 'color', 'labels'
                         }}
                     ]
                 }
             })
-
-            
-
-    pass
+            result = search_result.execute()
+            note_objs = [self.queryset.filter(pk=user_id, title=hits.title).values() for hits in result.hits]
+            logging.debug(f"{result}")
+            li = [hits.to_dict for hits in result.hits]
+            smd = dict()
+            smd['success'], smd['message'], smd['data'] = 'Success', 'Retrieved', note_objs
+            return Response(smd, status=status.HTTP_200_OK)
+        else:
+            smd = dict()
+            smd['success'], smd['message'] = 'Fail', 'Invalid Input/Serializer'
+            return Response()

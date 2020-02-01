@@ -24,7 +24,7 @@ es = Elasticsearch
 @method_decorator(logged_in, name='dispatch')
 class NoteView(GenericAPIView):
 
-    queryset = Note.objects.all()
+    # queryset = Note.objects.all()
     serializer_class = CreateNoteSerializer
 
     def get(self, request, *args, **kwargs):
@@ -34,9 +34,16 @@ class NoteView(GenericAPIView):
                 returns Http 403
         '''
         try:
+            import pdb
+            # pdb.set_trace()
+
             user_id = GenerateId().generate_id(request)
-            notes = self.queryset.filter(is_archived=False, is_trashed=False, user_id=user_id)
-            return Response(data=notes.values(), status=status.HTTP_200_OK)
+            notes = Note.objects.filter(is_archived=False, is_trashed=False, user=user_id)
+            serializer = CreateNoteSerializer(notes, many=True)
+            logging.info(f'{serializer.data}')
+
+            # notes = self.queryset.filter(is_archived=False, is_trashed=False, user_id=user_id)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
@@ -55,11 +62,12 @@ class NoteView(GenericAPIView):
 
         try:
 
+            user_id = GenerateId().generate_id(request)
+            request.data['user']=user_id
             serializer = CreateNoteSerializer(data=request.data)
 
             if serializer.is_valid():
-                user_id = GenerateId().generate_id(request)
-                serializer.save(user_id=user_id)
+                serializer.save()
                 data = serializer.data
                 smd['success'], smd['message'] = 'Success', 'Note Successfully created'
                 return JsonResponse(data=smd, status=status.HTTP_201_CREATED)
@@ -348,25 +356,29 @@ class SearchNote(GenericAPIView):
         import pdb
         pdb.set_trace()
 
-        search_parameters = request.data.get('title')
+        # search_parameters = request.data.get('title')
         serializer = SearchNoteSerializer(data=request.data)
 
         if serializer.is_valid():
 
             user_id = GenerateId().generate_id(request)
+            logging.info(f'----------->{user_id}')
             search_result = NoteDocument().search().query({
                 'bool': {
                     'must': [
-                        {'match': {
-                            "title": search_parameters
-                            # 'query': search_parameters,
-                            # 'field': ['title']  # , 'note_text', 'reminder', 'color', 'labels'
-                        }}
+                        {'match': {'title': serializer.data.get('title')}},
+                        {'match': {'note_text': serializer.data.get('note_text')}},
+                        # {'match': {'labels': serializer.data.get('labels')}},
+                        # {'match': {'color': serializer.data.get('color')}}
+                        # 'type': "best_fields",
+                        # 'field': ['title', 'note_text', 'reminder', 'color', 'labels']  #
                     ]
+                    # 'tikebreaker': 0.5,
                 }
             })
             result = search_result.execute()
-            note_objs = [self.queryset.filter(pk=user_id, title=hits.title).values() for hits in result.hits]
+            note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text).values()
+                         for hits in result.hits]
             logging.debug(f"{result}")
             li = [hits.to_dict for hits in result.hits]
             smd = dict()

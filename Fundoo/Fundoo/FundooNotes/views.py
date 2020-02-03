@@ -8,8 +8,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from Fun.models import User
 from util.decorators import logged_in
+from .consumer import consume_data
 from.documents import NoteDocument
 from .models import Note, Label
+from .producer import send_data_to_topic
 from .serializers import CreateNoteSerializer, NoteOperationsSerializer, CreateLabelSerializer, \
     LabelOperationsSerializer, SearchNoteSerializer
 from Fundoo.redis_class import Redis
@@ -345,6 +347,22 @@ class ViewTrashedNotes(GenericAPIView):
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
 
+class ViewNotesReminder(GenericAPIView):
+
+    @method_decorator(logged_in)
+    def get(self, request, id=None):
+
+        try:
+
+            user_id = GenerateId().generate_id(request)
+            notes_with_reminder = Note.objects.filter(user_id=user_id, reminder__isnull=False)
+            return Response(notes_with_reminder.values(), status=status.HTTP_200_OK)
+        except Exception:
+            smd = {'success': 'Fail', 'message': 'unable to retrieve notes with reminders', 'data': []}
+            return Response(smd, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 @method_decorator(logged_in, name='post')
 class SearchNote(GenericAPIView):
 
@@ -352,9 +370,6 @@ class SearchNote(GenericAPIView):
     queryset = Note.objects.all()
 
     def post(self, request, id=None):
-
-        import pdb
-        pdb.set_trace()
 
         # search_parameters = request.data.get('title')
         serializer = SearchNoteSerializer(data=request.data)
@@ -380,7 +395,7 @@ class SearchNote(GenericAPIView):
             note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text).values()
                          for hits in result.hits]
             logging.debug(f"{result}")
-            li = [hits.to_dict for hits in result.hits]
+            # li = [hits.to_dict for hits in result.hits]
             smd = dict()
             smd['success'], smd['message'], smd['data'] = 'Success', 'Retrieved', note_objs
             return Response(smd, status=status.HTTP_200_OK)

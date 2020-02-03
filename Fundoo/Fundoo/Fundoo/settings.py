@@ -121,6 +121,13 @@ ELASTICSEARCH_DSL = {
     },
 }
 
+#CELERY STUFF
+BROKER_URL = 'amqp://guest@localhost:9092'
+CELERY_RESULT_BACKEND = 'amqp://localhost:9092'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 
 CACHES = {
     "default": {

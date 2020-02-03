@@ -12,7 +12,7 @@ rdb = redis_class.Redis()
 def logged_in(function=None):
 
     @wraps(function)
-    def wrapper(request, id=None, *args, **kwargs):
+    def wrapper(request, id=None):
 
         smd = {
             'success': 'Fail',
@@ -21,6 +21,7 @@ def logged_in(function=None):
         }
 
         try:
+
             # token = request.META.get('HTTP_TOKEN')
             token = request.headers.get('token')
 
@@ -30,7 +31,7 @@ def logged_in(function=None):
             payload = TokenService().decode_token(token)
             user_id = payload.get('id')
             if rdb.exists(user_id):
-                return function(request, id, *args, **kwargs)
+                return function(request, id)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         except ValueError:

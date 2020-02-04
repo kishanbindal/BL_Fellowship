@@ -362,7 +362,6 @@ class ViewNotesReminder(GenericAPIView):
             return Response(smd, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @method_decorator(logged_in, name='post')
 class SearchNote(GenericAPIView):
 
@@ -388,7 +387,7 @@ class SearchNote(GenericAPIView):
                         # 'type': "best_fields",
                         # 'field': ['title', 'note_text', 'reminder', 'color', 'labels']  #
                     ]
-                    # 'tikebreaker': 0.5,
+                    # 'tiebreaker': 0.5,
                 }
             })
             result = search_result.execute()

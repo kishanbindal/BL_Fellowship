@@ -103,6 +103,18 @@ class MailServices:
         })
         send_mail(subject, message, from_email, to_email, fail_silently=True)
 
+    @staticmethod
+    def send_reminder(user, note):
+
+        subject = f'Reminder for note {note.title}'
+        from_email = os.getenv('EMAIL_HOST_USER')
+        to_email = ['kishan.bindal@gmail.com']
+        message = render_to_string('reminder.html', {
+            'user': user,
+            'note': note,
+        })
+        send_mail(subject, message, from_email, to_email, fail_silently=True)
+
 
 class GoogleLoginServices:
 

@@ -7,6 +7,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 async def consume_data():
+
     loop = asyncio.get_event_loop()
     consumer = AIOKafkaConsumer('note_reminder', loop=loop, bootstrap_servers='localhost:9092')
     await consumer.start()

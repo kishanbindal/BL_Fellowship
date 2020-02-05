@@ -11,7 +11,7 @@ import FundooNotes
 from FundooNotes.models import Note, Label
 import mock
 
-BASE_URL='http://127.0.0.1:8000/'
+BASE_URL = 'http://127.0.0.1:8000/'
 
 
 @pytest.mark.django_db
@@ -570,8 +570,9 @@ class TestViewTrashedNotes:
 
 
 @pytest.mark.django_db
-class ViewReminderNotes:
+class TestViewReminderNotes:
 
+    @pytest.fixture
     def set_up(self):
 
         email = 'kishan.bindal@gmail.com'
@@ -586,4 +587,39 @@ class ViewReminderNotes:
             'password': password
         }
         response = views.UserLoginView.post(self, request)
-        return response.data.get('token')
+        token = response.data.get('token')
+
+        note = Note(user_id=user.id, title="Title of My note", note_text='Note Sent', note_image=None, is_archived=True,
+                    labels=[], collaborators=[],
+                    is_trashed=False, color="", is_pinned=False, link="", reminder='2020-02-05 12:34:33+00:00')
+        note.save()
+        return token
+
+    def test_view_reminder_success(self, set_up):
+
+        path = reverse('reminder')
+        headers = {'HTTP_TOKEN': set_up}
+        client = Client()
+        response = client.get(path, content_type='application/json', **headers)
+        assert response.status_code == 200
+
+    def test_view_reminder_wrong_token(self, set_up):
+
+        path = reverse('reminder')
+        headers = {'HTTP_TOKEN': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYyJ9.zIVQLO-ZB6lVQXph3faTxfovtIAByaH8v1c2ZRMpVbI"}
+        client = Client()
+        response = client.get(path, content_type='application/json', **headers)
+        assert response.status_code == 400
+
+    def test_view_reminder_no_token(self, set_up):
+
+        path = reverse('reminder')
+        client = Client()
+        response = client.get(path, content_type='application/json')
+        assert response.status_code == 401
+
+
+@pytest.mark.django_db
+class TestElasticSearch:
+
+    pass

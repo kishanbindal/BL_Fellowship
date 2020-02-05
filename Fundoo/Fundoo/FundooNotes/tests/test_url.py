@@ -31,3 +31,8 @@ class TestFundooUrls:
 
         path = reverse('trashed-notes')
         assert resolve(path).view_name == 'trashed-notes'
+
+    def test_reminders(self):
+
+        path = reverse('reminder')
+        assert resolve(path).view_name == 'reminder'

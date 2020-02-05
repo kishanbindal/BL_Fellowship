@@ -62,9 +62,6 @@ class NoteView(GenericAPIView):
 
         try:
 
-            import pdb
-            pdb.set_trace()
-
             user_id = GenerateId().generate_id(request)
             # request.data['user'] = user_id
             serializer = CreateNoteSerializer(data=request.data)

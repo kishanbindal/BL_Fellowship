@@ -8,10 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from Fun.models import User
 from util.decorators import logged_in
-from .consumer import consume_data
 from.documents import NoteDocument
 from .models import Note, Label
-from .producer import send_data_to_topic
 from .serializers import CreateNoteSerializer, NoteOperationsSerializer, CreateLabelSerializer, \
     LabelOperationsSerializer, SearchNoteSerializer
 from Fundoo.redis_class import Redis
@@ -64,12 +62,15 @@ class NoteView(GenericAPIView):
 
         try:
 
+            import pdb
+            pdb.set_trace()
+
             user_id = GenerateId().generate_id(request)
-            request.data['user']=user_id
+            # request.data['user'] = user_id
             serializer = CreateNoteSerializer(data=request.data)
 
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(user_id=user_id)
                 data = serializer.data
                 smd['success'], smd['message'] = 'Success', 'Note Successfully created'
                 return JsonResponse(data=smd, status=status.HTTP_201_CREATED)

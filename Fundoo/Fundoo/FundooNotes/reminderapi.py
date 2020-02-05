@@ -9,6 +9,7 @@ def start_kafka():
 
 
 def check_for_reminders():
+
     kafka = start_kafka()
     kafka.send_data_to_kafka()
     kafka.consume_kafka_data()

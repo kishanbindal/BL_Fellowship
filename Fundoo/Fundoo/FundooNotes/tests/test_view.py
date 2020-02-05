@@ -567,3 +567,23 @@ class TestViewTrashedNotes:
         request.headers = headers
         response = FundooNotes.views.ViewTrashedNotes.get(self, request)
         assert response.status_code == 400
+
+
+@pytest.mark.django_db
+class ViewReminderNotes:
+
+    def set_up(self):
+
+        email = 'kishan.bindal@gmail.com'
+        password = '123'
+
+        user = User.objects.create_user(username='kishanbindal', email=email, password=password, is_active=True)
+        user.save()
+        path = reverse('login')
+        request = RequestFactory().post(path)
+        request.data = {
+            'email': email,
+            'password': password
+        }
+        response = views.UserLoginView.post(self, request)
+        return response.data.get('token')

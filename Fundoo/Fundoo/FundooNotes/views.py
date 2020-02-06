@@ -15,7 +15,7 @@ from .serializers import CreateNoteSerializer, NoteOperationsSerializer, CreateL
 from Fundoo.redis_class import Redis
 from services import TokenService
 from .note_services import GenerateId
-
+from rest_framework.views import APIView
 rdb = Redis()
 logging.basicConfig(level=logging.DEBUG)
 es = Elasticsearch
@@ -379,6 +379,8 @@ class SearchNote(GenericAPIView):
 
         # search_parameters = request.data.get('title')
         serializer = SearchNoteSerializer(data=request.data)
+        import pdb
+        pdb.set_trace()
 
         if serializer.is_valid():
 
@@ -408,4 +410,4 @@ class SearchNote(GenericAPIView):
         else:
             smd = dict()
             smd['success'], smd['message'] = 'Fail', 'Invalid Input/Serializer'
-            return Response(data = smd, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=smd, status=status.HTTP_400_BAD_REQUEST)

@@ -17,6 +17,7 @@ BASE_URL = 'http://127.0.0.1:8000/'
 @pytest.mark.django_db
 class TestNoteView:
 
+    @patch('FundooNotes.documents.NoteDocument')
     @pytest.fixture()
     def set_up(self):
 
@@ -132,6 +133,7 @@ class TestNoteOperationsView:
 
     queryset = FundooNotes.models.Note.objects.all()
 
+    @patch('FundooNotes.documents.NoteDocument')
     @pytest.fixture
     def set_up(self):
 
@@ -252,6 +254,7 @@ class TestLabelView:
 
     queryset = FundooNotes.models.Label.objects.all()
 
+    @patch('FundooNotes.documents.NoteDocument')
     @pytest.fixture
     def set_up(self):
 
@@ -343,6 +346,7 @@ class TestLabelOperationsView:
 
     queryset = FundooNotes.models.Label.objects.all()
 
+    @patch('FundooNotes.documents.NoteDocument')
     @pytest.fixture
     def set_up(self):
 
@@ -569,86 +573,88 @@ class TestViewTrashedNotes:
         assert response.status_code == 400
 
 
-# @pytest.mark.django_db
-# class TestViewReminderNotes:
+@pytest.mark.django_db
+class TestViewReminderNotes:
+
+    @patch('FundooNotes.documents.NoteDocument.Index()')
+    @pytest.fixture
+    def set_up(self):
+
+        email = 'kishan.bindal@gmail.com'
+        password = '123'
+
+        user = User.objects.create_user(username='kishanbindal', email=email, password=password, is_active=True)
+        user.save()
+        path = reverse('login')
+        request = RequestFactory().post(path)
+        request.data = {
+            'email': email,
+            'password': password
+        }
+        response = views.UserLoginView.post(self, request)
+        token = response.data.get('token')
+
+        note = Note(user_id=user.id, title="Note Title", note_text='Note Content', note_image=None, is_archived=True,
+                    is_trashed=False, color="", is_pinned=False, link="", reminder='2020-02-06')  # 12:39:16.922312+00:00
+
+        # note = Note(user_id=user.id, title="Title of My note", note_text='Note Sent', note_image=None, is_archived=True,
+        #             is_trashed=False, color="", is_pinned=False, link="", reminder='2020-02-05 12:34:33+00:00')
+        # note.collaborators.set([])
+        # note.labels.set([])
+        note.save()
+        return token
+
+    def test_view_reminder_success(self, set_up):
+
+        path = reverse('reminder')
+        headers = {'HTTP_TOKEN': set_up}
+        client = Client()
+        response = client.get(path, content_type='application/json', **headers)
+        assert response.status_code == 200
 #
-#     @pytest.fixture
-#     def set_up(self):
-#
-#         email = 'kishan.bindal@gmail.com'
-#         password = '123'
-#
-#         user = User.objects.create_user(username='kishanbindal', email=email, password=password, is_active=True)
-#         user.save()
-#         path = reverse('login')
-#         request = RequestFactory().post(path)
-#         request.data = {
-#             'email': email,
-#             'password': password
-#         }
-#         response = views.UserLoginView.post(self, request)
-#         token = response.data.get('token')
-#
-#         note = Note(user_id=user.id, title="Note Title", note_text='Note Content', note_image=None, is_archived=True,
-#                     is_trashed=False, color="", is_pinned=False, link="", reminder='2020-02-05 12:34:33+00:00')
-#
-#         # note = Note(user_id=user.id, title="Title of My note", note_text='Note Sent', note_image=None, is_archived=True,
-#         #             is_trashed=False, color="", is_pinned=False, link="", reminder='2020-02-05 12:34:33+00:00')
-#         # note.collaborators.set([])
-#         # note.labels.set([])
-#         note.save()
-#         return token
-#
-#     def test_view_reminder_success(self, set_up):
-#
-#         path = reverse('reminder')
-#         headers = {'HTTP_TOKEN': set_up}
-#         client = Client()
-#         response = client.get(path, content_type='application/json', **headers)
-#         assert response.status_code == 200
-#
-#     def test_view_reminder_wrong_token(self, set_up):
-#
-#         path = reverse('reminder')
-#         headers = {'HTTP_TOKEN': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYyJ9.zIVQLO-ZB6lVQXph3faTxfovtIAByaH8v1c2ZRMpVbI"}
-#         client = Client()
-#         response = client.get(path, content_type='application/json', **headers)
-#         assert response.status_code == 400
-#
-#     def test_view_reminder_no_token(self, set_up):
-#
-#         path = reverse('reminder')
-#         client = Client()
-#         response = client.get(path, content_type='application/json')
-#         assert response.status_code == 401
-#
-#
-# @pytest.mark.django_db
-# class TestElasticSearch:
-#
-#     @pytest.fixture
-#     def set_up(self):
-#
-#         user = User(username='kishan', email='kishan@gmail.com', password='123', is_active=True)
-#         user.save()
-#         path = reverse('login')
-#         request = RequestFactory().get(path)
-#         request.data = {'email': 'kishan@gmail.com', 'password': '123'}
-#         response = views.UserLoginView.post(self, request)
-#         token = response.data.get('token')
-#         return token
-#
-#     def test_search_view_success(self, set_up):
-#
-#         path = reverse('search')
-#         request = RequestFactory().get(path)
-#         request.headers = {'token': set_up}
-#         request.data = {
-#             'title': 'Note Title',
-#             'note_text': 'Note Content',
-#             'color': '#e8eb34',
-#             'reminder': 'null',
-#             # 'labels': '',
-#         }
-#         response = FundooNotes.views.SearchNote.get(self, request)
-#         assert response.status_code == 200
+    def test_view_reminder_wrong_token(self, set_up):
+
+        path = reverse('reminder')
+        headers = {'HTTP_TOKEN': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYyJ9.zIVQLO-ZB6lVQXph3faTxfovtIAByaH8v1c2ZRMpVbI"}
+        client = Client()
+        response = client.get(path, content_type='application/json', **headers)
+        assert response.status_code == 400
+
+    def test_view_reminder_no_token(self, set_up):
+
+        path = reverse('reminder')
+        client = Client()
+        response = client.get(path, content_type='application/json')
+        assert response.status_code == 401
+
+
+@pytest.mark.django_db
+class TestElasticSearch:
+
+    @patch('FundooNotes.documents.NoteDocument.Index()')
+    @pytest.fixture
+    def set_up(self):
+
+        user = User(username='kishan', email='kishan@gmail.com', password='123', is_active=True)
+        user.save()
+        path = reverse('login')
+        request = RequestFactory().get(path)
+        request.data = {'email': 'kishan@gmail.com', 'password': '123'}
+        response = views.UserLoginView.post(self, request)
+        token = response.data.get('token')
+        return token
+
+    def test_search_view_success(self, set_up):
+
+        path = reverse('search')
+        request = RequestFactory().post(path)
+        request.headers = {'token': set_up}
+        request.data = {
+            'title': 'Note Title',
+            'note_text': 'Note Content',
+            'color': '#e8eb34',
+            'reminder': None,
+            'labels': [],
+        }
+        response = FundooNotes.views.SearchNote.post(self, request)
+        assert response.status_code == 200

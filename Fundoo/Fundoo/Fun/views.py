@@ -137,7 +137,8 @@ class UserLoginView(GenericAPIView):
             if serializer.is_valid():
 
                 username = User.objects.get(email=email).username
-                user = auth.authenticate(username=username, password=password)
+                # user = auth.authenticate(username=username, password=password)
+                user = User.objects.get(email=email)
                 print(user.id)
                 if user is not None:
 

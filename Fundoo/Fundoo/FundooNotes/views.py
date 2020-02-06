@@ -349,7 +349,11 @@ class ViewNotesReminder(GenericAPIView):
 
     @method_decorator(logged_in)
     def get(self, request, id=None):
-
+        '''
+        :param request: Request from User to see Notes with Reminders/Reminders
+        :return: Returns all Notes with reminders pertaining to the User(Http200 Response).
+                Any Exception raises an Http_400 Response from Server.
+        '''
         try:
 
             user_id = GenerateId().generate_id(request)
@@ -367,6 +371,11 @@ class SearchNote(GenericAPIView):
     queryset = Note.objects.all()
 
     def post(self, request, id=None):
+        '''
+        :param request: Contains The fields that the User is going to be searching for
+        :return: Returns Http200 if object is found/not found. if Not found, data is empty. Returns Http 400 if there
+                is an issue with input.
+        '''
 
         # search_parameters = request.data.get('title')
         serializer = SearchNoteSerializer(data=request.data)
@@ -399,4 +408,4 @@ class SearchNote(GenericAPIView):
         else:
             smd = dict()
             smd['success'], smd['message'] = 'Fail', 'Invalid Input/Serializer'
-            return Response()
+            return Response(data = smd, status=status.HTTP_400_BAD_REQUEST)

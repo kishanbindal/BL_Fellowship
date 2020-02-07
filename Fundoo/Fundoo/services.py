@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from rest_framework.response import Response
 from rest_framework import status
 from Fundoo.redis_class import Redis
+from Fun.models import User
 
 
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -146,3 +147,19 @@ class GoogleLoginServices:
             self.smd['data'] = [token]
             self.rdb.set(key=key, value=token)
             return Response(self.smd, status=status.HTTP_201_CREATED)
+
+
+class CollaboratorService:
+
+    @staticmethod
+    def get_collaborators(serializer):
+        '''
+        :return: list of collaborators that can be set to serializer.data['collaborators']
+        '''
+
+        collaborators_input = serializer.data.get('collaborators')  # collaborator input has list of emails
+        list_of_collaborators = []
+        for collaborator_pk in collaborators_input:
+            user = User.objects.get(pk=collaborator_pk)
+            list_of_collaborators.append(user.id)
+        return list_of_collaborators

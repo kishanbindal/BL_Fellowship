@@ -13,12 +13,11 @@ from .models import Note, Label
 from .serializers import CreateNoteSerializer, NoteOperationsSerializer, CreateLabelSerializer, \
     LabelOperationsSerializer, SearchNoteSerializer
 from Fundoo.redis_class import Redis
-from services import TokenService
+from services import TokenService, CollaboratorService
 from .note_services import GenerateId
-from rest_framework.views import APIView
+
 rdb = Redis()
 logging.basicConfig(level=logging.DEBUG)
-es = Elasticsearch
 
 
 @method_decorator(logged_in, name='dispatch')
@@ -34,16 +33,36 @@ class NoteView(GenericAPIView):
                 returns Http 403
         '''
         try:
-            import pdb
-            # pdb.set_trace()
 
             user_id = GenerateId().generate_id(request)
             notes = Note.objects.filter(is_archived=False, is_trashed=False, user=user_id)
-            serializer = CreateNoteSerializer(notes, many=True)
-            logging.info(f'{serializer.data}')
+            collaborated_notes = Note.objects.filter(is_archived=False, is_trashed=False).filter(collaborators=user_id)
+            user_notes_serializer = CreateNoteSerializer(notes, many=True)
+            collab_notes_serializer = CreateNoteSerializer(collaborated_notes, many=True)
+
+            if len(list(notes)) > 0:
+                for data in user_notes_serializer.data:
+                    name_list = []
+                    for collaborator in data['collaborators']:
+                        user = User.objects.get(pk=collaborator)
+                        # if user.email not in name_list:
+                        name_list.append(user.email)
+                    data['collaborators'] = name_list
+
+            if len(list(collaborated_notes)) > 0:
+                for data in collab_notes_serializer.data:
+                    name_list = []
+                    for collaborator in data['collaborators']:
+                        user = User.objects.get(pk=collaborator)
+                        # if user.email not in name_list:
+                        name_list.append(user.email)
+                    data['collaborators'] = name_list
+                # collab_notes_serializer.data['collaborators'] = name_list
+            output_data = user_notes_serializer.data, collab_notes_serializer.data
+            logging.info(f'{output_data}')
 
             # notes = self.queryset.filter(is_archived=False, is_trashed=False, user_id=user_id)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+            return Response(data=output_data, status=status.HTTP_200_OK)
 
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
@@ -64,11 +83,17 @@ class NoteView(GenericAPIView):
 
             user_id = GenerateId().generate_id(request)
             # request.data['user'] = user_id
+            collab = request.data.get('collaborators')
+            collab_list = []
+            for email in collab:
+                user = User.objects.get(email=email)
+                collab_list.append(user.id)
+            request.data['collaborators'] = collab_list
             serializer = CreateNoteSerializer(data=request.data)
 
             if serializer.is_valid():
                 serializer.save(user_id=user_id)
-                data = serializer.data
+                logging.info(f'POST METHOD SERIALIZER DATA  {serializer.data}')
                 smd['success'], smd['message'] = 'Success', 'Note Successfully created'
                 return JsonResponse(data=smd, status=status.HTTP_201_CREATED)
             else:
@@ -127,17 +152,23 @@ class NoteOperationsView(GenericAPIView):
                 'data': [],
             }
             import json
-
+            # import pdb
+            # pdb.set_trace()
             print(request.body)
             print('id::', id)
-            # clientname = kwargs.get("clientname", "noparameter")
-            # print("The searched name is: " + str(clientname))
+            collab = request.data.get('collaborators')
+            collab_list = []
+            for email in collab:
+                user = User.objects.get(email=email)
+                collab_list.append(user.id)
+            request.data['collaborators'] = collab_list
             serializer = NoteOperationsSerializer(data=request.data) #json.loads(request.body)
 
             if serializer.is_valid():
+                serializer.data['collaborators'] = CollaboratorService().get_collaborators(serializer)
                 user_id = GenerateId().generate_id(request)
                 note = Note.objects.get(pk=id)
-                print(note, '---->')
+                logging.info(f'PUT METHOD DATA : {serializer.data}')
                 if note is not None:
                     serializer.update(note, serializer.data)
                     smd['Success'], smd['message'] = 'success', f'Successfully update Note with id: {id}'
@@ -397,7 +428,8 @@ class SearchNote(GenericAPIView):
                         # 'field': ['title', 'note_text', 'reminder', 'color', 'labels']  #
                     ]
                     # 'tiebreaker': 0.5,
-                }
+                },
+                # 'nested':
             })
             result = search_result.execute()
             note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text).values()

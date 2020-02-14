@@ -1,0 +1,29 @@
+{
+    "person1" : {
+        "first_name": "Kishan",
+        "last_name": "Bindal", 
+        "address": "Abc",
+        "city": "Bangalore", 
+        "state": "Karnataka",
+        "zip": 560082,
+        "phone_number": 9925654581
+    },
+    "person2": {
+        "first_name": "Varun",
+        "last_name": "Karthik",
+        "address": "Indiranagar",
+        "city": "Bangalore",
+        "state": "Karnataka",
+        "zip": 560008,
+        "phone_number": 8506512385
+    },
+    "person3":{
+        "first_name": "asdjnakfjb",
+        "last_name": "Entity",
+        "address": "adsfs",     
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "zip": 460081,
+        "phone_number": 9462530157
+    }
+}

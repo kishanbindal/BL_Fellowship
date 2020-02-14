@@ -1,5 +1,6 @@
 import * as readline from 'readline';
 import * as process from 'process';
+import { type } from 'os';
 
 let rl = readline.createInterface({
     input: process.stdin,
@@ -125,6 +126,8 @@ function primeFactors(){
     })
 }
 
+
+
 // primeFactors()
 
 // function primeFactors(){
@@ -136,10 +139,17 @@ function primeFactors(){
 // function primeFactors(){
 //     new Promise((resolve,reject)=> {
 //         var num = rl.question("Enter Number to find prime factors :\n", function(answer){
-//             var x:number  = parseInt(answer)
-//             resolve(x)
-//             rl.close();
+//             var x:number  = parseInt(answer);
+//             rl.close(); 
+//             return x;   
 //         })
+//         resolve(console.log(typeof(num));
+//     })
+// }
+
+// primeFactors();
+// console.log('Kishan');
+
 //     }).then(x=> {
 //         console.log(`Value of X : ${x}`);
 //         // console.log(typeof(x))
@@ -162,4 +172,4 @@ function primeFactors(){
 
 // rl.on('close', () => {
 //     console.log('Thank you for your input');
-// });
+//

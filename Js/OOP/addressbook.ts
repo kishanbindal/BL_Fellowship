@@ -107,8 +107,8 @@ class AddressBook {
     // }
 
     editUserData(){
-        let fname = rl.question("Enter First Name of Customer whose entry you would like to edit :\n");
-        let lname = rl.question("Enter Last Name of Customer whose entry you would like to edit :\n");
+        let fname:string = rl.question("Enter First Name of Customer whose entry you would like to edit :\n");
+        let lname:string = rl.question("Enter Last Name of Customer whose entry you would like to edit :\n");
         this.list_of_people.forEach(person => {
             if(fname == person['first_name'] && lname == person['last_name']){
                 var address:string = rl.question("Enter Address :\n");

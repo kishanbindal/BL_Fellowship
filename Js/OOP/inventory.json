@@ -3,17 +3,17 @@
         {
             "item": "rice",
             "weight": 100,
-            "priceperkg": 40
+            "ppk": 40
         },
         {
             "item": "Pulses",
             "weight": 250,
-            "priceperkg": 65
+            "ppk": 65
         },
         {
             "item": "Wheat",
             "weight": 300,
-            "priceperkg": 30
+            "ppk": 30
         }
     ]
 }

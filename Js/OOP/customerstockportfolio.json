@@ -1,0 +1,19 @@
+{
+    "stock" : [
+      {
+      "stockname" : "Apple",
+      "numberofshares": 150,
+      "shareprice" : 275.15
+    },
+      {
+        "stockname" : "Amazon",
+        "numberofshares" : 25,
+        "shareprice" : 1760.94
+      },
+      {
+        "stockname" : "Google:",
+        "numberofshares" : 50,
+        "shareprice" : 1346.87
+      }
+    ]
+  }

@@ -22,8 +22,8 @@ class InventoryManager{
         this.items = this.getInventory();
     }
 
-    private getInventoryData(data): [string, number, number]
     // Used to get data from JSON File and this.items
+    private getInventoryData(data): [string, number, number]    
     {
         var item_name = data['item'];
         var item_weight = data['weight'];

@@ -1,12 +1,41 @@
-<div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary" >Login</button>
+<div class='container-xs'>
+  <div class="card" style="width: 40rem;">
+    <div class="card-body">
+      <div class="btn-pos">
+        <div class="btn-group btn-group-md" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-secondary" (click) = 'goLogin()'>Login</button>
+          <!-- (click) = 'goLogin()' -->
+          <button type="button" class="btn btn-secondary" (click) = 'goRegister()'>Register</button> 
+          <!-- (click) = 'goRegister()' -->
+        </div>
+      </div>
+      <div class='container-sm'>
+        <app-login *ngIf = "userLogin; else noLogin"></app-login>
+        <app-register *ngIf="userRegister; else noRegister"></app-register>
+      </div>
+    </div>
+    </div>
+    <ng-template #noRegister></ng-template>
+    <ng-template #noLogin></ng-template>
+</div>
+
+
+<!-- <div class="btn-pos">
+  <div class="btn-group btn-group-md" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-secondary" >Login</button> -->
     <!-- (click) = 'goLogin()' -->
-    <button type="button" class="btn btn-secondary" >Register</button> 
+    <!-- <button type="button" class="btn btn-secondary" >Register</button>  -->
     <!-- (click) = 'goRegister()' -->
-  </div>
-<div class="card" style="width: 40rem;">
+  <!-- </div>
+</div>
+<div class='container-sm'>
+  <app-login></app-login>
+  <app-register></app-register>
+</div> -->
+
+<!-- <div class="card" style="width: 40rem;">
 <div class="card-body">
     <app-login></app-login>
     <app-register></app-register>
 </div>
-</div>
+</div> -->

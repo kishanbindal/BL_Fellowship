@@ -1,5 +1,5 @@
 <div class='jumbotron'>
-    <div class='container-sm'>
+    <div class='container-sm' *ngIf="!forgotPassword; else clickedForgotPassword">
         <h1 class='display-1'>Login</h1>
         <form>
             <div class="form-group"> 
@@ -11,6 +11,10 @@
               <input type="password" class="form-control" id="password" placeholder="Password">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-link" (click)='goForgotPassword()'>Forgot Password?</button>
           </form>
     </div>
 </div>
+<ng-template #clickedForgotPassword>
+   <app-forgot-password></app-forgot-password>
+</ng-template>

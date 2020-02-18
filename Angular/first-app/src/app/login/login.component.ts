@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  forgotPassword:boolean;
+  constructor() { 
+    this.forgotPassword = false;
+  }
 
   ngOnInit(): void {
+  }
+
+  goForgotPassword(){
+    console.log('Clicked on Forgot Password!')
+    this.forgotPassword = true;
+    console.log(this.forgotPassword)
+    return this.forgotPassword;
   }
 
 }

@@ -2,3 +2,40 @@
     align-items: center;
     padding-left: 14em;
 }
+
+.header {
+    padding: 30px;
+    text-align: center;
+    background:#0098eb;
+    color: white;
+    font-size: 30px;
+  }
+
+  .row {
+      display: flex;
+  }
+
+  .col-sm{
+    flex: 2;
+  }
+
+  .col-md{
+      flex: 1;
+  }
+
+.carousel{
+    width: 100%;
+}
+
+
+img{
+    padding-top: 50px;
+}
+/* carousel-item active, carousel-item{
+    padding: 1em;
+    max-width: 100%;
+} */
+
+/* .container-sm{
+    display: flex;
+} */

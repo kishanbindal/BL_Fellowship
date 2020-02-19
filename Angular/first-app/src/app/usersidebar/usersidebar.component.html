@@ -1,13 +1,66 @@
-<div class='container-xs'>
+<div class="header">
+    <h1 class="display-2">Fundoo Notes</h1>
+</div>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <div class="container-sm">
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="https://static.djangoproject.com/img/logos/django-logo-negative.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Bootstrap_logo.svg" class="d-block w-100" alt="...">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="col-md">
+      <div class='container-sm'>
+        <div class="card" style="width: 40rem; height: 40rem;">
+          <div class="card-body">
+            <div class="btn-pos">
+              <div class="btn-group btn-group-md" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-secondary" (click) = 'goLogin()'>Login</button>
+                <!-- (click) = 'goLogin()' -->
+                <button type="button" class="btn btn-secondary" (click) = 'goRegister()'>Register</button> 
+                <!-- (click) = 'goRegister()' -->
+              </div>
+            </div>
+            <div class='container-sm'>
+              <app-login *ngIf = "userLogin; else noLogin"></app-login>
+              <app-register *ngIf="userRegister; else noRegister"></app-register>
+            </div>
+          </div>
+          </div>
+          <ng-template #noRegister></ng-template>
+          <ng-template #noLogin></ng-template>
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+<!-- <div class='container-xs'>
   <div class="card" style="width: 40rem;">
     <div class="card-body">
       <div class="btn-pos">
         <div class="btn-group btn-group-md" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-secondary" (click) = 'goLogin()'>Login</button>
+          <button type="button" class="btn btn-secondary" (click) = 'goLogin()'>Login</button> -->
           <!-- (click) = 'goLogin()' -->
-          <button type="button" class="btn btn-secondary" (click) = 'goRegister()'>Register</button> 
+          <!-- <button type="button" class="btn btn-secondary" (click) = 'goRegister()'>Register</button>  -->
           <!-- (click) = 'goRegister()' -->
-        </div>
+        <!-- </div>
       </div>
       <div class='container-sm'>
         <app-login *ngIf = "userLogin; else noLogin"></app-login>
@@ -17,7 +70,7 @@
     </div>
     <ng-template #noRegister></ng-template>
     <ng-template #noLogin></ng-template>
-</div>
+</div> -->
 
 
 <!-- <div class="btn-pos">

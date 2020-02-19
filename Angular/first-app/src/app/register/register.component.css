@@ -1,3 +1,15 @@
 h1{
     text-align: center;
 }
+
+.jumbotron{
+    height: 35rem;
+}
+
+.container-sm{
+    height: 35rem;
+}
+
+.form-group{
+    height: 4em;
+}

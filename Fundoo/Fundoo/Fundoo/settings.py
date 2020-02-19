@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'FundooNotes.apps.FundoonotesConfig',
     'rest_framework',
     'rest_framework_swagger',
+    'corsheaders',
     'django_short_url',
     'storages',
     'django_nose',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +51,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+)
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://localhost:8000',
+]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'Fundoo.urls'
 

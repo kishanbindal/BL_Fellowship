@@ -15,6 +15,15 @@ export class LoginService {
     console.log(`Got Password: ${password}`);
     let data = {"email": email, "password":password};
     const headers = new HttpHeaders().set("content-type", "application/json");
-    this.http.post('localhost:8000/fun/api/login',data);
+    let option
+    this.http.post('http://localhost:8000/fun/api/login',data, {headers})
+    .subscribe((response) => {
+      console.log(response)
+      // console.log(` response status : ${response['success']}`); 
+      if (response['success'] === true){
+        localStorage.setItem('token', response['token'])
+        alert('Logged In Successfully.')
+      }
+    })
   }
 }

@@ -75,7 +75,12 @@ class UserRegistrationView(GenericAPIView):
                     # is_active set to false so that user cannot login without activating account from mail
                     user.is_active = False
                     user.save()
-                    return Response(status=status.HTTP_201_CREATED)
+                    smd = {
+                        'success': True,
+                        'message': "Registered Successfully, check mail to activate account",
+                        'data': []
+                    }
+                    return Response(data=smd, status=status.HTTP_201_CREATED)
                 else:
                     raise Exception("Password and Confirm Password do not match!")
         except Exception:
@@ -144,6 +149,7 @@ class UserLoginView(GenericAPIView):
 
                     token = TokenService().generate_login_token(user.id)
                     smd = {
+                        'success': True,
                         'message': 'Logged in Successfully',
                         'token': token
                     }
@@ -213,9 +219,11 @@ class UserForgotPasswordView(GenericAPIView):
                 MailServices.send_forgot_password_email(user, current_site, s_url)
 
                 smd = {
-                    'message': f'mail successfully sent to {to_email}'
+                    'success': True,
+                    'message': f'mail successfully sent to {to_email}',
+                    'data': []
                 }
-                return JsonResponse(smd, status=status.HTTP_202_ACCEPTED)
+                return Response(smd, status=status.HTTP_202_ACCEPTED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception:

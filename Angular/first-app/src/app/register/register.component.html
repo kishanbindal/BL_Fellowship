@@ -4,21 +4,21 @@
         <form>
             <div class="form-group">
               <label for="username"><strong>User Name</strong></label>
-              <input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter User Name">
+              <input type="text" class="form-control" id="username" [(ngModel)]="username" [ngModelOptions]="{standalone: true}" aria-describedby="emailHelp" placeholder="Enter User Name">
             </div>
             <div class="form-group"> 
                 <label for="email"><strong>Email Address</strong></label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                <input type="email" class="form-control" id="email" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" aria-describedby="emailHelp" placeholder="Enter email">
               </div>
             <div class="form-group">
               <label for="password"><strong>Password</strong></label>
-              <input type="password" class="form-control" id="password" placeholder="Password">
+              <input type="password" class="form-control" id="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" placeholder="Password">
             </div>
             <div class="form-group">
                 <label for="confirm_password"><strong>Confirm Password</strong></label>
-                <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password">
+                <input type="password" class="form-control" id="confirm_password" [(ngModel)]="confirm_password" [ngModelOptions]="{standalone: true}" placeholder="Confirm Password">
               </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" (click)="submitRegistrationData()">Submit</button>
           </form>
     </div>
 </div>

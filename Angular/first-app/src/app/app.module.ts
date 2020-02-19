@@ -12,6 +12,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 
 //-------------------Services-------------------------
 import {LoginService} from './services/login-service/login.service'
+import {RegistrationService} from './services/registration-service/registration.service'
+import {ForgotpasswordService} from './services/forgotpass-service/forgotpassword.service'
 
 
 
@@ -28,7 +30,11 @@ import {LoginService} from './services/login-service/login.service'
     FormsModule,
     HttpClientModule,
   ],
-  providers: [LoginService],
+  providers: [
+    LoginService,
+    RegistrationService,
+    ForgotpasswordService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

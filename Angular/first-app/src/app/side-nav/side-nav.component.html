@@ -1,0 +1,37 @@
+<div>
+
+  <!-- Toolbar Content Here  -->
+  <mat-toolbar>
+    <div class="toolbar-menu-brand">
+      <button class="toolbar-menu-brand-element" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+      <a href="/home" class="toolbar-menu-brand-element" style="padding-left: 10px; color:grey;"><img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Google_Keep_icon.svg" height="35px" width="35px">Fundoo</a>  
+    </div>
+
+    <div class="toolbar-search-element">
+      <app-search-bar></app-search-bar>
+    </div>
+
+    <div class="toolbar-profile-element">
+      <app-listview-gridview></app-listview-gridview>
+    </div>
+
+    <div class="toolbar-profile-element">
+      <app-profile-options></app-profile-options>
+    </div>
+  </mat-toolbar>
+
+
+  <!-- SideNav Content Goes here -->
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" [(opened)]="opened" [fixedInViewport]="true" fixedTopGap="65">
+      <button class="sidenav-element-button">Notes</button>
+      <button class="sidenav-element-button">Reminders</button>
+      <hr>
+      <!-- <label style="justify-content: center;">Labels</label> -->
+      <button class="sidenav-element-button">Edit Labels</button>
+      <hr>
+      <button class="sidenav-element-button">Archive</button>
+      <button class="sidenav-element-button">Trash</button>
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>

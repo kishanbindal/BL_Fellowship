@@ -142,9 +142,8 @@ class UserLoginView(GenericAPIView):
             if serializer.is_valid():
 
                 username = User.objects.get(email=email).username
-                # user = auth.authenticate(username=username, password=password)
-                user = User.objects.get(email=email)
-                print(user.id)
+                user = auth.authenticate(username=username, password=password)
+
                 if user is not None:
 
                     token = TokenService().generate_login_token(user.id)
@@ -158,7 +157,13 @@ class UserLoginView(GenericAPIView):
                     rdb.set(user.id, token)
                     return Response(smd, status=status.HTTP_200_OK)
                 else:
-                    raise ValueError("Please check credentials!!")
+                    # raise ValueError("Please check credentials!!")
+                    smd = {
+                        'success': False,
+                        'message': "Unable To Login, Please Verify Credentials",
+                        'data': []
+                    }
+                    return Response(smd, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

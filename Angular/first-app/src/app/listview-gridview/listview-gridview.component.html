@@ -1,0 +1,5 @@
+<button mat-icon-button (click)="switchView()">
+    <mat-icon *ngIf="!toggleList; else showGrid">list</mat-icon>
+</button>
+
+<ng-template #showGrid><mat-icon>grid_on</mat-icon></ng-template>

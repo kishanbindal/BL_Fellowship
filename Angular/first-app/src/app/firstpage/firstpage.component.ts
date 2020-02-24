@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-usersidebar',
-  templateUrl: './usersidebar.component.html',
-  styleUrls: ['./usersidebar.component.css']
+  selector: 'app-firstpage',
+  templateUrl: './firstpage.component.html',
+  styleUrls: ['./firstpage.component.css']
 })
-export class UsersidebarComponent implements OnInit {
+export class FirstpageComponent implements OnInit {
 
   userLogin:boolean;
   userRegister:boolean;
@@ -13,7 +13,7 @@ export class UsersidebarComponent implements OnInit {
   constructor() {
     this.userLogin = false;
     this.userRegister = true; 
-   }
+  }
 
   ngOnInit(): void {
   }
@@ -33,4 +33,5 @@ export class UsersidebarComponent implements OnInit {
     console.log(`Login Status: ${this.userLogin}`)
     return this.userLogin
   }
+
 }

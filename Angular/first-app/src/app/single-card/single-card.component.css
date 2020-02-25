@@ -1,0 +1,17 @@
+mat-card {
+    border : 5px;
+    width : 21.5em;
+    /* min-width: 21.5em; */
+}
+
+mat-card-actions{
+    display:none;
+}
+
+mat-card:hover mat-card-actions{
+    display:block;
+}
+
+/* mat-card div:hover mat-card-actions{
+    display:block;
+} */

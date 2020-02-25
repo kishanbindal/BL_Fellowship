@@ -1,0 +1,32 @@
+<div (click)="showNoteDialog()">
+    <mat-card>
+        <mat-card-title >
+            Filler Title
+            <mat-card-actions>
+                <!-- <button>Pin</button>   -->
+            </mat-card-actions>
+        </mat-card-title>
+        <hr>
+        <mat-card-content>Some Content Here</mat-card-content>
+        
+        <mat-card-actions>
+            <app-remind-me></app-remind-me>
+            <app-collaborators></app-collaborators>
+            <app-color-picker></app-color-picker>
+            <app-upload-note-image></app-upload-note-image>
+            <app-archive-button></app-archive-button>
+            <app-note-setting></app-note-setting>
+        </mat-card-actions>
+        
+        <!-- <mat-card-actions>
+            <app-remind-me *ngIf="show" (mouseenter)="showComponents()"></app-remind-me>
+            <app-collaborators *ngIf="show" (mouseenter)="showComponents()"></app-collaborators>
+            <app-color-picker *ngIf="show" (mouseenter)="showComponents()"></app-color-picker>
+            <button *ngIf="show" (mouseenter)="showComponents()">Add Image</button>
+            <app-archive-button *ngIf="show" (mouseenter)="showComponents()"></app-archive-button>
+            <app-note-setting *ngIf="show" (mouseenter)="showComponents()"></app-note-setting>
+        </mat-card-actions> -->
+    
+    </mat-card>
+</div>
+

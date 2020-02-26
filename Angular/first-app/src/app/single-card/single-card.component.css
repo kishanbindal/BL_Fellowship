@@ -1,8 +1,17 @@
 mat-card {
     border : 5px;
-    width : 21.5em;
-    /* min-width: 21.5em; */
+    width : 22.5em;
+    min-width: 21.5em;
 }
+
+/* .mat-card:not([class*=mat-elevation-z]) {
+    border : 5px;
+    width : 22.5em;
+    min-width: 21.5em;
+    box-shadow: 0 2px 1px -1px grey, 
+                0 1px 1px 0 grey, 
+                0 1px 3px 0 grey;
+} */
 
 mat-card-actions{
     display:none;

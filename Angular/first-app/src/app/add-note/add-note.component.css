@@ -1,0 +1,13 @@
+.createnotecontainer{
+    display:flex
+}
+
+.createnoteelement{
+    margin: 2.5em;
+    flex: 1;
+}
+
+.createnoteinput{
+    margin: 2.5em;
+    flex: 3;
+}

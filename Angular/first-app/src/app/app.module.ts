@@ -33,13 +33,17 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ArchiveButtonComponent } from './archive-button/archive-button.component';
 import { NoteSettingComponent } from './note-setting/note-setting.component';
 import { AllNotesGridComponent } from './all-notes-grid/all-notes-grid.component';
+import { UploadNoteImageComponent } from './upload-note-image/upload-note-image.component';
+import { AddNoteComponent } from './add-note/add-note.component';
+import { AllNotesPageComponent } from './all-notes-page/all-notes-page.component';
 
 //-------------------Services-------------------------
 import {LoginService} from './services/login-service/login.service'
 import {RegistrationService} from './services/registration-service/registration.service'
 import {ForgotpasswordService} from './services/forgotpass-service/forgotpassword.service';
 import { AppRoutingModule } from './app-routing/app-routing.module';
-import { UploadNoteImageComponent } from './upload-note-image/upload-note-image.component';
+import { LogoutService } from './services/logout-service/logout.service';
+
 
 
 
@@ -63,6 +67,8 @@ import { UploadNoteImageComponent } from './upload-note-image/upload-note-image.
     AllNotesGridComponent,
     UploadNoteImageComponent,
     SingleCardDialogComponent,
+    AddNoteComponent,
+    AllNotesPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +91,7 @@ import { UploadNoteImageComponent } from './upload-note-image/upload-note-image.
     LoginService,
     RegistrationService,
     ForgotpasswordService,
+    LogoutService,
   ],
   bootstrap: [AppComponent]
 })

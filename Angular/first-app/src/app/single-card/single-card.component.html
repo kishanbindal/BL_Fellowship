@@ -1,14 +1,15 @@
-<div (click)="showNoteDialog()">
-    <mat-card>
-        <mat-card-title >
-            Filler Title
-            <mat-card-actions>
-                <!-- <button>Pin</button>   -->
-            </mat-card-actions>
-        </mat-card-title>
-        <hr>
-        <mat-card-content>Some Content Here</mat-card-content>
-        
+
+    <mat-card class="card-properties" [class.mat-elevation-z8]>
+        <div (click)="showNoteDialog()">
+            <mat-card-title >
+                Filler Title
+                <mat-card-actions>
+                    <!-- <button>Pin</button>   -->
+                </mat-card-actions>
+            </mat-card-title>
+            <hr>
+            <mat-card-content>Some Content Here</mat-card-content>
+        </div>
         <mat-card-actions>
             <app-remind-me></app-remind-me>
             <app-collaborators></app-collaborators>
@@ -28,5 +29,3 @@
         </mat-card-actions> -->
     
     </mat-card>
-</div>
-

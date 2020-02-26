@@ -61,8 +61,10 @@ class NoteView(GenericAPIView):
             output_data = user_notes_serializer.data, collab_notes_serializer.data
             logging.info(f'{output_data}')
 
+            smd = {'success': True, 'message': 'Successfully collected all notes', 'data': output_data}
+
             # notes = self.queryset.filter(is_archived=False, is_trashed=False, user_id=user_id)
-            return Response(data=output_data, status=status.HTTP_200_OK)
+            return Response(data=smd, status=status.HTTP_200_OK)
 
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)

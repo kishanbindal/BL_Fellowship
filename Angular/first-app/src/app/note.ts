@@ -1,0 +1,16 @@
+export interface Note{
+    collaborators: Array<string>,
+    color: string,
+    created_on: string,
+    id: number,
+    is_archived: boolean,
+    is_pinned: boolean,
+    is_trashed: boolean,
+    labels: Array<string>,
+    last_edited: string,
+    link: string,
+    note_image: File,
+    note_text: string,
+    reminder: string,
+    title: string,
+}

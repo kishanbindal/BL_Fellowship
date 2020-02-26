@@ -184,7 +184,7 @@ class UserLogoutView(APIView):
         user_id = payload.get('id')
         rdb.delete(user_id)
         smd = {
-            'success': 'Success',
+            'success': True,
             'message': 'Successfully Logged out',
             'data': []
         }

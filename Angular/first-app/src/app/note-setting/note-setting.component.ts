@@ -15,8 +15,8 @@ export class NoteSettingComponent implements OnInit {
 
   openMore(){
     const dialogRef = this.dialog.open(NoteSettingDialogComponent,{
-      width: "25em",
-      height: "7.5em"
+      width: "12.5em",
+      height: "10.5em"
     })
 
     dialogRef.afterClosed().subscribe(result => {
@@ -28,7 +28,8 @@ export class NoteSettingComponent implements OnInit {
 
 @Component({
   selector: "app-note-setting-dialog",
-  templateUrl: "note-setting-dialog.component.html"
+  templateUrl: "note-setting-dialog.component.html",
+  styleUrls: ['./note-setting-dialog.component.css']
 })
 
 export class NoteSettingDialogComponent {}

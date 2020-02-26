@@ -17,7 +17,7 @@ export class SingleCardComponent implements OnInit {
   showNoteDialog(){
     const dialogRef = this.dialog.open(SingleCardDialogComponent,{
       width: "45em",
-      height: "15em"
+      height: "16.5em"
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -30,7 +30,8 @@ export class SingleCardComponent implements OnInit {
 
 @Component({
   selector: "app-single-card-component",
-  templateUrl: "app-single-card-dialog.component.html"
+  templateUrl: "single-card-dialog.component.html",
+  styleUrls: ['./single-card-dialog.component.css']
 })
 
 export class SingleCardDialogComponent {}

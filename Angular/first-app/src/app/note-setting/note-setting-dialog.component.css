@@ -1,0 +1,12 @@
+button {
+    width: 8em;
+    background-color: transparent;
+    border: transparent;
+    border-radius: 5px;
+    text-align: center;
+    padding: 1em;
+}
+
+button:hover{
+    background-color: gray;
+}

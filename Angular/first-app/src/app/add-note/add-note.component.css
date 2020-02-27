@@ -3,11 +3,27 @@
 }
 
 .createnoteelement{
-    margin: 2.5em;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
     flex: 1;
 }
 
 .createnoteinput{
-    margin: 2.5em;
-    flex: 3;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    flex: 1.5;
+}
+
+.createnoteplaceholder {
+    height: 3em;
+    border: solid rgba(209, 207, 207, 0.8) 1px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px rgba(209, 207, 207, 0.8);
+    width: inherit;
+    padding: 0.75em;
+    padding-left: 1em;
+}
+
+.createnoteplaceholder p {
+    color: rgb(150, 150, 150);
 }

@@ -7,9 +7,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddNoteComponent implements OnInit {
 
-  constructor() { }
+  showCard: boolean;
+
+  constructor() {
+    this.showCard = false;
+  }
 
   ngOnInit(): void {
+  }
+
+  openCard(){
+    if (this.showCard === false){
+      return this.showCard = true
+    }else{
+      return this.showCard = false;
+    }
   }
 
 }

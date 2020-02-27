@@ -19,10 +19,18 @@ export class ColorPickerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openColorDialog(){
+  openColorDialog(event){
+      
+      var positionX = event.pageX+ 'px';
+      console.log(positionX);
+      var positionY = event.pageY + 'px';
+      console.log(positionY);
+
+
       this.state = this.dialogRef.open(ColorPickerDialogComponent,{
-      width: "20em",
-      height: "20em"
+      width: "10em",
+      height: "10em",
+      position : {left :positionX, top: positionY},
     });
 
     this.state.afterClosed().subscribe(result => {

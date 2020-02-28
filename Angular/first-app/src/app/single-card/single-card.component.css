@@ -14,11 +14,11 @@ mat-card {
 } */
 
 mat-card-actions{
-    display:none;
+    visibility:hidden;
 }
 
 mat-card:hover mat-card-actions{
-    display:block;
+    visibility: visible;
 }
 
 /* mat-card div:hover mat-card-actions{

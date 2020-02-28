@@ -43,6 +43,7 @@ import {RegistrationService} from './services/registration-service/registration.
 import {ForgotpasswordService} from './services/forgotpass-service/forgotpassword.service';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LogoutService } from './services/logout-service/logout.service';
+import { AllNotesDataService } from './services/allNotesDataService/all-notes-data-service.service';
 
 
 
@@ -92,6 +93,7 @@ import { LogoutService } from './services/logout-service/logout.service';
     RegistrationService,
     ForgotpasswordService,
     LogoutService,
+    AllNotesDataService,
   ],
   bootstrap: [AppComponent]
 })

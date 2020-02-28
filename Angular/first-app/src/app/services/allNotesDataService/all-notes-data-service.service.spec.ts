@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AllNotesPageServiceService } from './all-notes-page-service.service';
+import { AllNotesDataService } from './all-notes-data-service.service';
 
 describe('AllNotesPageServiceService', () => {
-  let service: AllNotesPageServiceService;
+  let service: AllNotesDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AllNotesPageServiceService);
+    service = TestBed.inject(AllNotesDataService);
   });
 
   it('should be created', () => {

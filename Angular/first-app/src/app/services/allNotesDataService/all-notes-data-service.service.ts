@@ -10,6 +10,9 @@ export class AllNotesDataService{
   private responseSource = new BehaviorSubject('No Notes to Show');
   public cast = this.responseSource.asObservable();
 
+  private reminderSource = new BehaviorSubject('No Notes with reminders');
+  public reminderNotes = this.reminderSource.asObservable();
+
   constructor(private http: HttpClient) { }
 
   getAllNotes(){
@@ -24,6 +27,20 @@ export class AllNotesDataService{
       }
     })
   }
+
+  getReminderNotes(){
+    let token = localStorage.getItem('token');
+    return this.http.get('http://localhost:8000/notes/api/reminder',{headers:{
+      'Content-type': 'application/json',
+      'token': token,
+    }}).subscribe((response) => {
+      if(response['success'] === true){
+        let reminder_data = response['data']
+        this.reminderSource.next(response['data'])
+      }
+    })
+  }
+
 }
 
 // console.log(`Server response :${response}`)

@@ -23,9 +23,9 @@
 
   <!-- SideNav Content Goes here -->
   <mat-sidenav-container>
-    <mat-sidenav #sidenav mode="side" [(opened)]="opened" [fixedInViewport]="true" fixedTopGap="65">
-      <button class="sidenav-element-button">Notes</button>
-      <button class="sidenav-element-button">Reminders</button>
+    <mat-sidenav #sidenav mode="push" [(opened)]="opened" [fixedInViewport]="true" fixedTopGap="65">
+      <button class="sidenav-element-button" (click)="goDashboardView()">Notes</button>
+      <button class="sidenav-element-button" (click)="goReminderView()">Reminders</button>
       <hr>
       <!-- <label style="justify-content: center;">Labels</label> -->
       <button class="sidenav-element-button">Edit Labels</button>

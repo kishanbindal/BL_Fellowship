@@ -1,12 +1,12 @@
-<mat-card>
+<!-- <mat-card>
     <mat-card-title >
-        Filler Title
+        {{ data.title }}
         <mat-card-actions>
-            <!-- <button>Pin</button>   -->
+            <button>Pin</button>  
         </mat-card-actions>
     </mat-card-title>
     <hr>
-    <mat-card-content>Some Content Here</mat-card-content>
+    <mat-card-content>{{data.note_text}}</mat-card-content>
     
     <mat-card-actions>
         <app-remind-me></app-remind-me>
@@ -15,6 +15,31 @@
         <app-upload-note-image></app-upload-note-image>
         <app-archive-button></app-archive-button>
         <app-note-setting></app-note-setting>
-        <button style="align-items: right;">Close</button>
+        <button style="justify-content: right;">Close</button>
     </mat-card-actions>
-</mat-card>
+</mat-card> -->
+<div class="dialog-container">
+    <div class="title-container">
+        <div class="data-title">
+            {{ data.title }}
+        </div>
+        <div class="data-pin">
+            <button mat-icon-button><mat-icon></mat-icon></button>
+        </div>
+    </div>
+    <div class="text-container">
+        {{ data. note_text }}
+    </div>
+
+    <div class="button-container">
+        <div class="button-left">
+            <app-remind-me></app-remind-me>
+            <app-collaborators></app-collaborators>
+            <app-color-picker></app-color-picker>
+            <app-upload-note-image></app-upload-note-image>
+            <app-archive-button></app-archive-button>
+            <app-note-setting></app-note-setting>
+        </div>
+        <button style="justify-content: right;" class="button-right" (click)="closeDialog()">Close</button>
+    </div>
+</div>

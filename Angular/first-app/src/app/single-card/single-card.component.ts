@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { componentFactoryName } from '@angular/compiler';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-single-card',
@@ -8,16 +9,20 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./single-card.component.css']
 })
 export class SingleCardComponent implements OnInit {
+  
+  @Input() note;
 
   constructor(public dialog: MatDialog) { 
   }
 
   ngOnInit(): void {
   }
+
   showNoteDialog(){
     const dialogRef = this.dialog.open(SingleCardDialogComponent,{
       width: "45em",
-      height: "16.5em"
+      height: "16.5em",
+      data : this.note,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -34,5 +39,14 @@ export class SingleCardComponent implements OnInit {
   styleUrls: ['./single-card-dialog.component.css']
 })
 
-export class SingleCardDialogComponent {}
+export class SingleCardDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<SingleCardDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data:any){}
+
+    closeDialog(){
+      this.dialogRef.close()
+    }
+}
 

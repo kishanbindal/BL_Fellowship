@@ -44,7 +44,8 @@ import {ForgotpasswordService} from './services/forgotpass-service/forgotpasswor
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LogoutService } from './services/logout-service/logout.service';
 import { AllNotesDataService } from './services/allNotesDataService/all-notes-data-service.service';
-
+import { RemindersPageComponent } from './reminders-page/reminders-page.component';
+import { RemindersGridComponent } from './reminders-grid/reminders-grid.component';
 
 
 
@@ -70,6 +71,8 @@ import { AllNotesDataService } from './services/allNotesDataService/all-notes-da
     SingleCardDialogComponent,
     AddNoteComponent,
     AllNotesPageComponent,
+    RemindersPageComponent,
+    RemindersGridComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +90,9 @@ import { AllNotesDataService } from './services/allNotesDataService/all-notes-da
     MatCardModule,
     MatGridListModule,
     AppRoutingModule,
+  ],
+  entryComponents:[
+    SingleCardDialogComponent,
   ],
   providers: [
     LoginService,

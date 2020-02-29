@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LogoutService } from '../services/logout-service/logout.service';
+import { disableDebugTools } from '@angular/platform-browser';
 
 // User Icon Component
 @Component({
@@ -42,9 +43,12 @@ export class ProfileOptionsComponent implements OnInit {
 
 export class ProfileOptionsDialogComponent {
 
-  constructor(private logout: LogoutService){}
+  constructor(private logout: LogoutService,
+    public dialogRef: MatDialogRef<ProfileOptionsDialogComponent>
+    ){}
 
   logOut(){
     this.logout.logUserOut();
+    this.dialogRef.close();
   }
 }

@@ -58,7 +58,7 @@ class NoteView(GenericAPIView):
                         name_list.append(user.email)
                     data['collaborators'] = name_list
                 # collab_notes_serializer.data['collaborators'] = name_list
-            output_data = user_notes_serializer.data, collab_notes_serializer.data
+            output_data = user_notes_serializer.data + collab_notes_serializer.data
             logging.info(f'{output_data}')
 
             smd = {'success': True, 'message': 'Successfully collected all notes', 'data': output_data}
@@ -391,9 +391,11 @@ class ViewNotesReminder(GenericAPIView):
 
             user_id = GenerateId().generate_id(request)
             notes_with_reminder = Note.objects.filter(user_id=user_id, reminder__isnull=False)
-            return Response(notes_with_reminder.values(), status=status.HTTP_200_OK)
+            smd = {'success': True, 'message': 'Successfully Retrieved notes with reminders',
+                   'data': notes_with_reminder.values()}
+            return Response(data=smd, status=status.HTTP_200_OK)
         except Exception:
-            smd = {'success': 'Fail', 'message': 'unable to retrieve notes with reminders', 'data': []}
+            smd = {'success': False, 'message': 'unable to retrieve notes with reminders', 'data': []}
             return Response(smd, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AllNotesDataService } from '../services/allNotesDataService/all-notes-data-service.service';
 
 @Component({
   selector: 'app-all-notes-grid',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AllNotesGridComponent implements OnInit {
 
-  constructor() { }
+  allNotes; 
+
+  constructor(private allNotesService: AllNotesDataService) { }
 
   ngOnInit(): void {
+    this.recieveNotes()
+    // console.log(this.allNotes)
   }
 
+  recieveNotes(){
+    let recievedArray = []
+    this.allNotesService.getAllNotes()
+    this.allNotesService.cast.subscribe((data) => {this.allNotes = data});
+  }
 }

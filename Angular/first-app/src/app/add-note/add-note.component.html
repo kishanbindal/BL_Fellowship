@@ -2,13 +2,13 @@
 
     <div class="createnoteelement"></div>
 
-    <div class="createnoteinput" (click)="openCard()">
-        <div class="createnoteplaceholder" *ngIf="!showCard">
+    <div class="createnoteinput">
+        <div class="createnoteplaceholder" (click)="openCard()" *ngIf="!showCard">
             <p>Take a Note...</p>
         </div>
         <div *ngIf="showCard">
             <mat-card>
-                <mat-card-title >
+                <mat-card-title>
                     Filler Title
                     <mat-card-actions>
                         <!-- <button>Pin</button>   -->
@@ -24,7 +24,7 @@
                     <app-upload-note-image></app-upload-note-image>
                     <app-archive-button></app-archive-button>
                     <app-note-setting></app-note-setting>
-                    <button style="align-items: right;">Close</button>
+                    <button style="align-items: right;" (click)="closeCard()">Close</button>
                 </mat-card-actions>
             </mat-card>
         </div>

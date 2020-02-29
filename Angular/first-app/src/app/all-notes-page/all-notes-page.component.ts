@@ -9,20 +9,20 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AllNotesPageComponent implements OnInit {
 
-  allNotes; 
+  // allNotes; 
 
   constructor(private allNotesService: AllNotesDataService) { 
   }
 
   ngOnInit(): void {
-    this.recieveNotes()
+    // this.recieveNotes()
     // console.log(this.allNotes)
     }
     
-  recieveNotes(){
-    this.allNotesService.getAllNotes()
-    let note_data = this.allNotesService.cast.subscribe((data) => {this.allNotes = data});
-    setTimeout(()=> {console.log('All notes here : \n',this.allNotes)}, 5000)
-  }
+  // recieveNotes(){
+  //   this.allNotesService.getAllNotes()
+  //   let note_data = this.allNotesService.cast.subscribe((data) => {this.allNotes = data});
+  //   setTimeout(()=> {console.log('All notes here : \n',this.allNotes)}, 5000)
+  // }
 }
 

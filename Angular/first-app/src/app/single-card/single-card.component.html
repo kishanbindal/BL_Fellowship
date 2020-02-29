@@ -2,13 +2,13 @@
     <mat-card class="card-properties">
         <div (click)="showNoteDialog()">
             <mat-card-title >
-                Filler Title
+                {{note.title}}
                 <mat-card-actions>
                     <!-- <button>Pin</button>   -->
                 </mat-card-actions>
             </mat-card-title>
             <hr>
-            <mat-card-content>Some Content Here</mat-card-content>
+            <mat-card-content>{{note.note_text}}</mat-card-content>
         </div>
         <mat-card-actions>
             <app-remind-me></app-remind-me>

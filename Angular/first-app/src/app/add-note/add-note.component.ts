@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../services/DataService/data-service.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-note',
@@ -13,7 +15,6 @@ export class AddNoteComponent implements OnInit {
     collaborators: Array<string>,
     color: string,
     created_on: string,
-    id: number,
     is_archived: boolean,
     is_pinned: boolean,
     is_trashed: boolean,
@@ -26,11 +27,26 @@ export class AddNoteComponent implements OnInit {
     title: string,
   }
 
-  constructor() {
+  constructor(public noteService : DataService, private _snackbar: MatSnackBar) {
     this.showCard = false;
   }
 
   ngOnInit(): void {
+    this.templateNote = {
+      collaborators:[],
+      color: "",
+      created_on: "",
+      is_archived: false,
+      is_pinned: false,
+      is_trashed: false,
+      labels: [],
+      last_edited: "",
+      link: "",
+      note_image: null,
+      note_text: "",
+      reminder: null,
+      title: "",
+    }
   }
 
   openCard(){
@@ -38,13 +54,40 @@ export class AddNoteComponent implements OnInit {
       return this.showCard = true
     }
   }
+  
+  private SendNoteData(note_data:object){
+    if (this.templateNote.title !== '' || this.templateNote.note_text !== ''){
+      this.noteService.postNote(note_data).subscribe((result) => {
+        if (result['success'] == true){
+          this.noteService.getAllNotes();
+          this._snackbar.open('Successfully Created Note',"close",{
+            duration: 2000,
+          } 
+        )
+        }else{
+          console.log('Error')
+        }
+        
+      })
+    }
+  }
 
   closeCard(){
     if(this.showCard === true){
       this.showCard = false;
-      console.log(this.showCard);
+      console.log(`Note title : ${this.templateNote.title}\nNote Text : ${this.templateNote.note_text}`);
+      this.SendNoteData(this.templateNote)
       return this.showCard
     }
   }
+
+  setColor($event){
+    console.log('Event Recorded')
+    this.templateNote.color = $event;
+  }
+
+  // doSomething(){
+  //   console.log('Got your event')
+  // }
 
 }

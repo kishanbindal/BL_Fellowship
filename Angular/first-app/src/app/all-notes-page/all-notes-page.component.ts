@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AllNotesDataService } from '../services/allNotesDataService/all-notes-data-service.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
@@ -11,7 +10,7 @@ export class AllNotesPageComponent implements OnInit {
 
   // allNotes; 
 
-  constructor(private allNotesService: AllNotesDataService) { 
+  constructor() { 
   }
 
   ngOnInit(): void {

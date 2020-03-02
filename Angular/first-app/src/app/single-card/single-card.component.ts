@@ -13,6 +13,11 @@ export class SingleCardComponent implements OnInit {
   @Input() note;
 
   constructor(public dialog: MatDialog) { 
+    setTimeout(()=>{
+      console.log(`Note Id: ${this.note.id}\nEdited on : ${typeof(this.note.last_edited)}`);
+      let date = new Date(this.note.last_edited).toDateString()
+      console.log(`Date : ${date}`)
+    }, 2000)
   }
 
   ngOnInit(): void {
@@ -40,13 +45,15 @@ export class SingleCardComponent implements OnInit {
 })
 
 export class SingleCardDialogComponent {
+  
+  edited_date = new Date(this.data.last_edited).toDateString();
 
   constructor(
     public dialogRef: MatDialogRef<SingleCardDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data:any){}
 
     closeDialog(){
-      this.dialogRef.close()
-    }
+      this.dialogRef.close('Pizza')
+    } 
 }
 

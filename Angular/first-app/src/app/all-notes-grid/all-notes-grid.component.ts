@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AllNotesDataService } from '../services/allNotesDataService/all-notes-data-service.service';
+import { DataService } from '../services/DataService/data-service.service';
 
 @Component({
   selector: 'app-all-notes-grid',
@@ -10,7 +10,7 @@ export class AllNotesGridComponent implements OnInit {
 
   allNotes; 
 
-  constructor(private allNotesService: AllNotesDataService) { }
+  constructor(private allNotesService: DataService) { }
 
   ngOnInit(): void {
     this.recieveNotes()

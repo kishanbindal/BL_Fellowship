@@ -1,0 +1,33 @@
+table{
+    margin: 0em;
+}
+
+.color-palette{
+    flex: 1;
+    margin: 0.5em;
+    height: 1.8em;
+    width: 1.8em;
+    border-radius: 50%;
+    outline: 2px dotted white;
+    outline-offset: 2px;
+}
+
+.color-palette:hover, .color-palette-white:hover{
+    border: solid;
+    border-width: 2px;
+    border-color: black;
+    cursor: pointer;
+}
+
+.color-palette-white{
+    flex: 1;
+    margin: 0.5em;
+    height: 1.8em;
+    width: 1.8em;
+    border-radius: 50%;
+    border: solid;
+    border-width: 2px;
+    border-color: rgba(135,135,135,0.85);
+    /* outline: 2px dotted white;
+    outline-offset: 2px; */
+}

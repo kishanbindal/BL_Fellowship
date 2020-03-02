@@ -27,3 +27,34 @@
 .createnoteplaceholder p {
     color: rgb(150, 150, 150);
 }
+
+.title-input:focus{
+    outline:transparent;
+}
+
+.content-input:focus{
+    outline:transparent;
+}
+
+.button-close{
+    border: transparent;
+    background-color: transparent;
+}
+
+mat-card-title input{
+    width: 75%;
+    border-color: inherit;
+}
+
+mat-card-title input:focus{
+    outline: transparent;
+}
+
+mat-card-content input{
+    width: 100%;
+    border-color: inherit;
+}
+
+mat-card-content input:focus{
+    outline: transparent;
+}

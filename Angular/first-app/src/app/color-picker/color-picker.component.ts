@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-color-picker',
@@ -8,8 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ColorPickerComponent implements OnInit {
   
+  @Output() sendColor = new EventEmitter()
   dialogRef;
   state;
+  color:string;
 
   constructor(public dialog : MatDialog) { 
     this.dialogRef = dialog;
@@ -28,29 +31,45 @@ export class ColorPickerComponent implements OnInit {
 
 
       this.state = this.dialogRef.open(ColorPickerDialogComponent,{
-      width: "10em",
-      height: "10em",
+      width: "14.5em",
+      height: "12.25em",
       position : {left :positionX, top: positionY},
     });
 
     this.state.afterClosed().subscribe(result => {
-      console.log("Color Picker Dialog Closed")
+      this.color = result
+      this.sendColor.emit(this.color)
+      // console.log(`Result in color-picker :  ${this.color}`)
     });
   }
-
-// For Mouse Leave property.
-
-  // closeColorDialog(){
-  //   this.state.close()
-  // }
-
 }
 
 //Color Picker Dialog Component
 
 @Component({
   selector: "app-color-picker-dialog",
-  templateUrl: "color-picker-dialog.components.html"
+  templateUrl: "color-picker-dialog.components.html",
+  styleUrls:["color-picker-dialog.component.css"]
 })
 
-export class ColorPickerDialogComponent {}
+export class ColorPickerDialogComponent {
+
+  @Output() sendColor = new EventEmitter(false);
+  color: string;
+
+  constructor(public dialogRef: MatDialogRef<ColorPickerDialogComponent>){}
+
+  pickColor($event){
+    const element = $event.srcElement;
+    console.log(element.style.backgroundColor);
+    this.color = element.style.backgroundColor;
+    console.log(this.color);
+    this.dialogRef.close(this.color)
+  }
+
+  // sendColorToParent(){
+  //   console.log('Emitting Event')
+  //   let x = this.sendColor.emit(this.color); 
+  // }
+
+}

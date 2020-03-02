@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AllNotesDataService } from '../services/allNotesDataService/all-notes-data-service.service';
+import { DataService } from '../services/DataService/data-service.service';
 
 @Component({
   selector: 'app-reminders-grid',
@@ -10,7 +10,7 @@ export class RemindersGridComponent implements OnInit {
 
   reminderNotes;
 
-  constructor(private dataService: AllNotesDataService) { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
     this.getReminders();

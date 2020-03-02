@@ -29,7 +29,7 @@ import { FirstpageComponent } from './firstpage/firstpage.component';
 import { SingleCardComponent, SingleCardDialogComponent } from './single-card/single-card.component';
 import { RemindMeComponent } from './remind-me/remind-me.component';
 import { CollaboratorsComponent } from './collaborators/collaborators.component';
-import { ColorPickerComponent } from './color-picker/color-picker.component';
+import { ColorPickerComponent, ColorPickerDialogComponent } from './color-picker/color-picker.component';
 import { ArchiveButtonComponent } from './archive-button/archive-button.component';
 import { NoteSettingComponent } from './note-setting/note-setting.component';
 import { AllNotesGridComponent } from './all-notes-grid/all-notes-grid.component';
@@ -43,7 +43,7 @@ import {RegistrationService} from './services/registration-service/registration.
 import {ForgotpasswordService} from './services/forgotpass-service/forgotpassword.service';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LogoutService } from './services/logout-service/logout.service';
-import { AllNotesDataService } from './services/allNotesDataService/all-notes-data-service.service';
+import { DataService } from './services/DataService/data-service.service'
 import { RemindersPageComponent } from './reminders-page/reminders-page.component';
 import { RemindersGridComponent } from './reminders-grid/reminders-grid.component';
 
@@ -73,6 +73,7 @@ import { RemindersGridComponent } from './reminders-grid/reminders-grid.componen
     AllNotesPageComponent,
     RemindersPageComponent,
     RemindersGridComponent,
+    ColorPickerDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,7 +100,7 @@ import { RemindersGridComponent } from './reminders-grid/reminders-grid.componen
     RegistrationService,
     ForgotpasswordService,
     LogoutService,
-    AllNotesDataService,
+    DataService
   ],
   bootstrap: [AppComponent]
 })

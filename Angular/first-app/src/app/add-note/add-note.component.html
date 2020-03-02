@@ -1,35 +1,39 @@
 <div class="createnotecontainer">
-
+    <!-- Aligning Purpose -->
     <div class="createnoteelement"></div>
 
+    <!-- Main Content  -->
     <div class="createnoteinput">
         <div class="createnoteplaceholder" (click)="openCard()" *ngIf="!showCard">
             <p>Take a Note...</p>
         </div>
         <div *ngIf="showCard">
-            <mat-card>
+            <mat-card [ngStyle]="{background: [templateNote.color]}">
                 <mat-card-title>
-                    Filler Title
+                    <div class="title-input" contenteditable="true" [(ngModel)]="templateNote.title"></div>
                     <mat-card-actions>
                         <!-- <button>Pin</button>   -->
                     </mat-card-actions>
                 </mat-card-title>
                 <hr>
-                <mat-card-content>Some Content Here</mat-card-content>
+                <mat-card-content>
+                    <div class="content-input" contenteditable="true" [(ngModel)]="templateNote.note_text"></div>
+                </mat-card-content>
                 
                 <mat-card-actions>
                     <app-remind-me></app-remind-me>
                     <app-collaborators></app-collaborators>
-                    <app-color-picker></app-color-picker>
+                    <app-color-picker (sendColor)="setColor($event)"></app-color-picker>
                     <app-upload-note-image></app-upload-note-image>
                     <app-archive-button></app-archive-button>
                     <app-note-setting></app-note-setting>
-                    <button style="align-items: right;" (click)="closeCard()">Close</button>
+                    <button class="button-close" (click)="closeCard()">Close</button>
                 </mat-card-actions>
             </mat-card>
         </div>
     </div>
 
+    <!-- Aligning Purpose  -->
     <div class="createnoteelement"></div>
 
 </div>

@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AllNotesDataService{
+export class DataService{
 
   private responseSource = new BehaviorSubject('No Notes to Show');
   public cast = this.responseSource.asObservable();
@@ -39,6 +39,14 @@ export class AllNotesDataService{
         this.reminderSource.next(response['data'])
       }
     })
+  }
+
+  postNote(note_data:object){
+    let token = localStorage.getItem('token');
+    return this.http.post('http://localhost:8000/notes/api/notes/', note_data, {headers:{
+      'Content-type': 'application/json',
+      'token': token,
+    }})
   }
 
 }

@@ -18,7 +18,7 @@
 
 .data-title {
     font-size: 1.5em;
-    flex: 3;
+    flex: 2;
     align-items: center;
 }
 
@@ -27,11 +27,18 @@
 }
 
 .text-container{
-    flex: 2;
+    flex: 1;
+}
+
+.edit-date{
+    flex: 0.25;
+    text-align: right;
+    font-size: 0.85em;
+    color: rgba(135, 135, 135, 0.85);
 }
 
 .button-container{
-    flex: 0.75;
+    flex: 0.5;
     display: flex;
     flex-direction: row;
 }
@@ -41,6 +48,12 @@
 }
 
 .button-right{
+    line-height: 1em;
     flex:0.5;
     border-color: transparent;
+    background-color: transparent;
+}
+
+.button-right:hover{
+    background-color: rgba(135, 135, 135, 0.25);
 }

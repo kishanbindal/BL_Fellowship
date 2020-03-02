@@ -93,10 +93,13 @@ class NoteView(GenericAPIView):
             request.data['collaborators'] = collab_list
             serializer = CreateNoteSerializer(data=request.data)
 
+            import pdb
+            pdb.set_trace()
+
             if serializer.is_valid():
                 serializer.save(user_id=user_id)
                 logging.info(f'POST METHOD SERIALIZER DATA  {serializer.data}')
-                smd['success'], smd['message'] = 'Success', 'Note Successfully created'
+                smd['success'], smd['message'] = True, 'Note Successfully created'
                 return JsonResponse(data=smd, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,0 +1,36 @@
+.reminder-main-dialog{
+    width: 100%;
+    padding-top: 0.75em;
+    background-color: transparent;
+    border-color: transparent;
+    text-align: start;
+}
+
+.reminder-main-dialog:focus{
+    outline: transparent;
+}
+
+.reminder-main-dialog:hover{
+    background-color: rgba(168, 168, 168, 0.8);
+}
+
+.date-time-pick{
+    border: transparent;
+    border-style: solid;
+    border-width: 2.5px;
+    border-bottom: rgba(168, 168, 168, 1) ;
+}
+
+.save-button{
+    float: right;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.save-button:hover{
+    background-color: rgba(168, 168, 168, 0.8);
+}
+
+.save-button:focus{
+    outline: transparent;
+}

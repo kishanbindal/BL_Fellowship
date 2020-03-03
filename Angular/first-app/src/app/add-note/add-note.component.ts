@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/DataService/data-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-add-note',
@@ -27,7 +28,10 @@ export class AddNoteComponent implements OnInit {
     title: string,
   }
 
-  constructor(public noteService : DataService, private _snackbar: MatSnackBar) {
+  imgFile = null;
+
+  constructor(public noteService : DataService, private _snackbar: MatSnackBar,
+    private domSanitizer : DomSanitizer) {
     this.showCard = false;
   }
 
@@ -67,7 +71,6 @@ export class AddNoteComponent implements OnInit {
         }else{
           console.log('Error')
         }
-        
       })
     }
   }
@@ -86,8 +89,24 @@ export class AddNoteComponent implements OnInit {
     this.templateNote.color = $event;
   }
 
-  // doSomething(){
-  //   console.log('Got your event')
-  // }
+  setReminder($event){
+    let reminder  = new Date($event)
+    let date =  reminder.getFullYear()+'-'+(reminder.getMonth()+1)+'-'+reminder.getDate();
+    let time = reminder.getHours()+':'+reminder.getMinutes()+':'+reminder.getSeconds();
+    let finalReminder = date + ' ' + time 
+    console.log('reminder event recorded  :', finalReminder);
+    this.templateNote.reminder = finalReminder;
+  }
 
+  setImage($event){
+    console.log($event);
+    this.templateNote.note_image = $event[0];
+    let imgUrl = $event[1];
+    this.imgFile = this.domSanitizer.bypassSecurityTrustUrl(imgUrl)
+    console.log("aaa : ", this.imgFile)
+  }
 }
+
+// doSomething(){
+//   console.log('Got your event')
+// }

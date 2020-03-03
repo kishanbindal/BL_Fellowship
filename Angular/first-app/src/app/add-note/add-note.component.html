@@ -10,21 +10,25 @@
         <div *ngIf="showCard">
             <mat-card [ngStyle]="{background: [templateNote.color]}">
                 <mat-card-title>
-                    <div class="title-input" contenteditable="true" [(ngModel)]="templateNote.title"></div>
+                        <input class="title-input" [(ngModel)]="templateNote.title">
+                    <!-- <input [(ngModel)]="templateNote.title"></input> -->
                     <mat-card-actions>
                         <!-- <button>Pin</button>   -->
                     </mat-card-actions>
                 </mat-card-title>
-                <hr>
+
+                <img *ngIf="imgFile != null" id="imgTag" mat-card-image [src]="imgFile" style="height: 10em; width: 10em; float: center;">
+
                 <mat-card-content>
-                    <div class="content-input" contenteditable="true" [(ngModel)]="templateNote.note_text"></div>
+                        <input class="content-input" [(ngModel)]="templateNote.note_text">
+                    <!-- <div class="content-input" contenteditable="true" [(ngModel)]="templateNote.note_text"></div> -->
                 </mat-card-content>
-                
+                <p class="reminder-detail" *ngIf="this.templateNote.reminder != null">{{ templateNote.reminder }} </p> 
                 <mat-card-actions>
-                    <app-remind-me></app-remind-me>
+                    <app-remind-me (sendReminder)="setReminder($event)"></app-remind-me>
                     <app-collaborators></app-collaborators>
                     <app-color-picker (sendColor)="setColor($event)"></app-color-picker>
-                    <app-upload-note-image></app-upload-note-image>
+                    <app-upload-note-image (sendFile)="setImage($event)"></app-upload-note-image>
                     <app-archive-button></app-archive-button>
                     <app-note-setting></app-note-setting>
                     <button class="button-close" (click)="closeCard()">Close</button>
@@ -37,3 +41,6 @@
     <div class="createnoteelement"></div>
 
 </div>
+
+
+<!-- <button mat-icon-button> <mat-icon>close</mat-icon> </button> -->

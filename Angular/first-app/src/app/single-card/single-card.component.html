@@ -1,5 +1,5 @@
 
-    <mat-card class="card-properties">
+    <mat-card class="card-properties" [ngStyle]="{background: note.color}">
         <div (click)="showNoteDialog()">
             <mat-card-title >
                 {{note.title}}
@@ -8,7 +8,15 @@
                 </mat-card-actions>
             </mat-card-title>
             <hr>
-            <mat-card-content>{{note.note_text}}</mat-card-content>
+            <mat-card-content>
+                {{note.note_text}}
+                
+            </mat-card-content>
+            <mat-card-content>
+                <div>
+                    <p>{{ note.reminder }}</p>
+                </div>
+            </mat-card-content>
         </div>
         <mat-card-actions>
             <app-remind-me></app-remind-me>

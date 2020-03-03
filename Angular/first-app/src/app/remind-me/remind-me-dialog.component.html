@@ -1,2 +1,23 @@
-<label>Reminders: </label>
+<div *ngIf="!pickDate; else close">
+    <label>Reminders: </label><br>
 
+<button class="reminder-main-dialog"><label for="">Later Today:</label>8pm</button>
+<br>
+<button class="reminder-main-dialog"><label for="" (click)="openDateTime()"> Pick Date And Time:</label></button>
+</div>
+
+<ng-template #close>
+    <div>
+        <button mat-icon-button (click)="closeDateTime()"> <mat-icon>arrow_back</mat-icon> Pick Date & Time</button><br>
+        <label for="">Input Date: </label>
+        <input class="date-time-pick" type="date" [(ngModel)]="inputDate"><br><br>
+        <label for="">Input Time: </label>
+        <input class="date-time-pick" type="time" [(ngModel)]="inputTime"><br>
+        <button class="save-button"(click)="save()">Save</button>
+    </div>
+</ng-template>
+
+
+
+
+<!-- <input type="time"> -->

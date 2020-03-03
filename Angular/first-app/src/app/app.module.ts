@@ -14,7 +14,10 @@ import {MatListModule} from '@angular/material/list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatCardModule} from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list'
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
 //------------------Components------------------------
 import { AppComponent } from './app.component';
@@ -27,7 +30,7 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FirstpageComponent } from './firstpage/firstpage.component';
 import { SingleCardComponent, SingleCardDialogComponent } from './single-card/single-card.component';
-import { RemindMeComponent } from './remind-me/remind-me.component';
+import { RemindMeComponent, ReminderDialogBoxComponent } from './remind-me/remind-me.component';
 import { CollaboratorsComponent } from './collaborators/collaborators.component';
 import { ColorPickerComponent, ColorPickerDialogComponent } from './color-picker/color-picker.component';
 import { ArchiveButtonComponent } from './archive-button/archive-button.component';
@@ -36,6 +39,8 @@ import { AllNotesGridComponent } from './all-notes-grid/all-notes-grid.component
 import { UploadNoteImageComponent } from './upload-note-image/upload-note-image.component';
 import { AddNoteComponent } from './add-note/add-note.component';
 import { AllNotesPageComponent } from './all-notes-page/all-notes-page.component';
+import { RemindersPageComponent } from './reminders-page/reminders-page.component';
+import { RemindersGridComponent } from './reminders-grid/reminders-grid.component';
 
 //-------------------Services-------------------------
 import {LoginService} from './services/login-service/login.service'
@@ -44,9 +49,6 @@ import {ForgotpasswordService} from './services/forgotpass-service/forgotpasswor
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LogoutService } from './services/logout-service/logout.service';
 import { DataService } from './services/DataService/data-service.service'
-import { RemindersPageComponent } from './reminders-page/reminders-page.component';
-import { RemindersGridComponent } from './reminders-grid/reminders-grid.component';
-
 
 
 @NgModule({
@@ -74,6 +76,7 @@ import { RemindersGridComponent } from './reminders-grid/reminders-grid.componen
     RemindersPageComponent,
     RemindersGridComponent,
     ColorPickerDialogComponent,
+    ReminderDialogBoxComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,6 +93,9 @@ import { RemindersGridComponent } from './reminders-grid/reminders-grid.componen
     MatDialogModule,
     MatCardModule,
     MatGridListModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
     AppRoutingModule,
   ],
   entryComponents:[

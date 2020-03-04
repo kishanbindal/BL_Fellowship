@@ -20,7 +20,7 @@ class Note(models.Model):
     collaborators = models.ManyToManyField(User, blank=True)
     is_archived = models.BooleanField(default=False)
     is_trashed = models.BooleanField(default=False)
-    color = models.CharField(max_length=16, blank=True)
+    color = models.CharField(max_length=32, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
     is_pinned = models.BooleanField(default=False)

@@ -100,7 +100,7 @@ class NoteView(GenericAPIView):
                 serializer.save(user_id=user_id)
                 logging.info(f'POST METHOD SERIALIZER DATA  {serializer.data}')
                 smd['success'], smd['message'] = True, 'Note Successfully created'
-                return JsonResponse(data=smd, status=status.HTTP_201_CREATED)
+                return Response(data=smd, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception:

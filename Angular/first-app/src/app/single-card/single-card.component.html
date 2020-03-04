@@ -8,9 +8,9 @@
                 </mat-card-actions>
             </mat-card-title>
             <hr>
+            <img mat-card-sm-image *ngIf="note.note_image != null" src="{{ note.note_image }}">
             <mat-card-content>
                 {{note.note_text}}
-                
             </mat-card-content>
             <mat-card-content>
                 <div>

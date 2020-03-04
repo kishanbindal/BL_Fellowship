@@ -44,7 +44,8 @@ export class DataService{
   postNote(note_data:object){
     let token = localStorage.getItem('token');
     return this.http.post('http://localhost:8000/notes/api/notes/', note_data, {headers:{
-      'Content-type': 'application/json',
+      // 'Content-type': 'application/json',
+      // 'Content-Type': 'multipart/form-data', 
       'token': token,
     }})
   }

@@ -83,18 +83,29 @@ class NoteView(GenericAPIView):
 
         try:
 
+            import pdb
+            pdb.set_trace()
+
             user_id = GenerateId().generate_id(request)
             # request.data['user'] = user_id
-            collab = request.data.get('collaborators')
+            my_dict = request.data.dict()
+            collab = my_dict.get('collaborators')
             collab_list = []
             for email in collab:
                 user = User.objects.get(email=email)
                 collab_list.append(user.id)
-            request.data['collaborators'] = collab_list
-            serializer = CreateNoteSerializer(data=request.data)
-
-            import pdb
-            pdb.set_trace()
+            my_dict['collaborators'] = collab_list
+            # my_dict = request.data.dict()
+            for key, value in my_dict.items():
+                if value == 'null':
+                    my_dict[key] = None
+                elif value == 'true':
+                    my_dict[key] = True
+                elif value == 'false':
+                    my_dict[key] = False
+                elif key == 'labels' and value == '':
+                    my_dict[key] = []
+            serializer = CreateNoteSerializer(data=my_dict, partial=True)
 
             if serializer.is_valid():
                 serializer.save(user_id=user_id)

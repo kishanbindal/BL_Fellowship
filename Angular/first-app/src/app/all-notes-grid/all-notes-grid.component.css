@@ -7,6 +7,10 @@
 }
 
 .grid-container{
-    height: 30em;
+    /* height: 30em; */
     flex:2;
+}
+
+.grid-tile{
+    padding-top: 1em;
 }

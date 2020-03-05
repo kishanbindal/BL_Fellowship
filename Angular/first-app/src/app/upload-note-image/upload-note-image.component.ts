@@ -18,7 +18,9 @@ export class UploadNoteImageComponent implements OnInit {
   }
 
   getFile($event){
+    console.log($event);
     this.uploadFile = $event.target.files[0];
+    console.log(this.uploadFile)
     var reader = new FileReader();
     reader.readAsDataURL(this.uploadFile);
     //reader.result

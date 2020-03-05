@@ -36,6 +36,7 @@ export class AddNoteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.templateNote = {
       collaborators:[],
       color: "",
@@ -49,6 +50,7 @@ export class AddNoteComponent implements OnInit {
       reminder: null,
       title: "",
     }
+
   }
 
   openCard(){
@@ -59,14 +61,9 @@ export class AddNoteComponent implements OnInit {
 
   convertToFormData(){
     for (var content in this.templateNote){
-      if(content === "collaborators" || content === "labels"){
-        for (let i = 0; i < this.templateNote[content].length; i++){
-          
-        }
-      }else{
         this.formData.append(content, this.templateNote[content]);
-      }
     }
+    console.log(this.formData)
   }
   
   private SendNoteData(note_data){
@@ -89,6 +86,7 @@ export class AddNoteComponent implements OnInit {
     if(this.showCard === true){
       this.showCard = false;
       this.convertToFormData();
+      console.log(this.formData)
       this.SendNoteData(this.formData)
       return this.showCard
     }

@@ -1,7 +1,7 @@
 mat-card {
     border : 5px;
-    width : 22.5em;
-    min-width: 21.5em;
+    /* width : 22.5em;
+    min-width: 21.5em; */
 }
 
 /* .mat-card:not([class*=mat-elevation-z]) {
@@ -24,3 +24,17 @@ mat-card:hover mat-card-actions{
 /* mat-card div:hover mat-card-actions{
     display:block;
 } */
+
+#card-reminder{
+    border-color: slategrey;
+    background-color: slategrey;
+    border-radius: 5px;
+    width: 65%;
+
+}
+
+.custom-dialog-container{
+    padding: 0px;
+    margin: 0px;
+}
+

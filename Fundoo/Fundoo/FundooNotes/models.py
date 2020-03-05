@@ -28,4 +28,5 @@ class Note(models.Model):
     reminder = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
+
         return self.title

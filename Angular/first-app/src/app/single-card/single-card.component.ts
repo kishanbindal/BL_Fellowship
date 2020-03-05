@@ -28,6 +28,7 @@ export class SingleCardComponent implements OnInit {
       width: "45em",
       height: "16.5em",
       data : this.note,
+      panelClass : 'custom-dialog-container'
     });
 
     dialogRef.afterClosed().subscribe(result => {

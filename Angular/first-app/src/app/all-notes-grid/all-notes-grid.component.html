@@ -1,8 +1,8 @@
 <div class="grid-view-container">
         <div class="around-grid"></div>
         <div class="grid-container">
-                <mat-grid-list cols="3" rowHeight="1.5:1">
-                        <mat-grid-tile *ngFor="let note of allNotes"><app-single-card [note]="note"></app-single-card></mat-grid-tile>
+                <mat-grid-list cols="3" rowHeight="1.15:1" gutterSize="5px">
+                        <mat-grid-tile class="grid-tile"*ngFor="let note of allNotes"><app-single-card [note]="note"></app-single-card></mat-grid-tile>
                 </mat-grid-list> 
         </div>
         <div class="around-grid"></div>

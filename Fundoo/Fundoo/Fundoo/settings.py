@@ -170,8 +170,6 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
 
 # SWAGGER_SETTINGS = {
 #     # 'SHOW_REQUEST_HEADERS': True,
@@ -187,8 +185,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATIC_URL='static/'
 
-STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')

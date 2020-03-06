@@ -10,14 +10,16 @@ export class RemindersGridComponent implements OnInit {
 
   reminderNotes;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {
+   }
 
   ngOnInit(): void {
     this.getReminders();
   } 
   
   getReminders(){
-    this.dataService.reminderNotes.subscribe(data => this.reminderNotes=data)
+    this.dataService.getReminderNotes()
+    this.dataService.reminderNotes.subscribe(data => {console.log(data);this.reminderNotes=data})
     setTimeout(()=> console.log(this.reminderNotes), 2000);
   }
 

@@ -30,13 +30,14 @@ export class DataService{
 
   getReminderNotes(){
     let token = localStorage.getItem('token');
+    console.log('Getting notes with Reminders.')
     return this.http.get('http://localhost:8000/notes/api/reminder',{headers:{
-      'Content-type': 'application/json',
+      // 'Content-type': 'application/json',
       'token': token,
     }}).subscribe((response) => {
       if(response['success'] === true){
         let reminder_data = response['data']
-        this.reminderSource.next(response['data'])
+        this.reminderSource.next(reminder_data)
       }
     })
   }
@@ -44,8 +45,6 @@ export class DataService{
   postNote(note_data:object){
     let token = localStorage.getItem('token');
     return this.http.post('http://localhost:8000/notes/api/notes/', note_data, {headers:{
-      'Accept': 'application/json',
-      // 'Accept': 'multipart/form-data', 
       'token': token,
     }})
   }

@@ -36,6 +36,9 @@ class NoteView(GenericAPIView):
 
             user_id = GenerateId().generate_id(request)
             notes = Note.objects.filter(is_archived=False, is_trashed=False, user=user_id)
+            # print(notes,'---->notes')
+            # obj=notes.first()
+            # print(obj.note_image.url,'------>url')
             collaborated_notes = Note.objects.filter(is_archived=False, is_trashed=False).filter(collaborators=user_id)
             user_notes_serializer = CreateNoteSerializer(notes, many=True)
             collab_notes_serializer = CreateNoteSerializer(collaborated_notes, many=True)
@@ -82,37 +85,41 @@ class NoteView(GenericAPIView):
         }
 
         try:
-
-            import pdb
-            pdb.set_trace()
+            #
+            # import pdb
+            # pdb.set_trace()
 
             user_id = GenerateId().generate_id(request)
-            # request.data['user'] = user_id
-            my_dict = request.data.dict()
-            collab = my_dict.get('collaborators')
-            collab_list = []
-            for email in collab:
-                user = User.objects.get(email=email)
-                collab_list.append(user.id)
-            my_dict['collaborators'] = collab_list
-            # my_dict = request.data.dict()
-            for key, value in my_dict.items():
-                if value == 'null':
-                    my_dict[key] = None
-                elif value == 'true':
-                    my_dict[key] = True
-                elif value == 'false':
-                    my_dict[key] = False
-                elif key == 'labels' and value == '':
-                    my_dict[key] = []
-            serializer = CreateNoteSerializer(data=my_dict, partial=True)
+            request.data['user'] = user_id
+
+            to_merge=json.loads(request.data.get('otherData'))
+            request.data.update(to_merge)
+
+            # collab = request.data.get('collaborators')
+            # collab_list = []
+            #
+            # if len(collab)>0:
+            #     for email in collab:
+            #         user = User.objects.get(email=email)
+            #         collab_list.append(user.id)
+            #     request.data['collaborators'] = collab_list
+
+            print(request.data, '------->re')
+
+            serializer = CreateNoteSerializer(data=request.data)
+
+
 
             if serializer.is_valid():
-                serializer.save(user_id=user_id)
+                serializer.save()
                 logging.info(f'POST METHOD SERIALIZER DATA  {serializer.data}')
                 smd['success'], smd['message'] = True, 'Note Successfully created'
+                print(serializer.data,'---->ser')
+
                 return Response(data=smd, status=status.HTTP_201_CREATED)
             else:
+                print(serializer.errors, '---->error')
+
                 return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)

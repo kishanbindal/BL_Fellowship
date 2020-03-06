@@ -8,8 +8,9 @@
                 </mat-card-actions>
             </mat-card-title>
             <hr>
-            <img mat-card-sm-image *ngIf="note.note_image != null" src="{{ note.note_image }}">
+            <img mat-card-sm-image *ngIf="note.note_image != null" src="http://127.0.0.1:8000{{note.note_image}}">
             <mat-card-content>
+                <!-- http://127.0.0.1:8000/{{note.note_image}} -->
                 {{note.note_text}}
             </mat-card-content>
             <!-- <mat-card-content> -->

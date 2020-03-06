@@ -12,7 +12,7 @@ class Label(models.Model):
 
 class Note(models.Model):
 
-    user = models.ForeignKey(User, related_name='NoteUser', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='NoteUser', on_delete=models.CASCADE,blank=True)
     title = models.CharField(max_length=64, blank=True)
     note_text = models.TextField(blank=True)
     note_image = models.ImageField(upload_to='images/', blank=True, null=True)

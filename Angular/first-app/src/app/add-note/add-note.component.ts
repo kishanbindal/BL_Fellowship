@@ -29,6 +29,7 @@ export class AddNoteComponent implements OnInit {
 
   formData = new FormData();
   imgFile = null;
+  imgData:File;
 
   constructor(public noteService : DataService, private _snackbar: MatSnackBar,
     private domSanitizer : DomSanitizer) {
@@ -59,16 +60,37 @@ export class AddNoteComponent implements OnInit {
     }
   }
 
-  convertToFormData(){
-    for (var content in this.templateNote){
-        this.formData.append(content, this.templateNote[content]);
-    }
-    console.log(this.formData)
-  }
+  // convertToFormData(note_data:object, img_data:File){
+  //   // for (var content in this.templateNote){
+  //   //     this.formData.append(content, this.templateNote[content]);
+  //   // }
+  //   let otherData = JSON.stringify(note_data);
+  //   this.formData.append('note_image', img_data, img_data.name)
+  //   this.formData.append('note_data', otherData)
+  // }
   
   private SendNoteData(note_data){
+
+    const data={
+      color: this.templateNote.color,
+      is_archived: false,
+      is_pinned: false,
+      is_trashed: false,
+      note_text: this.templateNote.note_text,
+      title: this.templateNote.title,
+    }
+
+
+    const otherData=JSON.stringify(data)
+    const formData = new FormData();
+    formData.append('note_image',this.imgData,this.imgData.name)
+    formData.append('otherData',otherData)
+    
     if (this.templateNote.title !== '' || this.templateNote.note_text !== ''){
-      this.noteService.postNote(note_data).subscribe((result) => {
+      this.noteService.postNote(formData).subscribe(result => {
+        
+        console.log(result,'---->result')
+
         if (result['success'] == true){
           this.noteService.getAllNotes();
           this._snackbar.open('Successfully Created Note',"close",{
@@ -85,8 +107,7 @@ export class AddNoteComponent implements OnInit {
   closeCard(){
     if(this.showCard === true){
       this.showCard = false;
-      this.convertToFormData();
-      console.log(this.formData)
+      // this.convertToFormData(this.templateNote, this.imgData);
       this.SendNoteData(this.formData)
       return this.showCard
     }
@@ -107,7 +128,8 @@ export class AddNoteComponent implements OnInit {
   }
 
   setImage($event){
-    this.templateNote.note_image = $event[0];
+    // this.templateNote.note_image = $event[0];
+    this.imgData=$event[0];
     // this.fd.append('note_image', $event[0], $event[0].name)
     // this.templateNote.note_image = this.fd
     let imgUrl = $event[1];

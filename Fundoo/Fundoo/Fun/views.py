@@ -19,6 +19,7 @@ from django.core.mail import send_mail
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django_short_url.views import get_surl
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -26,7 +27,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import User
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserForgotPasswordSerializer, \
-    UploadImageSerializer
+    UploadImageSerializer, UserDataSerializer
+from util.decorators import logged_in
 
 # ??? Need to learn how to mask this path ???
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -134,6 +136,7 @@ class UserLoginView(GenericAPIView):
 
         try:
 
+
             email = request.data.get('email')
             password = request.data.get('password')
 
@@ -145,12 +148,17 @@ class UserLoginView(GenericAPIView):
                 user = auth.authenticate(username=username, password=password)
 
                 if user is not None:
+                    import pdb
+                    pdb.set_trace()
 
+                    if user.profile_image is not None:
+                        aws_presigned_url = AmazonServicesS3Util().generate_presigned_url(user.id)
                     token = TokenService().generate_login_token(user.id)
                     smd = {
                         'success': True,
                         'message': 'Logged in Successfully',
-                        'token': token
+                        'token': token,
+                        'data': [user.username, user.email, user.profile_image],
                     }
 
                     # REDIS CONTENT GOES HERE
@@ -292,7 +300,7 @@ class UploadImage(GenericAPIView):
             }
 
         # request_data = json.loads(request.body)
-        img_file = request.FILES['image']
+        img_file = request.data
         token = request.headers.get('token')
         decoded_token = TokenService().decode_token(token)
         user_id = str(decoded_token.get('id'))
@@ -484,3 +492,32 @@ class LoginGitHub(GenericAPIView):
                 return Response(data=smd, status=api_response.status_code)
         except Exception:
             return Response(data=Exception, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(logged_in, name='dispatch')
+class GetAllUsers(GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+
+        smd = {
+            'success': False,
+            'message': 'Unsuccessful in retrieving users',
+            'data': []
+        }
+
+        # import pdb
+        # pdb.set_trace()
+
+        users = User.objects.all().filter(is_active=True, is_superuser=False)
+        serializer = UserDataSerializer(users, many=True)
+
+        # if serializer.is_valid():
+
+        smd = {
+            'success': True,
+            'message': 'Successfully retrieved users',
+            'data': serializer.data
+        }
+        return Response(data=smd, status=status.HTTP_200_OK)
+        # else:
+        #     return Response(data=smd, status=status.HTTP_400_BAD_REQUEST)

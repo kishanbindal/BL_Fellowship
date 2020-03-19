@@ -1,0 +1,6 @@
+<mat-grid-list cols="3">
+    <mat-grid-tile *ngFor="let note of archivedNotes">
+        {{ note.note_image }}
+        <app-single-card [note]=note></app-single-card>
+    </mat-grid-tile>
+</mat-grid-list>

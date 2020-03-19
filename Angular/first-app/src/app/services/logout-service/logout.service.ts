@@ -20,6 +20,7 @@ export class LogoutService {
       console.log(`Logout Response : ${response}`)
       if (response['success'] === true){
         localStorage.removeItem('token');
+        localStorage .removeItem('user');
         this.route.navigate(['']);
         this._snackbar.open("SuccessFully Logged Out", "Close", {duration:2500})
       }else{

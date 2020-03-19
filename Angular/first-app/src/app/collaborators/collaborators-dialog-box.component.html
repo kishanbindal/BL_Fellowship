@@ -1,3 +1,72 @@
-<p>Add Some User Info</p>
 
-<p>Take Collaborator Input Here</p>
+
+<mat-card class="dialog-container">
+    <!-- <h1>Collaborators</h1> -->
+    <mat-card-title>
+        Collaborators
+    </mat-card-title>
+    <hr>
+    <form>
+        <mat-card-header>
+            <div *ngIf="host[2] !== ''; else noDp" mat-card-avatar 
+            [ngStyle]="{backgroundImage: host[2]}">
+            </div>
+            <mat-card-title style="font-size: 1rem;">{{ host[0]}}</mat-card-title>
+            <mat-card-subtitle>{{host[1]}}</mat-card-subtitle>
+        </mat-card-header>
+        
+        <!-- <div>
+            <div>
+                <img *ngIf="host[2] !== '' " src="{{host[2]}}" alt="">
+            </div>
+            <div>
+                {{ host[0]}}
+            </div>
+        </div> -->
+        <mat-form-field style="width: 100%;">
+          <input type="text"
+                 placeholder="Person or email to share with "
+                 matInput
+                 [formControl]="collaborator_name"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let user of filteredOptions | async" [value]="user.username" >
+                <div style="display: flex; flex-direction: row;">
+                    <div>
+                        <img src="{{user.profile_image}}" alt="">
+                    </div>
+                    <div>
+                        {{user.username}} &lt;{{ user.email }}&gt;
+                    </div>
+                </div>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- <div style="display: flex; float: right;">
+            <button style="border: transparent;">Cancel</button>
+            <button style="border: transparent;">Save</button>
+        </div> -->
+    </form>
+    
+    <!-- <div style="display: flex; float: right;">
+        <mat-card-actions style="float: right;">
+            <button style="border: transparent;">Cancel</button>
+            <button style="border: transparent;">Save</button>
+        </mat-card-actions>
+    </div> -->    
+</mat-card>
+
+<div style="display: flex; float: right; width: 100%; background: rgba(175, 175, 175, 1);">
+    <!-- <div style="flex: 1;"> -->
+        <button style="border: transparent;vertical-align: center;">Cancel</button>
+        <button style="border: transparent; align-self: center;">Save</button>
+    <!-- </div> -->
+</div>
+
+
+<ng-template #noDp>
+    <div mat-card-avatar>
+        <mat-icon style="transform: scale(2); align-self: center; background-size: cover;">account_circle</mat-icon>
+    </div>
+</ng-template>

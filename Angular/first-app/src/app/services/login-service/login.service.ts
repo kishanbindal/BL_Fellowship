@@ -25,6 +25,10 @@ export class LoginService {
       try{
         if (response['success'] === true){
           localStorage.setItem('token', response['token']);
+          console.log(response['data'])
+          localStorage.setItem('user', response['data']);
+          // localStorage.setItem('email', response['data']['email']);
+          // localStorage.setItem('profile_image', response['data']['profile_image']);
           this.router.navigate(['/home']);
         }else{
           console.log('Fail')
@@ -40,4 +44,12 @@ export class LoginService {
       
     })
   }
+
+  googleGetAuth(){
+    this.http.get('http://localhost:8000/fun/api/google')
+    .subscribe(result => {
+      console.log(result);
+    })
+  }
+
 }

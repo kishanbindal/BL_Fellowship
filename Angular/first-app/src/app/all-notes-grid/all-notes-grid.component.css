@@ -3,14 +3,18 @@
 }
 
 .around-grid{
-    flex:0.25;
+    flex: 0.5;
 }
 
 .grid-container{
     /* height: 30em; */
-    flex:2;
+    flex:1.75;
 }
 
 .grid-tile{
     padding-top: 1em;
+}
+
+app-single-card{
+    box-shadow: 2.5px 2.5px 5px rgba(191, 191, 191, 1);
 }

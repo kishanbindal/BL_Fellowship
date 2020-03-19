@@ -1,2 +1,7 @@
-<p>Some Dialog</p>
+<p>User Name: {{ data[0] }}</p>
+
+<button (click)="fileInput.click()">
+    Add profile Picture
+    <input #fileInput (change)="uploadImage($event)" type="file" style="display: none;" accept="image/*">
+</button>
 <button (click)="logOut()">Logout</button>

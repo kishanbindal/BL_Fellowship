@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { element } from 'protractor';
 
 
 @Component({
@@ -24,16 +25,23 @@ export class ColorPickerComponent implements OnInit {
 
   openColorDialog(event){
       
-      var positionX = event.pageX+ 'px';
-      console.log(positionX);
-      var positionY = event.pageY + 'px';
-      console.log(positionY);
+      // let source_element = event.srcElement;
+      // console.log(event.srcElement)
+      // console.log(event)
+      let rect = event.target.getBoundingClientRect()
+      console.log(rect)
+      let leftX = rect.x + 'px';
+      let topY = (rect.y +40) + 'px';
+      // var positionX = event.pageX + 'px'//event.position+ 'px';
+      // console.log(positionX);
+      // var positionY = event.pageY + 'px';
+      // console.log(positionY);
 
 
       this.state = this.dialogRef.open(ColorPickerDialogComponent,{
       width: "14.5em",
       height: "12.25em",
-      position : {left :positionX, top: positionY},
+      position : {left :leftX, top: topY},
     });
 
     this.state.afterClosed().subscribe(result => {

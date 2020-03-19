@@ -31,4 +31,8 @@ export class LoginComponent implements OnInit {
     this.ls.postData(this.email, this.password);
   }
 
+  loginGoogle(){
+    this.ls.googleGetAuth();
+  }
+
 }

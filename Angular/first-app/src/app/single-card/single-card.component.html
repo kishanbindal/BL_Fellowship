@@ -1,40 +1,43 @@
 
-    <mat-card class="card-properties" [ngStyle]="{background: note.color}">
-        <div (click)="showNoteDialog()">
-            <mat-card-title >
-                {{note.title}}
-                <mat-card-actions>
-                    <!-- <button>Pin</button>   -->
-                </mat-card-actions>
-            </mat-card-title>
-            <hr>
-            <img mat-card-sm-image *ngIf="note.note_image != null" src="http://127.0.0.1:8000{{note.note_image}}">
-            <mat-card-content>
-                <!-- http://127.0.0.1:8000/{{note.note_image}} -->
-                {{note.note_text}}
-            </mat-card-content>
-            <!-- <mat-card-content> -->
-                <div>
-                    <p id='card-reminder'>{{ note.reminder }}</p>
-                </div>
-            <!-- </mat-card-content> -->
-        </div>
-        <mat-card-actions>
-            <app-remind-me></app-remind-me>
-            <app-collaborators></app-collaborators>
-            <app-color-picker></app-color-picker>
-            <app-upload-note-image></app-upload-note-image>
-            <app-archive-button></app-archive-button>
-            <app-note-setting></app-note-setting>
-        </mat-card-actions>
-        
-        <!-- <mat-card-actions>
-            <app-remind-me *ngIf="show" (mouseenter)="showComponents()"></app-remind-me>
-            <app-collaborators *ngIf="show" (mouseenter)="showComponents()"></app-collaborators>
-            <app-color-picker *ngIf="show" (mouseenter)="showComponents()"></app-color-picker>
-            <button *ngIf="show" (mouseenter)="showComponents()">Add Image</button>
-            <app-archive-button *ngIf="show" (mouseenter)="showComponents()"></app-archive-button>
-            <app-note-setting *ngIf="show" (mouseenter)="showComponents()"></app-note-setting>
-        </mat-card-actions> -->
+<mat-card class="card-properties" [ngStyle]="{background: note.color}">
+    <div style="width: 100%;">
+        <img mat-card-md-image *ngIf="note.note_image != null" src="http://127.0.0.1:8000{{note.note_image}}">
+    </div>
+    <div (click)="showNoteDialog()">
+        <mat-card-title >
+            {{note.title}}
+            <mat-card-actions>
+                <!-- <button>Pin</button>   -->
+            </mat-card-actions>
+        </mat-card-title>
+        <hr>
+        <mat-card-content>
+            <!-- http://127.0.0.1:8000/{{note.note_image}} -->
+            {{note.note_text}}
+        </mat-card-content>
+        <!-- <mat-card-content> -->
+            <div>
+                <p id='card-reminder'>{{ note.reminder }}</p>
+            </div>
+        <!-- </mat-card-content> -->
+    </div>
+
+    <mat-card-actions>
+        <app-remind-me></app-remind-me>
+        <app-collaborators></app-collaborators>
+        <app-color-picker></app-color-picker>
+        <app-upload-note-image></app-upload-note-image>
+        <app-archive-button (sendArchive)="setArchive($event)" [archivedStatus] ="note.is_archived"></app-archive-button>
+        <app-note-setting></app-note-setting>
+    </mat-card-actions>
     
-    </mat-card>
+    <!-- <mat-card-actions>
+        <app-remind-me *ngIf="show" (mouseenter)="showComponents()"></app-remind-me>
+        <app-collaborators *ngIf="show" (mouseenter)="showComponents()"></app-collaborators>
+        <app-color-picker *ngIf="show" (mouseenter)="showComponents()"></app-color-picker>
+        <button *ngIf="show" (mouseenter)="showComponents()">Add Image</button>
+        <app-archive-button *ngIf="show" (mouseenter)="showComponents()"></app-archive-button>
+        <app-note-setting *ngIf="show" (mouseenter)="showComponents()"></app-note-setting>
+    </mat-card-actions> -->
+
+</mat-card>

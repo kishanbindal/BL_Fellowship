@@ -73,9 +73,10 @@ export class AddNoteComponent implements OnInit {
 
     const data={
       color: this.templateNote.color,
-      is_archived: false,
+      is_archived: this.templateNote.is_archived,
       is_pinned: false,
       is_trashed: false,
+      reminder: this.templateNote.reminder,
       note_text: this.templateNote.note_text,
       title: this.templateNote.title,
     }
@@ -83,7 +84,9 @@ export class AddNoteComponent implements OnInit {
 
     const otherData=JSON.stringify(data)
     const formData = new FormData();
-    formData.append('note_image',this.imgData,this.imgData.name)
+    if (this.imgData !== undefined){
+      formData.append('note_image',this.imgData) //this.imgData.name
+    }
     formData.append('otherData',otherData)
     
     if (this.templateNote.title !== '' || this.templateNote.note_text !== ''){
@@ -114,7 +117,7 @@ export class AddNoteComponent implements OnInit {
   }
 
   setColor($event){
-    console.log('Event Recorded')
+    console.log('Setting Color')
     this.templateNote.color = $event;
   }
 
@@ -136,4 +139,10 @@ export class AddNoteComponent implements OnInit {
     this.imgFile = this.domSanitizer.bypassSecurityTrustUrl(imgUrl)
     console.log(' Note Template : \n',this.templateNote)
   }
+
+  setArchive($event){
+    console.log($event)
+    this.templateNote.is_archived = $event;
+  }
+
 }

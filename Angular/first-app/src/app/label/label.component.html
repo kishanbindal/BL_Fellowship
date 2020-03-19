@@ -1,0 +1,16 @@
+<div style="align-content: center;">
+    <label for="" style="color: rgba(173, 173, 173);">LABELS</label>
+</div>
+
+
+<div>
+    <button *ngFor="let label of labels" style="border-color: transparent; background-color: transparent; width: 100%; font-size: 1rem; align-self: center;">
+        <mat-icon prefix style="float: left;">label</mat-icon>
+        {{label.label_name}}
+    </button>
+</div>
+
+<button (click)="openLabelDialog()" style="border-color: transparent; background-color: transparent; width: 100%; font-size: 1rem; align-self: center;"> 
+    <mat-icon matPrefix style="float: left;">edit</mat-icon>
+    Edit Labels
+</button>

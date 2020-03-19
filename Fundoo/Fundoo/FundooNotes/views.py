@@ -34,6 +34,7 @@ class NoteView(GenericAPIView):
         '''
         try:
 
+
             user_id = GenerateId().generate_id(request)
             notes = Note.objects.filter(is_archived=False, is_trashed=False, user=user_id)
             # print(notes,'---->notes')
@@ -86,14 +87,21 @@ class NoteView(GenericAPIView):
 
         try:
             #
-            # import pdb
-            # pdb.set_trace()
+            import pdb
+            pdb.set_trace()
 
             user_id = GenerateId().generate_id(request)
-            request.data['user'] = user_id
+            # request.data['user'] = user_id
 
-            to_merge=json.loads(request.data.get('otherData'))
-            request.data.update(to_merge)
+            if 'note_image' in request.data:
+                to_merge = json.loads(request.data.get('otherData'))
+                request.data.update(to_merge)
+                serializer = CreateNoteSerializer(data=request.data)
+            else:
+                data = request.data.dict()['otherData']
+                data = json.loads(data)
+                serializer = CreateNoteSerializer(data=data, partial=True)
+
 
             # collab = request.data.get('collaborators')
             # collab_list = []
@@ -106,12 +114,10 @@ class NoteView(GenericAPIView):
 
             print(request.data, '------->re')
 
-            serializer = CreateNoteSerializer(data=request.data)
-
-
+            # serializer = CreateNoteSerializer(data=request.data)
 
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(user_id=user_id)
                 logging.info(f'POST METHOD SERIALIZER DATA  {serializer.data}')
                 smd['success'], smd['message'] = True, 'Note Successfully created'
                 print(serializer.data,'---->ser')
@@ -161,7 +167,7 @@ class NoteOperationsView(GenericAPIView):
             return Response(Exception, status=status.HTTP_404_NOT_FOUND)
 
     @method_decorator(logged_in)
-    def put(self, request, id):
+    def patch(self, request, id):
         '''
         :param request:
         :param id: Specified Note ID
@@ -170,10 +176,11 @@ class NoteOperationsView(GenericAPIView):
         '''
         try:
             smd = {
-                'Success': 'Fail',
+                'success': False,
                 'message': 'Unsuccessful in updating Note',
                 'data': [],
             }
+
             import json
             # import pdb
             # pdb.set_trace()
@@ -181,11 +188,12 @@ class NoteOperationsView(GenericAPIView):
             print('id::', id)
             collab = request.data.get('collaborators')
             collab_list = []
-            for email in collab:
-                user = User.objects.get(email=email)
-                collab_list.append(user.id)
+            if collab is not None:
+                for email in collab:
+                    user = User.objects.get(email=email)
+                    collab_list.append(user.id)
             request.data['collaborators'] = collab_list
-            serializer = NoteOperationsSerializer(data=request.data) #json.loads(request.body)
+            serializer = NoteOperationsSerializer(data=request.data, partial=True) #json.loads(request.body)
 
             if serializer.is_valid():
                 serializer.data['collaborators'] = CollaboratorService().get_collaborators(serializer)
@@ -194,8 +202,8 @@ class NoteOperationsView(GenericAPIView):
                 logging.info(f'PUT METHOD DATA : {serializer.data}')
                 if note is not None:
                     serializer.update(note, serializer.data)
-                    smd['Success'], smd['message'] = 'success', f'Successfully update Note with id: {id}'
-                    return Response(smd, status=status.HTTP_200_OK)
+                    smd['success'], smd['message'] = True, f'Successfully update Note with id: {id}'
+                    return Response(data=smd, status=status.HTTP_200_OK)
                 else:
                     return Response(smd, status=status.HTTP_404_NOT_FOUND)
             else:
@@ -249,7 +257,12 @@ class LabelView(GenericAPIView):
 
             user_id = GenerateId().generate_id(request)
             labels = self.queryset.filter(user_id=user_id)
-            return Response(labels.values(), status=status.HTTP_200_OK)
+            smd = {
+                'success': True,
+                'message': 'Successfully retrieved labels',
+                'data': labels.values()
+            }
+            return Response(data=smd, status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
@@ -261,16 +274,20 @@ class LabelView(GenericAPIView):
         '''
         try:
             smd = {
-                'Success': 'Fail',
+                'success': 'Fail',
                 'message': 'Label creation Unsuccessful',
                 'data': []
             }
+
+            import pdb
+            pdb.set_trace()
+
             serializer = CreateLabelSerializer(data=request.data)
 
             if serializer.is_valid():
                 user_id = GenerateId().generate_id(request)
                 serializer.save(user_id=user_id)
-                smd['Success'], smd['message'] = 'Success', 'Successfully created Label'
+                smd['success'], smd['message'] = True, 'Successfully created Label'
                 return Response(smd, status=status.HTTP_201_CREATED)
             else:
                 return Response(smd, status=status.HTTP_400_BAD_REQUEST)
@@ -293,14 +310,14 @@ class LabelOperationsView(GenericAPIView):
         '''
         try:
             smd = {
-                'Success': 'Fail',
+                'Success': False,
                 'message': 'Unable to retrieve Label',
                 'data': []
             }
             label = self.queryset.filter(pk=id)
 
             if label.values() is not None:
-                smd['Success'], smd['message'], smd['data'] = 'Success', 'Successfully Retrieved Label', [label.values()]
+                smd['Success'], smd['message'], smd['data'] = True, 'Successfully Retrieved Label', [label.values()]
                 return Response(smd, status=status.HTTP_200_OK)
             else:
                 return Response(smd, status=status.HTTP_400_BAD_REQUEST)
@@ -321,6 +338,9 @@ class LabelOperationsView(GenericAPIView):
                 'message': f'Unable to update Label with id : {id}',
                 'data': []
             }
+
+            import pdb
+            pdb.set_trace()
 
             serializer = LabelOperationsSerializer(data=request.data)
 
@@ -348,7 +368,7 @@ class LabelOperationsView(GenericAPIView):
         '''
         try:
             smd = {
-                'Success': 'Fail',
+                'success': False,
                 'message': f'Unable to delete Label with id : {id}',
                 'data': []
             }
@@ -356,7 +376,7 @@ class LabelOperationsView(GenericAPIView):
 
             if label is not None:
                 label.delete()
-                smd['Success'], smd['message'], smd['data'] = 'Success', f'Successfully deleted Label with id: {id}', \
+                smd['success'], smd['message'], smd['data'] = True, f'Successfully deleted Label with id: {id}', \
                                                               [label.label_name]
                 return Response(smd, status=status.HTTP_200_OK)
             else:
@@ -375,10 +395,19 @@ class ViewArchivedNotes(GenericAPIView):
         :param request:
         :return: returns all archived notes by the user
         '''
+
+        smd = {
+            'success': False,
+            'message': 'Unsuccessful in retrieving archived notes',
+            'data': []
+        }
+
         try:
             user_id = GenerateId().generate_id(request)
             archived_notes = Note.objects.all().filter(is_archived=True, user_id=user_id)
-            return Response(archived_notes.values(), status=status.HTTP_200_OK)
+            serializer = CreateNoteSerializer(archived_notes, many=True)  # TODO
+            smd['success'], smd['message'], smd['data'] = True, 'Retrieved Archived Notes', serializer.data
+            return Response(data=smd, status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
@@ -394,7 +423,8 @@ class ViewTrashedNotes(GenericAPIView):
         try:
             user_id = GenerateId().generate_id(request)
             trashed_notes = Note.objects.all().filter(is_trashed=True, user_id=user_id)
-            return Response(trashed_notes.values(), status=status.HTTP_200_OK)
+            serializer = CreateNoteSerializer(trashed_notes, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception:
             return Response(Exception, status=status.HTTP_403_FORBIDDEN)
 
@@ -412,8 +442,9 @@ class ViewNotesReminder(GenericAPIView):
 
             user_id = GenerateId().generate_id(request)
             notes_with_reminder = Note.objects.filter(user_id=user_id, reminder__isnull=False)
+            serializer = CreateNoteSerializer(notes_with_reminder, many=True)
             smd = {'success': True, 'message': 'Successfully Retrieved notes with reminders',
-                   'data': notes_with_reminder.values()}
+                   'data': serializer.data}
             return Response(data=smd, status=status.HTTP_200_OK)
         except Exception:
             smd = {'success': False, 'message': 'unable to retrieve notes with reminders', 'data': []}

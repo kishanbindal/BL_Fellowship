@@ -18,7 +18,6 @@ export class AllNotesGridComponent implements OnInit {
   }
 
   recieveNotes(){
-    let recievedArray = []
     this.allNotesService.getAllNotes()
     this.allNotesService.cast.subscribe((data) => {this.allNotes = data});
   }

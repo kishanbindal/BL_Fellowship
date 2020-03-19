@@ -28,9 +28,10 @@
       <button class="sidenav-element-button" (click)="goReminderView()">Reminders</button>
       <hr>
       <!-- <label style="justify-content: center;">Labels</label> -->
-      <button class="sidenav-element-button">Edit Labels</button>
+      <!-- <button class="sidenav-element-button">Edit Labels</button> -->
+      <app-label></app-label>
       <hr>
-      <button class="sidenav-element-button">Archive</button>
+      <button class="sidenav-element-button" (click)="goArchivedView()">Archive</button>
       <button class="sidenav-element-button">Trash</button>
     </mat-sidenav>
   </mat-sidenav-container>

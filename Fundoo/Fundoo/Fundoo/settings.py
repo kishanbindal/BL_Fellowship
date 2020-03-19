@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Add Template Directory Path here
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-ENV_PATH = os.path.join(BASE_DIR, '.env')
+ENV_PATH = os.path.join(BASE_DIR, 'env')
+# print('ENV Path : -> ', ENV_PATH)
+# print('Base path : -> ', BASE_DIR)
 load_dotenv(ENV_PATH)
 
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
@@ -54,13 +56,13 @@ MIDDLEWARE = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ORIGIN_WHITELIST = (
-#     'http://localhost:8000',
-# )
-#
-# CORS_ORIGIN_REGEX_WHITELIST = [
-#     'http://localhost:8000',
-# ]
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+)
+
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://localhost:8000',
+]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -166,6 +168,7 @@ CACHES = {
         }
     }
 }
+
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"

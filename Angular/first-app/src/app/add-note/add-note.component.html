@@ -29,7 +29,7 @@
                     <app-collaborators></app-collaborators>
                     <app-color-picker (sendColor)="setColor($event)"></app-color-picker>
                     <app-upload-note-image (sendFile)="setImage($event)"></app-upload-note-image>
-                    <app-archive-button></app-archive-button>
+                    <app-archive-button (sendArchive)="setArchive($event)"></app-archive-button>
                     <app-note-setting></app-note-setting>
                     <button class="button-close" (click)="closeCard()">Close</button>
                 </mat-card-actions>

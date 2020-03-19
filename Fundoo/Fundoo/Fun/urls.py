@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/google-callback', views.LoginGoogle.as_view(), name='google-callback'),
     path('api/github', views.LoginGitHubAuthorization.as_view(), name='github-auth'),
     path('api/github-callback', views.LoginGitHub.as_view(), name='github-callback'),
-    path('api/', TemplateView.as_view(template_name="login_page.html")),
+    path('api/users', views.GetAllUsers.as_view(), name='get-users'),
+    # path('api/', TemplateView.as_view(template_name="login_page.html")),
     # path('api/credentials/<token>', views.UserGetPasswordView.as_view(), name='get-user-credentials')
 ]

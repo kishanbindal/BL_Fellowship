@@ -1,0 +1,31 @@
+<h1>Edit Labels</h1>
+
+<form action="">
+    <button mat-icon-button>
+        <mat-icon mat-prefix>close</mat-icon>
+    </button>
+    <mat-form-field>
+            <input type="text" [formControl]="label_name" matInput>
+    </mat-form-field>
+    <button type="submit" mat-icon-button (click)='submitLabel()'><mat-icon mat-suffix>check</mat-icon></button>
+</form>
+
+<div *ngFor="let label of labels" style="display: flex; align-items: center;" (mouseenter)="getButton()" (mouseleave)="removeButton()">
+    <!-- {{label.id}} -->
+    <button name="{{label.id}}" (click)="deleteLabel(label.id)" mat-icon-button><mat-icon *ngIf="!showDeleteButton; else showDelete">label</mat-icon></button>
+    <!-- <p id="label-name"> {{label.label_name}} </p> -->
+    <mat-form-field>
+        <input type="text" matInput [(ngModel)]="label.label_name">
+        <!-- value="{{label.label_name}}"  -->
+    </mat-form-field>
+    <button mat-icon-button style="float:right;" (click)="updateLabel(label)"><mat-icon>edit</mat-icon></button>
+</div>
+
+
+<hr>
+<button style="float: right; background-color: inherit; border-color: transparent;" [mat-dialog-close]="label_name">Done</button>
+
+<!-- ---------------------------------------Templates for ngif-else conditions----------- -->
+<ng-template #showDelete>
+    <mat-icon>delete</mat-icon>
+</ng-template>

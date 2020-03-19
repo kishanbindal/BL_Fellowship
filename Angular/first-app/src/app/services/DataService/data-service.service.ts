@@ -13,8 +13,42 @@ export class DataService{
   private reminderSource = new BehaviorSubject('No Notes with reminders');
   public reminderNotes = this.reminderSource.asObservable();
 
+  private archivedSource = new BehaviorSubject('No Archived Notes');
+  public archivedNotes = this.archivedSource.asObservable();
+
+  private labelSource = new BehaviorSubject('No labels to show');
+  public labelData = this.labelSource.asObservable();
+
+  private userSource = new BehaviorSubject('No Users');
+  public usersList = this.userSource.asObservable();
+
   constructor(private http: HttpClient) { }
 
+  //-----------Users Related-----------------------------
+
+  getAllUsers(){
+    let token = localStorage.getItem('token')
+    return this.http.get('http://localhost:8000/fun/api/users', {headers : {
+      'token': token,
+    }}).subscribe(response => {
+      if (response['success'] === true){
+        let data = response['data']
+        this.userSource.next(data)
+      }
+    })
+  }
+
+  uploadProfilePicture(image_file){
+    let token = localStorage.getItem('token')
+    console.log('sending profile_image to backend');
+    return this.http.post('http://localhost:8000/fun/api/uploadimage', image_file, {headers :{
+      'token': token,
+    }}).subscribe(response => {
+      console.log(response)
+    })
+  }
+
+  //-----------Note Related Options--------------------------
   getAllNotes(){
     let token = localStorage.getItem('token') 
     return this.http.get('http://localhost:8000/notes/api/notes/', {headers:{
@@ -23,6 +57,7 @@ export class DataService{
     }}).subscribe((response) =>{
       if(response['success']===true){
         let data = response['data']
+        // console.log('Incoming Note Data: \n', data)
         this.responseSource.next(data)
       }
     })
@@ -49,7 +84,67 @@ export class DataService{
     }})
   }
 
+  getArchivedNotes(){
+    let token = localStorage.getItem('token')
+    // console.log('archived token : ', token)
+    this.http.get('http://localhost:8000/notes/api/archived', { headers :{
+      'token': token
+    }}).subscribe(response => {
+      // console.log('response from Api: ', response);
+      if (response['success'] === true){
+        let archived_data  = response['data'];
+        this.archivedSource.next(archived_data);
+      }
+    })
+  }
+
+  updateNote(note_data){
+    let token = localStorage.getItem('token');
+    return this.http.patch(`http://localhost:8000/notes/api/notes/${note_data.id}`, note_data, { headers:{
+      'token': token
+    }})
+  }
+
+  //---------------Label related Operations-----------------------------
+  postLabel(label_data){
+    let token = localStorage.getItem('token')
+    return this.http.post('http://localhost:8000/notes/api/labels/', label_data, {headers: {
+      'token': token
+    }})
+  }
+
+  getLabels(){
+    let token = localStorage.getItem('token');
+    this.http.get('http://localhost:8000/notes/api/labels', {headers: {
+      'token': token
+    }})
+    .subscribe(response => {
+      // console.log('Labels Data Service : ', response)
+      if(response['success'] === true){
+        let label = response['data']
+        this.labelSource.next(label);
+      }else{
+        console.log(response['message']);
+      } 
+    })
+  }
+
+  deleteLabelId(label_id:number){
+    let token = localStorage.getItem('token')
+    return this.http.delete(`http://localhost:8000/notes/api/labels/${label_id}`, {headers:{
+      'token': token
+    }})
+  }
+
+  updateLabelId(label){
+    let token = localStorage.getItem('token')
+    return this.http.put(`http://localhost:8000/notes/api/labels/${label.id}`, label , {headers : {
+      'token': token
+    }})
+  }
 }
+
+
 
 // console.log(`Server response :${response}`)
 //       if (response['success'] === true){

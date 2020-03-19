@@ -13,10 +13,16 @@ export class NoteSettingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openMore(){
+  openMore($event){
+    console.log($event)
+    let rect = $event.target.getBoundingClientRect()
+    console.log(rect)
+    let leftX = rect.x + 'px';
+    let topY = rect.y + 'px';
     const dialogRef = this.dialog.open(NoteSettingDialogComponent,{
       width: "12.5em",
-      height: "10.5em"
+      height: "10.5em",
+      position: {left: leftX, top: topY}
     })
 
     dialogRef.afterClosed().subscribe(result => {
@@ -32,4 +38,18 @@ export class NoteSettingComponent implements OnInit {
   styleUrls: ['./note-setting-dialog.component.css']
 })
 
-export class NoteSettingDialogComponent {}
+export class NoteSettingDialogComponent {
+
+  showLabelsSignal
+
+  constructor(){
+    this.showLabelsSignal = false
+  }
+
+  showLabels(){
+    if (this.showLabelsSignal === false){
+      return this.showLabelsSignal = true;
+    }
+  }
+
+}

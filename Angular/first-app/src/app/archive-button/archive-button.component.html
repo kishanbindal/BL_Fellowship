@@ -1,3 +1,9 @@
-<button mat-icon-button (click)="goArchive()">
+<button *ngIf="!is_archived; else unArchive" mat-icon-button (click)="goArchive()">
     <mat-icon>archive</mat-icon>
 </button>
+
+<ng-template #unArchive>
+    <button mat-icon-button (click) = "goArchive()">
+        <mat-icon>unarchive</mat-icon>
+    </button>
+</ng-template>

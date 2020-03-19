@@ -33,6 +33,13 @@ class UploadImageSerializer(serializers.ModelSerializer):
         model = User
         fields = ['profile_image']
 
+
+class UserDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['pk','username', 'email', 'profile_image']
+
 # class UserGetPasswordSerializer(serializers.ModelSerializer):
 #
 #     class Meta:

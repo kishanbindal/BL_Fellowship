@@ -6,13 +6,14 @@
 .dialog-container{
     display: flex;
     flex-direction: column;
-    height: 12.5em;
-    margin: inherit;
+    height: 16.5em;
+    /* margin: inherit; */
 }
 
 .title-container{
     flex: 1;
     display: flex;
+    padding : 1em;
     flex-direction: row;
 }
 
@@ -27,6 +28,7 @@
 }
 
 .text-container{
+    padding: 1em;
     flex: 1;
 }
 

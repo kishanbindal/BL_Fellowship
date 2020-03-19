@@ -18,6 +18,7 @@
         <button style="justify-content: right;">Close</button>
     </mat-card-actions>
 </mat-card> -->
+<img *ngIf="data.note_image != null" src="http://localhost:8000{{data.note_image}}" alt="" style="height: 100%; width: 100%;">
 <div class="dialog-container" [ngStyle]="{background: data.color}">
     <div class="title-container">
         <div class="data-title">

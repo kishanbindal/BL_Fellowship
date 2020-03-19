@@ -24,4 +24,9 @@ export class SideNavComponent {
     this.router.navigate(['/reminders'])
   }
 
+  goArchivedView(){
+    console.log('Clicked on Archive View Button')
+    this.router.navigate(['/archived'])
+  }
+
 }

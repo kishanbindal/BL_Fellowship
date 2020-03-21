@@ -19,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
+import { MatCheckboxModule } from '@angular/material/checkbox'
 
 //------------------Components------------------------
 import { AppComponent } from './app.component';
@@ -35,7 +36,7 @@ import { RemindMeComponent, ReminderDialogBoxComponent } from './remind-me/remin
 import { CollaboratorsComponent, CollaboratorsDialogBoxComponent } from './collaborators/collaborators.component';
 import { ColorPickerComponent, ColorPickerDialogComponent } from './color-picker/color-picker.component';
 import { ArchiveButtonComponent } from './archive-button/archive-button.component';
-import { NoteSettingComponent } from './note-setting/note-setting.component';
+import { NoteSettingComponent, NoteSettingDialogComponent } from './note-setting/note-setting.component';
 import { AllNotesGridComponent } from './all-notes-grid/all-notes-grid.component';
 import { UploadNoteImageComponent } from './upload-note-image/upload-note-image.component';
 import { AddNoteComponent } from './add-note/add-note.component';
@@ -77,6 +78,7 @@ import { ArchivedGridComponent } from './archived-grid/archived-grid.component';
     ColorPickerDialogComponent,
     ArchiveButtonComponent,
     NoteSettingComponent,
+    NoteSettingDialogComponent,
     AllNotesGridComponent,
     UploadNoteImageComponent,
     SingleCardDialogComponent,
@@ -108,6 +110,7 @@ import { ArchivedGridComponent } from './archived-grid/archived-grid.component';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
     AppRoutingModule,
     ReactiveFormsModule,
   ],

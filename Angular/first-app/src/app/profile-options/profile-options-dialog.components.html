@@ -1,7 +1,18 @@
-<p>User Name: {{ data[0] }}</p>
+<div style="align-self: center;">
+    <mat-icon *ngIf="data[2] === ''; else dp" style="transform: scale(2); float: center;">account_circle</mat-icon>
+</div>
+<p>User Name: {{ data[0] }}</p>    
+
 
 <button (click)="fileInput.click()">
     Add profile Picture
     <input #fileInput (change)="uploadImage($event)" type="file" style="display: none;" accept="image/*">
 </button>
 <button (click)="logOut()">Logout</button>
+
+
+<ng-template #dp>
+    <div>
+        <img src="{{data[2]}}" alt="" style="border-radius: 50%;transform: scale(1); height: 50%; width: 50%;">
+    </div>
+</ng-template>

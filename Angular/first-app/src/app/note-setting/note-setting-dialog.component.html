@@ -1,3 +1,17 @@
-<button>Delete Note</button>
-<br>
-<button>Add Label</button>
+<div *ngIf="showLabelsSignal === false;else showLabelList">
+    <button>Delete Note</button>
+    <br>
+    <button (click)="showLabels()">Add Label</button>
+</div>
+
+
+<ng-template #showLabelList>
+    <h2>Label note</h2>
+
+    <div *ngFor="let label of allLabels">
+        <mat-checkbox [value]="label.id" (change)="toggle($event)">{{label.label_name}}</mat-checkbox>
+    </div>
+
+    <button (click)="onClose()">Cancel</button>
+    <button (click)="submitLabels()">Submit</button>
+</ng-template>

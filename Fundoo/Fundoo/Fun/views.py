@@ -151,14 +151,16 @@ class UserLoginView(GenericAPIView):
                     import pdb
                     pdb.set_trace()
 
+                    aws_presigned_url = None
                     if user.profile_image is not None:
-                        aws_presigned_url = AmazonServicesS3Util().generate_presigned_url(user.id)
+                        s3 = AmazonServicesS3Util.create_s3_client()
+                        aws_presigned_url = AmazonServicesS3Util().generate_presigned_url(str(user.id))
                     token = TokenService().generate_login_token(user.id)
                     smd = {
                         'success': True,
                         'message': 'Logged in Successfully',
                         'token': token,
-                        'data': [user.username, user.email, user.profile_image],
+                        'data': [user.username, user.email, aws_presigned_url],
                     }
 
                     # REDIS CONTENT GOES HERE
@@ -290,7 +292,7 @@ def reset(request, token):
 
 class UploadImage(GenericAPIView):
 
-    serializer_class = UploadImageSerializer
+    # serializer_class = UploadImageSerializer
 
     def post(self, request, *args, **kwargs):
         smd = {
@@ -300,7 +302,9 @@ class UploadImage(GenericAPIView):
             }
 
         # request_data = json.loads(request.body)
-        img_file = request.data
+        # import pdb
+        # pdb.set_trace()
+        img_file = request.data.get('profile_image')
         token = request.headers.get('token')
         decoded_token = TokenService().decode_token(token)
         user_id = str(decoded_token.get('id'))

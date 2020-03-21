@@ -36,9 +36,7 @@ export class LabelComponent implements OnInit {
       this.dataService.labelData.subscribe(data => this.labels = data)
     })
   }
-
 }
-
 
 
 @Component({

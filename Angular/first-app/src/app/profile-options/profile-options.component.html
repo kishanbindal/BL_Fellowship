@@ -1,3 +1,11 @@
-<button mat-icon-button (click)="openProfileDialog()">
-    <mat-icon>account_circle</mat-icon>
-</button>
+<div *ngIf="userDetailsArray[2] === '';else dp">
+    <button mat-icon-button (click)="openProfileDialog()">
+        <mat-icon>account_circle</mat-icon>
+    </button>
+</div>
+
+<ng-template #dp>
+    <button id="profile-image" (click)="openProfileDialog()" style="border-color: transparent; border-radius: 50%;height: 2rem;width: 2rem;">
+        <img src="{{userDetailsArray[2]}}" alt="" style="height: 75%; width: 75%;">
+    </button>   
+</ng-template>

@@ -8,27 +8,33 @@
     <hr>
     <form>
         <mat-card-header>
-            <div *ngIf="host[2] !== ''; else noDp" mat-card-avatar 
-            [ngStyle]="{backgroundImage: host[2]}">
+            <div *ngIf="host[2] !== ''; else noDp" mat-card-avatar> 
+                <img src="{{host[2]}}" alt="" style="border-radius: 50%;width: 40px; height: 40px;">
             </div>
             <mat-card-title style="font-size: 1rem;">{{ host[0]}}</mat-card-title>
             <mat-card-subtitle>{{host[1]}}</mat-card-subtitle>
         </mat-card-header>
+
+        <mat-card-header *ngFor="let collab of listOfCollaborators.controls; index as i">
+            <!-- <div>
+                <img src="{{host[2]}}" alt="" style="border-radius: 50%;width: 40px; height: 40px;">
+            </div> -->
+            <mat-card-title [formControl]="listOfCollaborators.controls[i].value" style="font-size: 1rem;"></mat-card-title>
+            <!-- <mat-card-subtitle>{{host[1]}}</mat-card-subtitle> -->
+            <!-- [formControl]="listOfCollaborators.value[i]" -->
+            <!-- [formControl]="listOfCollaborators.controls[i]" -->
+        </mat-card-header>
         
-        <!-- <div>
-            <div>
-                <img *ngIf="host[2] !== '' " src="{{host[2]}}" alt="">
-            </div>
-            <div>
-                {{ host[0]}}
-            </div>
-        </div> -->
         <mat-form-field style="width: 100%;">
-          <input type="text"
+            <div style="display: flex;">
+                <input type="text"
                  placeholder="Person or email to share with "
                  matInput
                  [formControl]="collaborator_name"
                  [matAutocomplete]="auto">
+                <button (click)="addCollab(collaborator_name)" mat-icon-button><mat-icon>check</mat-icon></button>
+            </div>
+
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let user of filteredOptions | async" [value]="user.username" >
                 <div style="display: flex; flex-direction: row;">
@@ -41,8 +47,11 @@
                 </div>
             </mat-option>
           </mat-autocomplete>
+          
         </mat-form-field>
-
+        <!-- <div *ngFor="let collab of listOfCollaborators.value">
+            collab
+        </div> -->
         <!-- <div style="display: flex; float: right;">
             <button style="border: transparent;">Cancel</button>
             <button style="border: transparent;">Save</button>
@@ -60,7 +69,7 @@
 <div style="display: flex; float: right; width: 100%; background: rgba(175, 175, 175, 1);">
     <!-- <div style="flex: 1;"> -->
         <button style="border: transparent;vertical-align: center;">Cancel</button>
-        <button style="border: transparent; align-self: center;">Save</button>
+        <button (click)="onSave()" style="border: transparent; align-self: center;">Save</button>
     <!-- </div> -->
 </div>
 

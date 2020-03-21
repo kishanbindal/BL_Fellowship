@@ -22,13 +22,15 @@ export class ProfileOptionsComponent implements OnInit {
     // this.clicked = false
     this.userDetailsArray = localStorage.getItem('user').split(',');
     console.log('Profile Options Array : ', this.userDetailsArray);
+    let element = document.getElementById('profile-image')
+    console.log('Element : ',element)
   }
 
   openProfileDialog():void {
     console.log('Clicked on profile to open Dialog Box')
     const dialogRef = this.dialog.open(ProfileOptionsDialogComponent,{
       width: '15em',
-      height: '7.5em',
+      // height: '7.5em',
       position: {right: '0', top: '65px'},
       data: this.userDetailsArray,
     });

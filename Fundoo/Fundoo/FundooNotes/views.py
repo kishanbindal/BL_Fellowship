@@ -279,9 +279,6 @@ class LabelView(GenericAPIView):
                 'data': []
             }
 
-            import pdb
-            pdb.set_trace()
-
             serializer = CreateLabelSerializer(data=request.data)
 
             if serializer.is_valid():

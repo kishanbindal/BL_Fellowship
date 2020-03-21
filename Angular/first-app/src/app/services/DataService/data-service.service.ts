@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { formattedError } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +42,13 @@ export class DataService{
   uploadProfilePicture(image_file){
     let token = localStorage.getItem('token')
     console.log('sending profile_image to backend');
-    return this.http.post('http://localhost:8000/fun/api/uploadimage', image_file, {headers :{
+    let formData = new FormData()
+    formData.append('profile_image', image_file)
+    
+    return this.http.post('http://localhost:8000/fun/api/uploadimage', formData, {headers :{
+      // "Content-Type": "multipart/form-data",
       'token': token,
+      // "Accept": "multipart/form-data"
     }}).subscribe(response => {
       console.log(response)
     })

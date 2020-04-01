@@ -15,13 +15,13 @@ export class LabelComponent implements OnInit {
 
 
   constructor(public dialog: MatDialog, private dataService: DataService) {
-    this.dataService.getLabels();
+    // this.dataService.getLabels();
     this.dataService.labelData.subscribe(result => {this.labels = result})
     console.log('Labels : ', this.labels)
    }
 
   ngOnInit(): void {
-
+    
   }
 
   openLabelDialog(){
@@ -60,9 +60,9 @@ export class LabelDialogComponent implements OnDestroy, OnInit{
     ){}
 
   ngOnInit(){
-    this.dataService.getLabels();
+    // this.dataService.getLabels();
     this.dataService.labelData.subscribe(result => {this.labels = result})
-    console.log('Labels : ', this.labels)
+    // console.log('coming from here')
   }
   
   ngOnDestroy(){

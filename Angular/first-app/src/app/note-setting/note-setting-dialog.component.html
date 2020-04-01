@@ -9,7 +9,7 @@
     <h2>Label note</h2>
 
     <div *ngFor="let label of allLabels">
-        <mat-checkbox [value]="label.id" (change)="toggle($event)">{{label.label_name}}</mat-checkbox>
+        <mat-checkbox [checked]= "label.pk" [value]="label" (change)="toggle($event)">{{label.label_name}}</mat-checkbox>
     </div>
 
     <button (click)="onClose()">Cancel</button>

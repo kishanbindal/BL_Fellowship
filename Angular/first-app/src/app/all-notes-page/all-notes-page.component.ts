@@ -13,10 +13,17 @@ export class AllNotesPageComponent implements OnInit {
   constructor() { 
   }
 
+  view = false
+
   ngOnInit(): void {
     // this.recieveNotes()
     // console.log(this.allNotes)
     }
+  
+  getListSignal($event){
+    console.log('Event in all notes grid Component : ', $event);
+    this.view = $event;
+  }
     
   // recieveNotes(){
   //   this.allNotesService.getAllNotes()

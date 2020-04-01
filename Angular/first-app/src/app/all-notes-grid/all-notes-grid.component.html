@@ -1,12 +1,20 @@
 <div class="grid-view-container">
         <div class="around-grid"></div>
         <div class="grid-container">
-                <mat-grid-list cols="3" rowHeight="1:1" gutterSize="5px" rowspan="3">
+                <mat-grid-list *ngIf="view == false ;else showList" cols="3" rowHeight="1:1" gutterSize="5px" rowspan="3">
                         <mat-grid-tile class="grid-tile"*ngFor="let note of allNotes"><app-single-card [note]="note"></app-single-card></mat-grid-tile>
                 </mat-grid-list> 
         </div>
         <div class="around-grid"></div>
 </div>
+
+<ng-template #showList>
+        <mat-grid-list cols="1" rowHeight="1:0.5" colspan="3">
+                <mat-grid-tile *ngFor="let note of allNotes">
+                        <app-single-card [note]="note"></app-single-card>
+                </mat-grid-tile>
+        </mat-grid-list>
+</ng-template>
 
 
 <!-- <mat-grid-list cols="3" rowHeight="2.5:1" gutterSize="5px">

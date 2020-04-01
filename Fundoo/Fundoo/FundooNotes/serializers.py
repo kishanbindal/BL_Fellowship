@@ -39,4 +39,6 @@ class SearchNoteSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Note
-        fields = ['title', 'note_text', 'reminder', 'color', 'labels']
+        fields = ['title']
+
+        # fields = ['title', 'note_text', 'reminder', 'color', 'labels']

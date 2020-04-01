@@ -1,8 +1,8 @@
 <!-- Sidenav  -->
-<app-side-nav></app-side-nav>
+<app-side-nav (sendListView)="getListSignal($event)"></app-side-nav>
 
 <!-- Add Note -->
 <app-add-note></app-add-note>
 
 <!-- Reminder Notes -->
-<app-reminders-grid></app-reminders-grid>
+<app-reminders-grid [view]="view"></app-reminders-grid>

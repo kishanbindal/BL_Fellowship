@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DataService } from '../services/DataService/data-service.service';
 
 @Component({
@@ -9,6 +9,8 @@ import { DataService } from '../services/DataService/data-service.service';
 export class RemindersGridComponent implements OnInit {
 
   reminderNotes;
+
+  @Input() view
 
   constructor(private dataService: DataService) {
    }

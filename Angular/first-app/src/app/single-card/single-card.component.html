@@ -1,7 +1,11 @@
 
 <mat-card class="card-properties" [ngStyle]="{background: note.color}">
     <div style="width: 100%;">
-        <img mat-card-md-image *ngIf="note.note_image != null" src="http://127.0.0.1:8000{{note.note_image}}">
+        <img mat-card-md-image *ngIf="note.note_image != null; else updatedPic" src="http://127.0.0.1:8000{{note.note_image}}">
+    
+        <ng-template #updatedPic>
+            <img [src]="imgUrl">
+        </ng-template>
     </div>
     <div (click)="showNoteDialog()">
         <mat-card-title >
@@ -16,19 +20,45 @@
             {{note.note_text}}
         </mat-card-content>
         <!-- <mat-card-content> -->
-            <div>
-                <p id='card-reminder'>{{ note.reminder }}</p>
+        <mat-card-footer style="display: flex;">
+            <!-- reminders -->
+            <div class="footer-items">
+                <p id='card-reminder' *ngIf="note.reminder != null">{{ note.reminder }}</p>
             </div>
+
+            <!-- labels [[ YET TO DO]]-->
+            <div *ngFor="let label of note.labels" class="footer-items">
+                <div class="labels">
+                    <p id='card-label'>{{label.label_name}} 
+                        <button mat-icon-button inline="true">
+                            <mat-icon >close</mat-icon>
+                        </button>
+                    </p> 
+                </div>
+            </div>
+
+            <!-- collaborators -->
+            <div *ngFor="let collaborator of note.collaborators" class="footer-items collaborators">
+                <mat-icon *ngIf="collaborator.profile_image === null; else showDp" style="transform: scale(1.25);" [title]="collaborator.username">
+                    account_circle
+                </mat-icon>
+
+                <ng-template #showDp>
+                    <img src="collaborator.profile_image" alt="" style="border-radius: 50%;">
+                </ng-template>
+            </div>
+            
+        </mat-card-footer>
         <!-- </mat-card-content> -->
     </div>
 
     <mat-card-actions>
-        <app-remind-me></app-remind-me>
-        <app-collaborators></app-collaborators>
-        <app-color-picker></app-color-picker>
-        <app-upload-note-image></app-upload-note-image>
+        <app-remind-me (sendReminder)="setReminder($event)"></app-remind-me>
+        <app-collaborators (sendCollaborators)="setCollaborators($event)"></app-collaborators>
+        <app-color-picker (sendColor)="setColor($event)"></app-color-picker>
+        <app-upload-note-image (sendFile)="setImage($event)"></app-upload-note-image>
         <app-archive-button (sendArchive)="setArchive($event)" [archivedStatus] ="note.is_archived"></app-archive-button>
-        <app-note-setting></app-note-setting>
+        <app-note-setting (sendLabels)="setLabels($event)"></app-note-setting>
     </mat-card-actions>
     
     <!-- <mat-card-actions>

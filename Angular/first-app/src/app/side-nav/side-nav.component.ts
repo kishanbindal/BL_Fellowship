@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { DataService } from '../services/DataService/data-service.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -13,7 +14,13 @@ export class SideNavComponent {
 
   opened:boolean;
 
-  constructor(private router: Router) {
+  @Output() sendListView = new EventEmitter(false)
+
+
+  constructor(private router: Router,
+    private dataService : DataService) {
+      this.dataService.getAllUsers();
+      this.dataService.getLabels();
   }
   
   goDashboardView(){
@@ -27,6 +34,11 @@ export class SideNavComponent {
   goArchivedView(){
     console.log('Clicked on Archive View Button')
     this.router.navigate(['/archived'])
+  }
+
+  getListSignal($event){
+    console.log('List-Grid view event in Sidenav:', $event);
+    this.sendListView.emit($event)
   }
 
 }

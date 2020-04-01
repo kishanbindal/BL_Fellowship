@@ -23,14 +23,21 @@
                         <input class="content-input" [(ngModel)]="templateNote.note_text">
                     <!-- <div class="content-input" contenteditable="true" [(ngModel)]="templateNote.note_text"></div> -->
                 </mat-card-content>
-                <p class="reminder-detail" *ngIf="this.templateNote.reminder != null">{{ templateNote.reminder }} </p> 
+
+                <mat-card-footer>
+                    <p class="reminder-detail" *ngIf="templateNote.reminder != null">{{ templateNote.reminder }} </p> 
+                    <div *ngFor="let label of templateNote.labels">
+                        {{label}}
+                    </div>
+                </mat-card-footer>
+
                 <mat-card-actions>
                     <app-remind-me (sendReminder)="setReminder($event)"></app-remind-me>
-                    <app-collaborators></app-collaborators>
+                    <app-collaborators (sendCollaborators)="setCollaborators($event)"></app-collaborators>
                     <app-color-picker (sendColor)="setColor($event)"></app-color-picker>
                     <app-upload-note-image (sendFile)="setImage($event)"></app-upload-note-image>
                     <app-archive-button (sendArchive)="setArchive($event)"></app-archive-button>
-                    <app-note-setting></app-note-setting>
+                    <app-note-setting (sendLabels)="setLabels($event)"></app-note-setting>
                     <button class="button-close" (click)="closeCard()">Close</button>
                 </mat-card-actions>
             </mat-card>

@@ -76,6 +76,8 @@ export class AddNoteComponent implements OnInit {
       is_archived: this.templateNote.is_archived,
       is_pinned: false,
       is_trashed: false,
+      labels: this.templateNote.labels,
+      collaborators: this.templateNote.collaborators,
       reminder: this.templateNote.reminder,
       note_text: this.templateNote.note_text,
       title: this.templateNote.title,
@@ -143,6 +145,19 @@ export class AddNoteComponent implements OnInit {
   setArchive($event){
     console.log($event)
     this.templateNote.is_archived = $event;
+  }
+
+  setLabels($event){
+    console.log($event)
+   this.templateNote.labels = $event
+  }
+
+  setCollaborators($event){
+    for (let obj of $event){
+      console.log('Object in add note component\ : \n', obj)
+      this.templateNote.collaborators.push(obj.pk)
+    }
+    console.log('Final Collab List :', this.templateNote.collaborators)
   }
 
 }

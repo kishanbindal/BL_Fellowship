@@ -6,7 +6,7 @@
 .dialog-container{
     display: flex;
     flex-direction: column;
-    height: 16.5em;
+    /* height: 16.5em; */
     /* margin: inherit; */
 }
 

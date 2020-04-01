@@ -51,6 +51,7 @@ export class ProfileOptionsComponent implements OnInit {
 
 export class ProfileOptionsDialogComponent {
 
+  //TODO : Remove
   displayPicture;
 
   constructor(private logout: LogoutService,
@@ -61,13 +62,13 @@ export class ProfileOptionsDialogComponent {
       console.log('Dialog Data: ', data)
       console.log(typeof(data))
     }
-
-  uploadImage($event){
-    // console.log($event)
-    this.displayPicture = $event.target.files[0];
-    console.log(this.displayPicture)
-    this.dataService.uploadProfilePicture(this.displayPicture);
-  }
+    //TODO: Remove
+      uploadImage($event){
+        // console.log($event)
+        this.displayPicture = $event.target.files[0];
+        console.log(this.displayPicture)
+        this.dataService.uploadProfilePicture(this.displayPicture);
+      }
 
   logOut(){
     this.logout.logUserOut(); 

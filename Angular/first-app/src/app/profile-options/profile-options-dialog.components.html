@@ -4,10 +4,13 @@
 <p>User Name: {{ data[0] }}</p>    
 
 
-<button (click)="fileInput.click()">
+<app-add-profile-pic>
+    
+</app-add-profile-pic>
+<!-- <button (click)="fileInput.click()">
     Add profile Picture
     <input #fileInput (change)="uploadImage($event)" type="file" style="display: none;" accept="image/*">
-</button>
+</button> -->
 <button (click)="logOut()">Logout</button>
 
 

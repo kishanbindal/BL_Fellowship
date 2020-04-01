@@ -29,7 +29,8 @@ export class NoteSettingComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+      this.sendLabels.emit(result)
+      console.log('emitting event')
       console.log("More Note Options Dialog Box Closed")
     })
   }
@@ -59,7 +60,6 @@ export class NoteSettingDialogComponent implements OnInit{
   ngOnInit(){
     this.dataService.labelData.subscribe(result => {
       this.allLabels = result;
-      console.log(this.allLabels);
     })
   }
 
@@ -74,7 +74,6 @@ export class NoteSettingDialogComponent implements OnInit{
     if ($event.source.checked ===true){
       console.log($event.source.value);
       this.listOfLabels.push($event.source.value)
-      console.log(this.listOfLabels)
     }
   }
 

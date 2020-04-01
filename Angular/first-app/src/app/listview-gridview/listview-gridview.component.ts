@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-listview-gridview',
@@ -9,6 +9,8 @@ export class ListviewGridviewComponent implements OnInit {
 
   toggleList:boolean;
 
+  @Output() listSignal= new EventEmitter(false)
+
   constructor() {
    }
 
@@ -18,8 +20,10 @@ export class ListviewGridviewComponent implements OnInit {
 
   switchView(){
     if (this.toggleList === true){
+      this.listSignal.emit(false)
       return this.toggleList = false
     }else{
+      this.listSignal.emit(true)
       return this.toggleList = true;
     }
   }

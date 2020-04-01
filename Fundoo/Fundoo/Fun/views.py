@@ -148,8 +148,6 @@ class UserLoginView(GenericAPIView):
                 user = auth.authenticate(username=username, password=password)
 
                 if user is not None:
-                    import pdb
-                    pdb.set_trace()
 
                     aws_presigned_url = None
                     if user.profile_image is not None:
@@ -297,7 +295,7 @@ class UploadImage(GenericAPIView):
     def post(self, request, *args, **kwargs):
         smd = {
             'message': 'Successfully Added Image',
-            'success': 'Success',
+            'success': True,
             'data': []
             }
 
@@ -333,7 +331,7 @@ class UploadImage(GenericAPIView):
         else:
             smd = {
                 'message': 'Upload Failed',
-                'status': 'fail'
+                'success': False
             }
             return JsonResponse(smd, status=status.HTTP_400_BAD_REQUEST)
 

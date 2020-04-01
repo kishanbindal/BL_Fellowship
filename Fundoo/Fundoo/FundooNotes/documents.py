@@ -25,6 +25,8 @@ class NoteDocument(Document):
         "user": fields.TextField(analyzer=custom_analyzer)
     })
 
+    #collB
+
     class Django:
 
         model = Note

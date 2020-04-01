@@ -1,5 +1,15 @@
-<mat-grid-list cols='3'>
+<mat-grid-list cols='3' *ngIf="view ===false ;else showList">
     <mat-grid-tile *ngFor="let note of reminderNotes">
         <app-single-card [note]=note></app-single-card>
     </mat-grid-tile>
 </mat-grid-list>
+
+
+
+<ng-template #showList>
+    <mat-grid-list cols="1" rowHeight="1:0.5" colspan="3">
+            <mat-grid-tile *ngFor="let note of reminderNotes">
+                    <app-single-card [note]="note"></app-single-card>
+            </mat-grid-tile>
+    </mat-grid-list>
+</ng-template>

@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RemindersPageComponent implements OnInit {
 
-  constructor() { }
+  view=false
+
+  constructor() {}
 
   ngOnInit(): void {
+  }
+
+  getListSignal($event){
+    console.log('Event in Reminder notes grid Component : ', $event);
+    this.view = $event;
   }
 
 }

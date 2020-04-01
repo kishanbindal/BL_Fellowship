@@ -34,3 +34,16 @@ mat-card:hover mat-card-actions{
 }
 
 
+.footer-items{
+    padding-left: 10px;
+}
+
+.labels{
+    /* padding-left: 2px; */
+    border-radius: 5px;
+    font-size: smaller;
+    background-color: rgba(128, 128, 128, 0.8);
+}
+
+
+

@@ -18,8 +18,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete'
-import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 //------------------Components------------------------
 import { AppComponent } from './app.component';
@@ -43,8 +44,10 @@ import { AddNoteComponent } from './add-note/add-note.component';
 import { AllNotesPageComponent } from './all-notes-page/all-notes-page.component';
 import { RemindersPageComponent } from './reminders-page/reminders-page.component';
 import { RemindersGridComponent } from './reminders-grid/reminders-grid.component';
-import { LabelComponent } from './label/label.component'
-import { LabelDialogComponent } from './label/label.component'
+import { LabelComponent } from './label/label.component';
+import { LabelDialogComponent } from './label/label.component';
+import { AddProfilePicComponent, AddProfilePicDialogComponent } from './add-profile-pic/add-profile-pic.component';
+
 
 //-------------------Services-------------------------
 import {LoginService} from './services/login-service/login.service'
@@ -55,6 +58,12 @@ import { LogoutService } from './services/logout-service/logout.service';
 import { DataService } from './services/DataService/data-service.service';
 import { ArchivedNotesPageComponent } from './archived-notes-page/archived-notes-page.component';
 import { ArchivedGridComponent } from './archived-grid/archived-grid.component';
+
+//-------------------Directives-------------------------
+import { DragDropDirective } from './drag-drop.directive';
+import { SearchNotesPageComponent } from './search-notes-page/search-notes-page.component';
+import { SearchNotesGridComponent } from './search-notes-grid/search-notes-grid.component';
+
 
 
 @NgModule({
@@ -90,6 +99,11 @@ import { ArchivedGridComponent } from './archived-grid/archived-grid.component';
     ArchivedGridComponent,
     LabelComponent,
     LabelDialogComponent,
+    AddProfilePicComponent,
+    AddProfilePicDialogComponent,
+    DragDropDirective,
+    SearchNotesPageComponent,
+    SearchNotesGridComponent,
   ],  
   imports: [
     BrowserModule,
@@ -113,6 +127,8 @@ import { ArchivedGridComponent } from './archived-grid/archived-grid.component';
     MatCheckboxModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    DragDropModule,
+    MatListModule,
   ],
   entryComponents:[
     SingleCardDialogComponent,

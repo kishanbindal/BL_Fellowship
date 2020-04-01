@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { formattedError } from '@angular/compiler';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,11 @@ export class DataService{
   private userSource = new BehaviorSubject('No Users');
   public usersList = this.userSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  private searchSource = new BehaviorSubject('No Notes');
+  public searchNotes = this.searchSource.asObservable();
+
+  constructor(private http: HttpClient, private snackbar: MatSnackBar,
+    private router: Router) { }
 
   //-----------Users Related-----------------------------
 
@@ -49,9 +55,7 @@ export class DataService{
       // "Content-Type": "multipart/form-data",
       'token': token,
       // "Accept": "multipart/form-data"
-    }}).subscribe(response => {
-      console.log(response)
-    })
+    }})
   }
 
   //-----------Note Related Options--------------------------
@@ -63,7 +67,7 @@ export class DataService{
     }}).subscribe((response) =>{
       if(response['success']===true){
         let data = response['data']
-        // console.log('Incoming Note Data: \n', data)
+        console.log('Incoming Note Data: \n', data)
         this.responseSource.next(data)
       }
     })
@@ -111,6 +115,20 @@ export class DataService{
     }})
   }
 
+  getSearchedNote(note_data){
+    let token = localStorage.getItem('token')
+    this.http.post('http://localhost:8000/notes/api/search/', note_data, {headers:{
+      'token': token
+    }}).subscribe(response => {
+      if (response['success']===true){
+        let searchNoteData= response['data']
+        console.log(searchNoteData)
+        this.searchSource.next(searchNoteData)
+        this.router.navigate(['/search'])
+      }
+    })
+  }
+
   //---------------Label related Operations-----------------------------
   postLabel(label_data){
     let token = localStorage.getItem('token')
@@ -128,6 +146,7 @@ export class DataService{
       // console.log('Labels Data Service : ', response)
       if(response['success'] === true){
         let label = response['data']
+        // console.log('Label Data : ',label)
         this.labelSource.next(label);
       }else{
         console.log(response['message']);

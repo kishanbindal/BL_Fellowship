@@ -1,0 +1,9 @@
+<mat-grid-list>
+
+    <div *ngFor="let note of searchedNotes">
+        <mat-grid-tile *ngFor="let item of note">
+            <app-single-card [note]="item"></app-single-card>
+        </mat-grid-tile>
+    </div>
+    
+</mat-grid-list>

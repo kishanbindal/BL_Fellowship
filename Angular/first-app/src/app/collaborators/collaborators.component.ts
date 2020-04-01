@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormArray, FormGroup } from '@angular/forms';
 import { DataService } from '../services/DataService/data-service.service';
@@ -14,11 +14,12 @@ export class CollaboratorsComponent implements OnInit {
 
   listOfUsers
 
+  @Output() sendCollaborators = new EventEmitter(false)
+
 
   constructor(private dialog: MatDialog, private dataService : DataService) {}
 
   ngOnInit(): void {
-    this.dataService.getAllUsers()
     this.dataService.usersList.subscribe(data => {
       this.listOfUsers = data
       })
@@ -34,14 +35,12 @@ export class CollaboratorsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.listOfUsers = result.controls;
-      for (let value of this.listOfUsers){
-        console.log(value)
-
-      }
+      this.listOfUsers = result;
+      console.log(this.listOfUsers)
+      this.sendCollaborators.emit(this.listOfUsers);
       console.log("Collaborators DialogBox Closed!");
     })
-  }
+  } 
 }
 
 //CollaboratorsDialogBox
@@ -54,10 +53,15 @@ export class CollaboratorsComponent implements OnInit {
 export class CollaboratorsDialogBoxComponent implements OnInit{
   
   collaborator_name = new FormControl('');
-  listOfCollaborators = new FormArray([]);
+  listOfCollaborators = [];
   host = localStorage.getItem('user').split(',')
 
-
+  // collab_data = new FormGroup({
+  //   id : new FormControl(''),
+  //   username: new FormControl(''),
+  //   email: new FormControl(''),
+  //   profileImage: new FormControl(''),
+  // })
   
   filteredOptions : Observable<any>;
 
@@ -82,19 +86,20 @@ export class CollaboratorsDialogBoxComponent implements OnInit{
 
   _filter(value: string): string[] {
     const filterValue = value.toLowerCase()
-    console.log('Data :\n', this.data)
     return this.data.filter(option => option.username.toLowerCase().includes(filterValue));
   }
 
-  addCollab(collabName){
-    // let collab_data = new FormGroup({
-    //   id : new FormControl(''),
-    //   username: new FormControl(''),
-    //   email: new FormControl(''),
-    //   profileImage: new FormControl(''),
-    // })
-    this.listOfCollaborators.push(collabName.value);
-    console.log('List Of Collaborators : ', this.listOfCollaborators.controls);
+  addCollab(collabName){  
+
+    for (let obj of this.data){
+      if (this.collaborator_name.value === obj.username){
+        // console.log('Collaborator : ', obj)
+        this.listOfCollaborators.push(obj);
+        console.log('listOf Collaborators: ', this.listOfCollaborators)
+      }
+    }
+    // collabName.setValue(collabName.username)
+    console.log('List Of Collaborators : ', this.listOfCollaborators);
     this.collaborator_name.setValue('');
   }
 

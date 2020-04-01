@@ -34,7 +34,6 @@ class NoteView(GenericAPIView):
         '''
         try:
 
-
             user_id = GenerateId().generate_id(request)
             notes = Note.objects.filter(is_archived=False, is_trashed=False, user=user_id)
             # print(notes,'---->notes')
@@ -43,14 +42,13 @@ class NoteView(GenericAPIView):
             collaborated_notes = Note.objects.filter(is_archived=False, is_trashed=False).filter(collaborators=user_id)
             user_notes_serializer = CreateNoteSerializer(notes, many=True)
             collab_notes_serializer = CreateNoteSerializer(collaborated_notes, many=True)
-
             if len(list(notes)) > 0:
                 for data in user_notes_serializer.data:
                     name_list = []
                     for collaborator in data['collaborators']:
-                        user = User.objects.get(pk=collaborator)
+                        user = User.objects.get(pk=3)
                         # if user.email not in name_list:
-                        name_list.append(user.email)
+                        name_list.append(user.pk)
                     data['collaborators'] = name_list
 
             if len(list(collaborated_notes)) > 0:
@@ -59,11 +57,11 @@ class NoteView(GenericAPIView):
                     for collaborator in data['collaborators']:
                         user = User.objects.get(pk=collaborator)
                         # if user.email not in name_list:
-                        name_list.append(user.email)
+                        name_list.append(user.pk)
                     data['collaborators'] = name_list
                 # collab_notes_serializer.data['collaborators'] = name_list
             output_data = user_notes_serializer.data + collab_notes_serializer.data
-            logging.info(f'{output_data}')
+            # logging.info(f'{output_data}')
 
             smd = {'success': True, 'message': 'Successfully collected all notes', 'data': output_data}
 
@@ -87,28 +85,35 @@ class NoteView(GenericAPIView):
 
         try:
             #
-            import pdb
-            pdb.set_trace()
 
             user_id = GenerateId().generate_id(request)
             # request.data['user'] = user_id
 
+            import pdb
+            pdb.set_trace()
+
             if 'note_image' in request.data:
-                to_merge = json.loads(request.data.get('otherData'))
-                request.data.update(to_merge)
-                serializer = CreateNoteSerializer(data=request.data)
+
+                other_data = json.loads(request.data.get('otherData'))
+                img_file = request.data.get('note_image')
+                data = other_data
+                data['note_image'] = img_file
+                serializer = CreateNoteSerializer(data=data)
+
+                # to_merge = json.loads(request.data.get('otherData'))
+                # request.data.update(to_merge)
+                # serializer = CreateNoteSerializer(data=request.data)
             else:
                 data = request.data.dict()['otherData']
                 data = json.loads(data)
                 serializer = CreateNoteSerializer(data=data, partial=True)
 
-
             # collab = request.data.get('collaborators')
             # collab_list = []
             #
             # if len(collab)>0:
-            #     for email in collab:
-            #         user = User.objects.get(email=email)
+            #     for username in collab:
+            #         user = User.objects.get(username=username)
             #         collab_list.append(user.id)
             #     request.data['collaborators'] = collab_list
 
@@ -182,26 +187,29 @@ class NoteOperationsView(GenericAPIView):
             }
 
             import json
-            # import pdb
-            # pdb.set_trace()
-            print(request.body)
-            print('id::', id)
-            collab = request.data.get('collaborators')
-            collab_list = []
-            if collab is not None:
-                for email in collab:
-                    user = User.objects.get(email=email)
-                    collab_list.append(user.id)
-            request.data['collaborators'] = collab_list
+
+            # collab = request.data.get('collaborators')
+            # collab_list = []
+
+            # if collab is not None:
+            #     for email in collab:
+            #         user = User.objects.get(email=email)
+            #         collab_list.append(user.id)
+            # request.data['collaborators'] = collab_list
+
             serializer = NoteOperationsSerializer(data=request.data, partial=True) #json.loads(request.body)
 
+            # import pdb
+            # pdb.set_trace()
+
             if serializer.is_valid():
-                serializer.data['collaborators'] = CollaboratorService().get_collaborators(serializer)
+                # serializer.data['collaborators'] = CollaboratorService().get_collaborators(serializer)
                 user_id = GenerateId().generate_id(request)
+                id = request.data.get('id')
                 note = Note.objects.get(pk=id)
-                logging.info(f'PUT METHOD DATA : {serializer.data}')
+                # logging.info(f'PUT METHOD DATA : {serializer.data}')
                 if note is not None:
-                    serializer.update(note, serializer.data)
+                    serializer.update(note, serializer.validated_data)
                     smd['success'], smd['message'] = True, f'Successfully update Note with id: {id}'
                     return Response(data=smd, status=status.HTTP_200_OK)
                 else:
@@ -462,9 +470,7 @@ class SearchNote(GenericAPIView):
         '''
 
         # search_parameters = request.data.get('title')
-        serializer = SearchNoteSerializer(data=request.data)
-        import pdb
-        pdb.set_trace()
+        serializer = SearchNoteSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
 
@@ -474,7 +480,7 @@ class SearchNote(GenericAPIView):
                 'bool': {
                     'must': [
                         {'match': {'title': serializer.data.get('title')}},
-                        {'match': {'note_text': serializer.data.get('note_text')}},
+                        {'match': {'note_text': serializer.data.get('title')}},
                         # {'match': {'labels': serializer.data.get('labels')}},
                         # {'match': {'color': serializer.data.get('color')}}
                         # 'type': "best_fields",
@@ -484,15 +490,17 @@ class SearchNote(GenericAPIView):
                 },
                 # 'nested':
             })
+            import pdb
+            pdb.set_trace()
             result = search_result.execute()
-            note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text).values()
+            note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text)
                          for hits in result.hits]
-            logging.debug(f"{result}")
+            logging.debug(f"{note_objs}")
             # li = [hits.to_dict for hits in result.hits]
             smd = dict()
-            smd['success'], smd['message'], smd['data'] = 'Success', 'Retrieved', note_objs
+            smd['success'], smd['message'], smd['data'] = True, 'Retrieved', note_objs
             return Response(smd, status=status.HTTP_200_OK)
         else:
             smd = dict()
-            smd['success'], smd['message'] = 'Fail', 'Invalid Input/Serializer'
+            smd['success'], smd['message'] = False, 'Invalid Input/Serializer'
             return Response(data=smd, status=status.HTTP_400_BAD_REQUEST)

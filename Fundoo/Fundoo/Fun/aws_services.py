@@ -5,7 +5,7 @@ import dotenv
 import logging
 
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env_path = os.path.join(base_path, '.env')
+env_path = os.path.join(base_path, '..env')
 dotenv.load_dotenv(env_path)
 
 

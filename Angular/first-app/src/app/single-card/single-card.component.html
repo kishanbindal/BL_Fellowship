@@ -29,11 +29,10 @@
             <!-- labels [[ YET TO DO]]-->
             <div *ngFor="let label of note.labels" class="footer-items">
                 <div class="labels">
-                    <p id='card-label'>{{label.label_name}} 
-                        <button mat-icon-button inline="true">
-                            <mat-icon >close</mat-icon>
-                        </button>
-                    </p> 
+                    <p id='card-label'>{{label.label_name}} </p> 
+                    <button mat-icon-button>
+                        <mat-icon class="label-icon">close</mat-icon>
+                    </button>
                 </div>
             </div>
 

@@ -490,15 +490,19 @@ class SearchNote(GenericAPIView):
                 },
                 # 'nested':
             })
-            import pdb
-            pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
             result = search_result.execute()
-            note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text)
+            note_objs = [Note.objects.filter(user_id=user_id, title=hits.title, note_text=hits.note_text).values()
                          for hits in result.hits]
-            logging.debug(f"{note_objs}")
+            # TODO
+            output_data = []
+            for query_obj in note_objs:
+                output_data.append(query_obj[0])
+            logging.debug(f"{output_data}")
             # li = [hits.to_dict for hits in result.hits]
             smd = dict()
-            smd['success'], smd['message'], smd['data'] = True, 'Retrieved', note_objs
+            smd['success'], smd['message'], smd['data'] = True, 'Retrieved', output_data
             return Response(smd, status=status.HTTP_200_OK)
         else:
             smd = dict()

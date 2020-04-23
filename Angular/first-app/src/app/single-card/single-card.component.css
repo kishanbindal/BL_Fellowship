@@ -1,7 +1,8 @@
 mat-card {
     border : 5px;
-    /* width : 22.5em;
-    min-width: 21.5em; */
+    width : inherit;
+    height: inherit;
+    /* min-width: 21.5em; */
 }
 
 /* .mat-card:not([class*=mat-elevation-z]) {
@@ -30,7 +31,10 @@ mat-card:hover mat-card-actions{
     background-color: slategrey;
     border-radius: 5px;
     width: 65%;
+}
 
+#card-label{
+    height: inherit;
 }
 
 
@@ -40,10 +44,21 @@ mat-card:hover mat-card-actions{
 
 .labels{
     /* padding-left: 2px; */
+    display: flex;
+    height: 1.5em;
+    /* width: 1em; */
     border-radius: 5px;
     font-size: smaller;
     background-color: rgba(128, 128, 128, 0.8);
 }
+
+.mat-icon-button{
+    height: inherit;
+}
+
+.label-icon {
+    transform: scale(0.5);  
+}   
 
 
 

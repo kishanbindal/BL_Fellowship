@@ -47,8 +47,12 @@ export class LoginService {
 
   googleGetAuth(){
     this.http.get('http://localhost:8000/fun/api/google')
-    .subscribe(result => {
-      console.log(result);
+    .subscribe(response => {
+      if (response['success'] === true){
+        this.http.get(response['data']).subscribe(response => {
+          console.log('Response = ', response)
+        })
+      }
     })
   }
 

@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Add Template Directory Path here
 TEMPLATE_DIR = os.path.join(BASE_DIR, '..', 'templates')
 print(f'Template path : {TEMPLATE_DIR}')
-ENV_PATH = os.path.join(BASE_DIR, '..', '.env')
+ENV_PATH = os.path.join(BASE_DIR, '..', '..env')
 print(ENV_PATH)
 load_dotenv(ENV_PATH)
 

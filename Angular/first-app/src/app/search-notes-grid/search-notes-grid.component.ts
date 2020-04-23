@@ -11,15 +11,6 @@ export class SearchNotesGridComponent implements OnInit {
   searchedNotes
 
   constructor(private dataService: DataService) { 
-    this.dataService.searchNotes.subscribe(data => {
-      console.log('Data Constructor: ', data)
-      // for(let i=0; i < data.length; i++){
-      //   let tempData = data[i][0]
-      //   console.log(tempData)
-      //   this.searchedNotes.push(tempData)
-      // }
-      console.log('searched note data:',this.searchedNotes)
-    })
   }
 
   ngOnInit(): void {

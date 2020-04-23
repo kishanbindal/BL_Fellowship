@@ -10,7 +10,7 @@ from Fun.models import User
 
 
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env = os.path.join(base, '.env')
+env = os.path.join(base, '..env')
 dotenv.load_dotenv(dotenv_path=env)
 
 

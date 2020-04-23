@@ -69,7 +69,7 @@ export class SingleCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log('note id: ', this.note.id ,'note_image : ' ,this.note.note_image)
+    console.log('note: ', this.note)
     this.getLabelDetails()
     this.getCollaboratorDetails()
 

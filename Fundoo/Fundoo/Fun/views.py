@@ -32,7 +32,7 @@ from util.decorators import logged_in
 
 # ??? Need to learn how to mask this path ???
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env = os.path.join(base, '.env')
+env = os.path.join(base, '..env')
 load_dotenv(dotenv_path=env)
 
 
@@ -290,7 +290,7 @@ def reset(request, token):
 
 class UploadImage(GenericAPIView):
 
-    # serializer_class = UploadImageSerializer
+    serializer_class = UploadImageSerializer
 
     def post(self, request, *args, **kwargs):
         smd = {
@@ -379,7 +379,12 @@ class LoginGoogleAuthorization(GenericAPIView):
 
         response = requests.get(url, params)
 
+        import pdb
+        pdb.set_trace()
+
         if response.status_code == 200:
+            # smd = dict()
+            # smd['success'], smd['data'] = True, response.url
             return redirect(response.url)
         return Response(response, status=response.status_code)
 
@@ -397,6 +402,8 @@ class LoginGoogle(GenericAPIView):
 
         try:
 
+            # import pdb
+            # pdb.set_trace()
             # access_url = 'https://www.googleapis.com/oauth2/v4/token'
             access_url = os.getenv('SOCIAL_AUTH_GOOGLE_GET_TOKEN')
             auth_code = get_auth_code(request)
@@ -412,10 +419,13 @@ class LoginGoogle(GenericAPIView):
             x = json.loads(response.content)
             token = x.get('access_token')
 
+            import pdb
+            pdb.set_trace()
+
             api_response = get_username(token, os.getenv('SOCIAL_AUTH_GOOGLE_GET_INFO'))
 
             smd = {
-                'success': 'Success',
+                'success': True,
                 'message': 'Successfully signed up and logged in through Google',
                 'data': []
             }
@@ -523,3 +533,7 @@ class GetAllUsers(GenericAPIView):
         return Response(data=smd, status=status.HTTP_200_OK)
         # else:
         #     return Response(data=smd, status=status.HTTP_400_BAD_REQUEST)
+
+'''
+    Testing Jenkins on git push
+'''
